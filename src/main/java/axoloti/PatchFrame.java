@@ -295,6 +295,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuSaveClip = new javax.swing.JMenuItem();
         jMenuClose = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
+        undoItem = new javax.swing.JMenuItem();
+        redoItem = new javax.swing.JMenuItem();
         jMenuItemDelete = new javax.swing.JMenuItem();
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemAddObj = new javax.swing.JMenuItem();
@@ -441,6 +443,24 @@ jMenuClose.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuEdit.setMnemonic('E');
     jMenuEdit.setText("Edit");
+
+    undoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+    undoItem.setText("Undo");
+    undoItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            undoItemActionPerformed(evt);
+        }
+    });
+    jMenuEdit.add(undoItem);
+
+    redoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+    redoItem.setText("Redo");
+    redoItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            redoItemActionPerformed(evt);
+        }
+    });
+    jMenuEdit.add(redoItem);
 
     jMenuItemDelete.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
     jMenuItemDelete.setText("Delete");
@@ -928,6 +948,14 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         patch.Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
+    private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
+        patch.undo();
+    }//GEN-LAST:event_undoItemActionPerformed
+
+    private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
+        patch.redo();
+    }//GEN-LAST:event_redoItemActionPerformed
+
     private boolean GoLive() {
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
             Object[] options = {"Yes",
@@ -999,6 +1027,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPanel jToolbarPanel;
+    private javax.swing.JMenuItem redoItem;
+    private javax.swing.JMenuItem undoItem;
     private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 

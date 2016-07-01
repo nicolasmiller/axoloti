@@ -48,6 +48,8 @@ import axoloti.displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -60,6 +62,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.undo.CannotUndoException;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
@@ -117,6 +120,9 @@ public class Patch {
     private AxoObjectInstanceAbstract controllerinstance;
 
     public boolean presetUpdatePending = false;
+
+    private List<String> previousStates = new ArrayList<String>();
+    private int currentState = 0;
 
     static public class PatchVersionException
             extends RuntimeException {
@@ -376,6 +382,7 @@ public class Patch {
 
     public void SetDirty() {
         dirty = true;
+        saveState();
         if (container != null) {
             container.SetDirty();
         }
@@ -690,6 +697,36 @@ public class Patch {
     }
 
     void PreSerialize() {
+    }
+
+    void saveState() {
+
+        SortByPosition();
+        PreSerialize();
+        Serializer serializer = new Persister();
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        try {
+            serializer.write(this, b);
+            previousStates.add(b.toString());
+            System.out.println("Saving state: " + currentState);
+            currentState += 1;
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void loadState() {
+        Serializer serializer = new Persister();
+        ByteArrayInputStream b = new ByteArrayInputStream(previousStates.get(currentState).getBytes());
+        try {
+            Patch p = serializer.read(Patch.class, b);
+            System.out.println("Loading state:" + currentState);
+            this.objectinstances = p.objectinstances;
+            this.nets = p.nets;
+            repaint();
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     boolean save(File f) {
@@ -2519,6 +2556,20 @@ public class Patch {
         Unlock();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.Close();
+        }
+    }
+
+    public void undo() {
+        if (currentState > 0) {
+            currentState -= 1;
+            loadState();
+        }
+    }
+
+    public void redo() {
+        if (currentState < previousStates.size() - 1) {
+            currentState += 1;
+            loadState();
         }
     }
 }
