@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.utils.OSDetect;
 import java.io.File;
 import java.util.logging.Level;
@@ -29,9 +29,9 @@ import java.util.logging.Logger;
  */
 public class QCmdCompilePatch extends QCmdShellTask {
 
-    Patch p;
+    PatchModel p;
 
-    public QCmdCompilePatch(Patch p) {
+    public QCmdCompilePatch(PatchModel p) {
         this.p = p;
     }
 

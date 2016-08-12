@@ -17,8 +17,8 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import components.LabelComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -48,7 +48,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public AxoObjectInstanceHyperlink() {
     }
 
-    public AxoObjectInstanceHyperlink(AxoObjectAbstract type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceHyperlink(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 
@@ -72,11 +72,11 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (link.endsWith(".axp") || link.endsWith(".axh") || link.endsWith(".axs")) {
-            String s = getPatch().getFileNamePath();
+            String s = getPatchModel().getFileNamePath();
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {
-                PatchGUI.OpenPatch(f);
+                PatchView.OpenPatch(f);
             } else {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());                
             }
@@ -107,12 +107,12 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
-                if (patch != null) {
+                if (patchView != null) {
                     if (e.getClickCount() == 1) {
                         if (e.isShiftDown()) {
                             SetSelected(!GetSelected());
                         } else if (Selected == false) {
-                            ((PatchGUI) patch).SelectNone();
+                            patchView.SelectNone();
                             SetSelected(true);
                         }
                     }

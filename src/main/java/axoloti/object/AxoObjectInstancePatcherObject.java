@@ -17,7 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.objecteditor.AxoObjectEditor;
 import components.ButtonComponent;
 import components.ButtonComponent.ActListener;
@@ -40,7 +40,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public AxoObjectInstancePatcherObject() {
     }
 
-    public AxoObjectInstancePatcherObject(AxoObject type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstancePatcherObject(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 

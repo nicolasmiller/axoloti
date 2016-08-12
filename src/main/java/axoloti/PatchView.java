@@ -75,14 +75,21 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
+import qcmds.QCmdChangeWorkingDirectory;
+import qcmds.QCmdCompilePatch;
+import qcmds.QCmdCreateDirectory;
+import qcmds.QCmdLock;
 import qcmds.QCmdProcessor;
+import qcmds.QCmdStart;
+import qcmds.QCmdStop;
+import qcmds.QCmdUploadPatch;
 
 /**
  *
  * @author Johannes Taelman
  */
 @Root(name = "patch-1.0")
-public class PatchGUI extends Patch {
+public class PatchView {
 
     // shortcut patch names
     final static String patchComment = "patch/comment";
@@ -110,9 +117,13 @@ public class PatchGUI extends Patch {
     Point selectionRectStart;
     Point panOrigin;
     public AxoObjectFromPatch ObjEditor;
+    
+    private PatchController patchController;
 
-    public PatchGUI() {
+    public PatchView(PatchController patchController) {
         super();
+        
+        this.patchController = patchController;
 
         Layers.setLayout(null);
         Layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
@@ -164,7 +175,7 @@ public class PatchGUI extends Patch {
 
             @Override
             public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-                Patch p = GetSelectedObjects();
+                PatchModel p = GetSelectedObjects();
                 if (p.objectinstances.isEmpty()) {
                     clip.setContents(new StringSelection(""), null);
                     return;
@@ -180,7 +191,7 @@ public class PatchGUI extends Patch {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (action == MOVE) {
-                    deleteSelectedAxoObjInstances();
+                    PatchView.this.patchController.patchModel.deleteSelectedAxoObjInstances();
                     cleanUpObjectLayer();
                 }
             }
@@ -193,16 +204,16 @@ public class PatchGUI extends Patch {
             @Override
             public boolean importData(JComponent comp, Transferable t) {
                 try {
-                    if (!locked) {
+                    if (!PatchView.this.patchController.patchModel.IsLocked()) {
                         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 
                             paste((String) t.getTransferData(DataFlavor.stringFlavor), comp.getMousePosition(), false);
                         }
                     }
                 } catch (UnsupportedFlavorException ex) {
-                    Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, "paste", ex);
+                    Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "paste", ex);
                 } catch (IOException ex) {
-                    Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, "paste", ex);
+                    Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "paste", ex);
                 }
                 return true;
             }
@@ -306,7 +317,7 @@ public class PatchGUI extends Patch {
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                    deleteSelectedAxoObjInstances();
+                    PatchView.this.patchController.patchModel.deleteSelectedAxoObjInstances();
                     cleanUpObjectLayer();
                     Layers.revalidate();
 
@@ -335,7 +346,7 @@ public class PatchGUI extends Patch {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
-                    for (AxoObjectInstanceAbstract o : objectinstances) {
+                    for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
                         o.SetSelected(false);
                     }
                     if (me.getClickCount() == 2) {
@@ -371,7 +382,7 @@ public class PatchGUI extends Patch {
             public void mouseReleased(MouseEvent me) {
                 if (selectionrectangle.isVisible() | me.getButton() == MouseEvent.BUTTON1) {
                     Rectangle r = selectionrectangle.getBounds();
-                    for (AxoObjectInstanceAbstract o : objectinstances) {
+                    for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
                         o.SetSelected(o.getBounds().intersects(r));
                     }
                     selectionrectangle.setVisible(false);
@@ -408,7 +419,8 @@ public class PatchGUI extends Patch {
                             if (f.exists() && f.canRead()) {
                                 AxoObjectAbstract o = new AxoObjectFromPatch(f);
                                 String fn = f.getCanonicalPath();
-                                if (GetCurrentWorkingDirectory() != null && fn.startsWith(GetCurrentWorkingDirectory())) {
+                                if (PatchView.this.patchController.patchModel.GetCurrentWorkingDirectory() != null && 
+                                        fn.startsWith(PatchView.this.patchController.patchModel.GetCurrentWorkingDirectory())) {
                                     o.createdFromRelativePath = true;
                                 }
                                 AddObjectInstance(o, dtde.getLocation());
@@ -416,9 +428,9 @@ public class PatchGUI extends Patch {
                         }
                         dtde.dropComplete(true);
                     } catch (UnsupportedFlavorException ex) {
-                        Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
-                        Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     return;
                 }
@@ -460,25 +472,23 @@ public class PatchGUI extends Patch {
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
-            PatchGUI p = serializer.read(PatchGUI.class, v);
+            PatchModel p = serializer.read(PatchModel.class, v);
             HashMap<String, String> dict = new HashMap<String, String>();
-            for (AxoObjectInstanceAbstract o : p.objectinstances) {
-                o.patch = this;
+            for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
+                o.patchView = this;
+                o.patchModel = this.patchController.patchModel;
                 AxoObjectAbstract obj = o.resolveType();
                 Modulator[] m = obj.getModulators();
                 if (m != null) {
-                    if (Modulators == null) {
-                        Modulators = new ArrayList<Modulator>();
-                    }
                     for (Modulator mm : m) {
                         mm.objinst = o;
-                        Modulators.add(mm);
+                        PatchView.this.patchController.patchModel.addModulator(mm);
                     }
                 }
 
             }
             int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
-            for (AxoObjectInstanceAbstract o : p.objectinstances) {
+            for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
                 String original_name = o.getInstanceName();
                 if (original_name != null) {
                     String new_name = original_name;
@@ -493,14 +503,14 @@ public class PatchGUI extends Patch {
                     if (hasNumeralSuffix) {
                         int n = Integer.parseInt(ss[ss.length - 1]) + 1;
                         String bs = original_name.substring(0, original_name.length() - ss[ss.length - 1].length());
-                        while (GetObjectInstance(new_name) != null) {
+                        while (PatchView.this.patchController.patchModel.GetObjectInstance(new_name) != null) {
                             new_name = bs + n++;
                         }
                         while (dict.containsKey(new_name)) {
                             new_name = bs + n++;
                         }
                     } else {
-                        while (GetObjectInstance(new_name) != null) {
+                        while (PatchView.this.patchController.patchModel.GetObjectInstance(new_name) != null) {
                             new_name = new_name + "_";
                         }
                         while (dict.containsKey(new_name)) {
@@ -518,8 +528,8 @@ public class PatchGUI extends Patch {
                 if (o.getY() < minY) {
                     minY = o.getY();
                 }
-                o.patch = this;
-                objectinstances.add(o);
+                o.patchView = this;
+                PatchView.this.patchController.patchModel.addObjectInstance(o);
                 objectLayerPanel.add(o, 0);
                 o.PostConstructor();
                 int newposx = o.getX();
@@ -554,7 +564,7 @@ public class PatchGUI extends Patch {
                                 i.objname = on2;
                                 source2.add(i);
                             } else if (restoreConnectionsToExternalOutlets) {
-                                AxoObjectInstanceAbstract obj = GetObjectInstance(objname);
+                                AxoObjectInstanceAbstract obj = p.GetObjectInstance(objname);
                                 if ((obj != null) && (connectedOutlet == null)) {
                                     OutletInstance oi = obj.GetOutletInstance(outletname);
                                     if (oi != null) {
@@ -585,26 +595,26 @@ public class PatchGUI extends Patch {
                 }
                 if (n.source.size() + n.dest.size() > 1) {
                     if ((connectedInlet == null) && (connectedOutlet == null)) {
-                        n.patch = this;
+                        n.patchView = this;
                         n.PostConstructor();
-                        nets.add(n);
+                        PatchView.this.patchController.patchModel.addNet(n);
                         netLayerPanel.add(n);
                     } else if (connectedInlet != null) {
                         for (InletInstance o : n.dest) {
-                            InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+                            InletInstance o2 = PatchView.this.patchController.patchModel.getInletByReference(o.getObjname(), o.getInletname());
                             if ((o2 != null) && (o2 != connectedInlet)) {
                                 AddConnection(connectedInlet, o2);
                             }
                         }
                         for (OutletInstance o : n.source) {
-                            OutletInstance o2 = getOutletByReference(o.getObjname(), o.getOutletname());
+                            OutletInstance o2 = PatchView.this.patchController.patchModel.getOutletByReference(o.getObjname(), o.getOutletname());
                             if (o2 != null) {
                                 AddConnection(connectedInlet, o2);
                             }
                         }
                     } else if (connectedOutlet != null) {
                         for (InletInstance o : n.dest) {
-                            InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+                            InletInstance o2 = PatchView.this.patchController.patchModel.getInletByReference(o.getObjname(), o.getInletname());
                             if (o2 != null) {
                                 AddConnection(o2, connectedOutlet);
                             }
@@ -613,16 +623,16 @@ public class PatchGUI extends Patch {
                 }
             }
             AdjustSize();
-            SetDirty();
+            PatchView.this.patchController.patchModel.SetDirty();
         } catch (javax.xml.stream.XMLStreamException ex) {
             // silence
         } catch (Exception ex) {
-            Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     AxoObjectInstanceAbstract getObjectAtLocation(int x, int y) {
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
             if ((o.getX() == x) && (o.getY() == y)) {
                 return o;
             }
@@ -632,23 +642,23 @@ public class PatchGUI extends Patch {
     public ObjectSearchFrame osf;
 
     public void ShowClassSelector(Point p, AxoObjectInstanceAbstract o, String searchString) {
-        if (IsLocked()) {
+        if (PatchView.this.patchController.patchModel.IsLocked()) {
             return;
         }
         if (osf == null) {
-            osf = new ObjectSearchFrame(this);
+            osf = new ObjectSearchFrame(patchController);
         }
         osf.Launch(p, o, searchString);
     }
 
     void SelectAll() {
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
             o.SetSelected(true);
         }
     }
 
     public void SelectNone() {
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
             o.SetSelected(false);
         }
     }
@@ -656,9 +666,9 @@ public class PatchGUI extends Patch {
 
     void ShowNotesFrame() {
         if (NotesFrame == null) {
-            NotesFrame = new TextEditor(new StringRef(), getPatchframe());
+            NotesFrame = new TextEditor(new StringRef(), PatchView.this.patchController.patchModel.getPatchframe());
             NotesFrame.setTitle("notes");
-            NotesFrame.SetText(notes);
+            NotesFrame.SetText(PatchView.this.patchController.patchModel.notes);
             NotesFrame.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -666,7 +676,7 @@ public class PatchGUI extends Patch {
 
                 @Override
                 public void focusLost(FocusEvent e) {
-                    notes = NotesFrame.GetText();
+                    PatchView.this.patchController.patchModel.notes = NotesFrame.GetText();
                 }
             });
         }
@@ -679,15 +689,15 @@ public class PatchGUI extends Patch {
         UP, LEFT, DOWN, RIGHT
     }
 
-    Patch GetSelectedObjects() {
-        Patch p = new Patch();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+    PatchModel GetSelectedObjects() {
+        PatchModel p = new PatchModel();
+        for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
             if (o.IsSelected()) {
                 p.objectinstances.add(o);
             }
         }
-        p.nets = new ArrayList<Net>();
-        for (Net n : nets) {
+        PatchView.this.patchController.patchModel.nets = new ArrayList<Net>();
+        for (Net n : PatchView.this.patchController.patchModel.getNets()) {
             int sel = 0;
             for (InletInstance i : n.dest) {
                 if (i.GetObjectInstance().IsSelected()) {
@@ -708,7 +718,7 @@ public class PatchGUI extends Patch {
     }
 
     void MoveSelectedAxoObjInstances(Direction dir, int xsteps, int ysteps) {
-        if (!locked) {
+        if (!PatchView.this.patchController.patchModel.IsLocked()) {
             int xgrid = 1;
             int ygrid = 1;
             int xstep = 0;
@@ -732,7 +742,7 @@ public class PatchGUI extends Patch {
                     break;
             }
             boolean isUpdate = false;
-            for (AxoObjectInstanceAbstract o : objectinstances) {
+            for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.getObjectInstances()) {
                 if (o.IsSelected()) {
                     isUpdate = true;
                     Point p = o.getLocation();
@@ -746,22 +756,23 @@ public class PatchGUI extends Patch {
             }
             if (isUpdate) {
                 AdjustSize();
-                SetDirty();
+                PatchView.this.patchController.patchModel.SetDirty();
             }
         } else {
-            Logger.getLogger(PatchGUI.class.getName()).log(Level.INFO, "can't move: locked");
+            Logger.getLogger(PatchView.class.getName()).log(Level.INFO, "can't move: locked");
         }
     }
 
-    @Override
     public void PostContructor() {
-        super.PostContructor();
+        PatchView.this.patchController.patchModel.PostContructor();
         objectLayerPanel.removeAll();
         netLayerPanel.removeAll();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.objectinstances) {
+            o.setPatchController(PatchView.this.patchController);
             objectLayerPanel.add(o);
         }
-        for (Net n : nets) {
+        for (Net n : PatchView.this.patchController.patchModel.nets) {
+            n.setPatchView(this);
             netLayerPanel.add(n);
         }
         objectLayerPanel.validate();
@@ -771,38 +782,34 @@ public class PatchGUI extends Patch {
         AdjustSize();
         Layers.revalidate();
 
-        for (Net n : nets) {
+        for (Net n : PatchView.this.patchController.patchModel.nets) {
             n.updateBounds();
         }
     }
 
-    @Override
     public void setFileNamePath(String FileNamePath) {
-        super.setFileNamePath(FileNamePath);
-        patchframe.setTitle(FileNamePath);
+        PatchView.this.patchController.patchModel.setFileNamePath(FileNamePath);
+        PatchView.this.patchController.patchModel.getPatchframe().setTitle(FileNamePath);
     }
 
-    @Override
     public Net AddConnection(InletInstance il, OutletInstance ol) {
-        Net n = super.AddConnection(il, ol);
+        Net n = PatchView.this.patchController.patchModel.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
         }
         return n;
     }
 
-    @Override
     public Net AddConnection(InletInstance il, InletInstance ol) {
-        Net n = super.AddConnection(il, ol);
+        Net n = PatchView.this.patchController.patchModel.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
         }
         return n;
     }
 
-    @Override
     public Net disconnect(IoletAbstract io) {
-        Net n = super.disconnect(io);
+        Net n = PatchView.this.patchController.patchModel.disconnect(io);
         if (n != null) {
             n.updateBounds();
             n.repaint();
@@ -810,27 +817,25 @@ public class PatchGUI extends Patch {
         return n;
     }
 
-    @Override
     public Net delete(Net n) {
         if (n != null) {
             netLayerPanel.remove(n);
             netLayer.repaint(n.getBounds());
         }
-        Net nn = super.delete(n);
+        Net nn = PatchView.this.patchController.patchModel.delete(n);
         return nn;
     }
 
-    @Override
     public void delete(AxoObjectInstanceAbstract o) {
-        super.delete(o);
+        PatchView.this.patchController.patchModel.delete(o);
         objectLayerPanel.remove(o);
         objectLayerPanel.validate();
         AdjustSize();
     }
 
-    @Override
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
-        AxoObjectInstanceAbstract objinst = super.AddObjectInstance(obj, loc);
+        AxoObjectInstanceAbstract objinst = patchController.patchModel.AddObjectInstance(obj, loc);
+        objinst.setPatchController(patchController);
         if (objinst != null) {
             SelectNone();
             objectLayerPanel.add(objinst);
@@ -858,49 +863,60 @@ public class PatchGUI extends Patch {
         }
     }
 
-    @Override
     void GoLive() {
-        Patch p = GetQCmdProcessor().getPatch();
-        if (p != null) {
-            p.Unlock();
+        PatchView patchView = patchController.patchView;
+        if (patchView != null) {
+            patchView.Unlock();
         }
-        super.GoLive();
+        
+        QCmdProcessor qCmdProcessor = patchController.patchModel.GetQCmdProcessor();
+        
+        qCmdProcessor.AppendToQueue(new QCmdStop());
+        String f = "/" + patchController.patchModel.getSDCardPath();
+        System.out.println("pathf" + f);
+        qCmdProcessor.AppendToQueue(new QCmdCreateDirectory(f));
+        qCmdProcessor.AppendToQueue(new QCmdChangeWorkingDirectory(f));
+//        GetQCmdProcessor().AppendToQueue(new QCmdStop());
+        patchController.patchModel.UploadDependentFiles();
+        patchController.patchModel.ShowPreset(0);
+        patchController.patchModel.WriteCode();
+        patchController.patchModel.presetUpdatePending = false;
+        qCmdProcessor.setPatchController(null);
+        qCmdProcessor.AppendToQueue(new QCmdCompilePatch(patchController.patchModel));
+        qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
+        qCmdProcessor.AppendToQueue(new QCmdStart(patchController));
+        qCmdProcessor.AppendToQueue(new QCmdLock(patchController));
     }
 
-    @Override
     public void Lock() {
-        super.Lock();
-        patchframe.SetLive(true);
+        PatchView.this.patchController.patchModel.Lock();
+        PatchView.this.patchController.patchModel.getPatchframe().SetLive(true);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
     }
 
-    @Override
     public void Unlock() {
-        super.Unlock();
-        patchframe.SetLive(false);
+        PatchView.this.patchController.patchModel.Unlock();
+        PatchView.this.patchController.patchModel.getPatchframe().SetLive(false);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
     }
 
-    @Override
     void invalidate() {
-        super.invalidate();
+        PatchView.this.patchController.patchModel.invalidate();
         Layers.invalidate();
     }
 
-    @Override
     public void repaint() {
         Layers.repaint();
     }
 
-    @Override
     void SetDSPLoad(int pct) {
-        patchframe.ShowDSPLoad(pct);
+        PatchView.this.patchController.patchModel.getPatchframe().ShowDSPLoad(pct);
     }
 
     Dimension GetInitialSize() {
         int mx = 100; // min size
         int my = 100;
-        for (AxoObjectInstanceAbstract i : objectinstances) {
+        for (AxoObjectInstanceAbstract i : PatchView.this.patchController.patchModel.getObjectInstances()) {
 
             Dimension s = i.getPreferredSize();
 
@@ -928,9 +944,8 @@ public class PatchGUI extends Patch {
         }
     }
 
-    @Override
     public void AdjustSize() {
-        Dimension s = GetSize();
+        Dimension s = PatchView.this.patchController.patchModel.GetSize();
         clampLayerSize(s);
         Dimension s2 = Layers.getSize();
         if (s2.equals(s)) {
@@ -940,18 +955,16 @@ public class PatchGUI extends Patch {
         Layers.setPreferredSize(s);
     }
 
-    @Override
     void PreSerialize() {
-        super.PreSerialize();
+        PatchView.this.patchController.patchModel.PreSerialize();
         if (NotesFrame != null) {
-            this.notes = NotesFrame.GetText();
+            PatchView.this.patchController.patchModel.notes = NotesFrame.GetText();
         }
-        windowPos = patchframe.getBounds();
+        PatchView.this.patchController.patchModel.windowPos = PatchView.this.patchController.patchModel.getPatchframe().getBounds();
     }
 
-    @Override
     boolean save(File f) {
-        boolean b = super.save(f);
+        boolean b = PatchView.this.patchController.patchModel.save(f);
         if (ObjEditor != null) {
             ObjEditor.UpdateObject();
         }
@@ -962,11 +975,14 @@ public class PatchGUI extends Patch {
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
-            PatchGUI patch1 = serializer.read(PatchGUI.class, stream);
-            PatchFrame pf = new PatchFrame(patch1, QCmdProcessor.getQCmdProcessor());
-            patch1.setFileNamePath(name);
-            patch1.PostContructor();
-            patch1.setFileNamePath(name);
+            PatchModel patchModel = serializer.read(PatchModel.class, stream);
+            PatchController patchController = new PatchController();
+            PatchView patchView = new PatchView(patchController);
+            patchController.setPatchView(patchView);
+            patchController.setPatchModel(patchModel);
+            PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+            patchView.setFileNamePath(name);
+            patchView.PostContructor();
             pf.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -988,15 +1004,19 @@ public class PatchGUI extends Patch {
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
-            PatchGUI patch1 = serializer.read(PatchGUI.class, f);
-            PatchFrame pf = new PatchFrame(patch1, QCmdProcessor.getQCmdProcessor());
-            patch1.setFileNamePath(f.getAbsolutePath());
-            patch1.PostContructor();
-            patch1.setFileNamePath(f.getPath());
+            PatchModel patchModel = serializer.read(PatchModel.class, f);
+            PatchController patchController = new PatchController();
+            PatchView patchView = new PatchView(patchController);
+            patchController.setPatchView(patchView);
+            patchController.setPatchModel(patchModel);
+            PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+            patchView.setFileNamePath(f.getAbsolutePath());
+            patchView.PostContructor();
+            patchView.setFileNamePath(f.getPath());
             return pf;
         } catch (java.lang.reflect.InvocationTargetException ite) {
-            if (ite.getTargetException() instanceof Patch.PatchVersionException) {
-                Patch.PatchVersionException pve = (Patch.PatchVersionException) ite.getTargetException();
+            if (ite.getTargetException() instanceof PatchModel.PatchVersionException) {
+                PatchModel.PatchVersionException pve = (PatchModel.PatchVersionException) ite.getTargetException();
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
                         new Object[]{f.getAbsoluteFile(), pve.getMessage()});
             } else {
@@ -1032,7 +1052,7 @@ public class PatchGUI extends Patch {
     }
 
     public void updateNetVisibility() {
-        for (Net n : this.nets) {
+        for (Net n : PatchView.this.patchController.patchModel.getNets()) {
             DataType d = n.GetDataType();
             if (d != null) {
                 n.setVisible(isCableTypeEnabled(d));
@@ -1041,21 +1061,21 @@ public class PatchGUI extends Patch {
         Layers.repaint();
     }
 
-    @Override
     public void Close() {
-        super.Close();
+        PatchView.this.patchController.patchModel.Close();
         if (NotesFrame != null) {
             NotesFrame.dispose();
         }
-        if ((settings != null) && (settings.editor != null)) {
-            settings.editor.dispose();
+        if ((PatchView.this.patchController.patchModel.settings != null) && 
+                (PatchView.this.patchController.patchModel.settings.editor != null)) {
+            PatchView.this.patchController.patchModel.settings.editor.dispose();
         }
     }
 
     void cleanUpObjectLayer() {
-        if (!IsLocked()) {
+        if (!PatchView.this.patchController.patchModel.IsLocked()) {
             for (Component c : this.objectLayerPanel.getComponents()) {
-                if (!objectinstances.contains(c)) {
+                if (!PatchView.this.patchController.patchModel.getObjectInstances().contains(c)) {
                     this.objectLayerPanel.remove(c);
                 }
             }

@@ -47,7 +47,8 @@ public class Net extends JComponent {
     ArrayList<OutletInstance> source;
     @ElementList(inline = true, required = false)
     ArrayList<InletInstance> dest = new ArrayList<InletInstance>();
-    Patch patch;
+    public PatchModel patchModel;
+    public PatchView patchView;
     boolean selected = false;
 
     public Net() {
@@ -63,9 +64,9 @@ public class Net extends JComponent {
         setOpaque(false);
     }
 
-    public Net(Patch patch) {
+    public Net(PatchModel patchModel) {
         this();
-        this.patch = patch;
+        this.patchModel = patchModel;
     }
 
     public void PostConstructor() {
@@ -74,16 +75,16 @@ public class Net extends JComponent {
         for (OutletInstance i : source) {
             String objname = i.getObjname();
             String outletname = i.getOutletname();
-            AxoObjectInstanceAbstract o = patch.GetObjectInstance(objname);
+            AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
             if (o == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
-                patch.nets.remove(this);
+                patchModel.nets.remove(this);
                 return;
             }
             OutletInstance r = o.GetOutletInstance(outletname);
             if (r == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
-                patch.nets.remove(this);
+                patchModel.nets.remove(this);
                 return;
             }
             source2.add(r);
@@ -92,16 +93,16 @@ public class Net extends JComponent {
         for (InletInstance i : dest) {
             String objname = i.getObjname();
             String inletname = i.getInletname();
-            AxoObjectInstanceAbstract o = patch.GetObjectInstance(objname);
+            AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
             if (o == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
-                patch.nets.remove(this);
+                patchModel.nets.remove(this);
                 return;
             }
             InletInstance r = o.GetInletInstance(inletname);
             if (r == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
-                patch.nets.remove(this);
+                patchModel.nets.remove(this);
                 return;
             }
             dest2.add(r);
@@ -134,7 +135,10 @@ public class Net extends JComponent {
     }
 
     public void connectInlet(InletInstance inlet) {
-        if (inlet.GetObjectInstance().patch != patch) {
+        if(patchView == null) {
+            patchView = inlet.axoObj.getPatchView();
+        }
+        if (inlet.GetObjectInstance().patchModel != patchModel) {
             return;
         }
         dest.add(inlet);
@@ -142,7 +146,10 @@ public class Net extends JComponent {
     }
 
     public void connectOutlet(OutletInstance outlet) {
-        if (outlet.GetObjectInstance().patch == patch) {
+        if(patchView == null) {
+            patchView = outlet.axoObj.getPatchView();
+        }
+        if (outlet.GetObjectInstance().patchModel == patchModel) {
             source.add(outlet);
         }
         updateBounds();
@@ -257,11 +264,11 @@ public class Net extends JComponent {
             }
         }
 
-        Point from = SwingUtilities.convertPoint(getPatchGui().Layers, p0, this);
+        Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
         for (InletInstance i : dest) {
             Point p1 = i.getJackLocInCanvas();
 
-            Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+            Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
             g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
             DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
             g2.setColor(c);
@@ -270,7 +277,7 @@ public class Net extends JComponent {
         for (OutletInstance i : source) {
             Point p1 = i.getJackLocInCanvas();
 
-            Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+            Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
             g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
             DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
             g2.setColor(c);
@@ -279,22 +286,18 @@ public class Net extends JComponent {
         }
     }
 
-    public PatchGUI getPatchGui() {
-        return (PatchGUI) patch;
-    }
-
     public boolean NeedsLatch() {
         // reads before last write on net
         int lastSource = 0;
         for (OutletInstance s : source) {
-            int i = patch.objectinstances.indexOf(s.GetObjectInstance());
+            int i = patchModel.objectinstances.indexOf(s.GetObjectInstance());
             if (i > lastSource) {
                 lastSource = i;
             }
         }
         int firstDest = java.lang.Integer.MAX_VALUE;
         for (InletInstance d : dest) {
-            int i = patch.objectinstances.indexOf(d.GetObjectInstance());
+            int i = patchModel.objectinstances.indexOf(d.GetObjectInstance());
             if (i < firstDest) {
                 firstDest = i;
             }
@@ -306,7 +309,7 @@ public class Net extends JComponent {
         if (source.size() == 1) {
             return true;
         }
-        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+        for (AxoObjectInstanceAbstract o : patchModel.objectinstances) {
             for (OutletInstance i : o.GetOutletInstances()) {
                 if (source.contains(i)) {
                     // o is first objectinstance connected to this net
@@ -340,7 +343,11 @@ public class Net extends JComponent {
     }
 
     public String CName() {
-        int i = patch.nets.indexOf(this);
+        int i = patchModel.nets.indexOf(this);
         return "net" + i;
+    }
+    
+    public void setPatchView(PatchView patchView) {
+        this.patchView = patchView;
     }
 }

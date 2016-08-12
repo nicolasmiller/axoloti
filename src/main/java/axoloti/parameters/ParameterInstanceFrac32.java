@@ -118,7 +118,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             if (modulators == null) {
                 modulators = new ArrayList<Modulation>();
             }
-            Modulator modulator = axoObj.patch.Modulators.get(index);
+            Modulator modulator = axoObj.getPatchModel().getModulators().get(index);
             //System.out.println("updatemodulation2:" + modulator.name);
             Modulation n = null;
             for (Modulation m : modulators) {
@@ -144,10 +144,10 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             n.modName = modulator.name;
             n.getValue().setDouble(amount);
             n.destination = this;
-            axoObj.patch.updateModulation(n);
+            axoObj.getPatchModel().updateModulation(n);
         } else {
             // remove modulation target if exists
-            Modulator modulator = axoObj.patch.Modulators.get(index);
+            Modulator modulator = axoObj.getPatchModel().getModulators().get(index);
             if (modulator == null) {
                 return;
             }
@@ -162,13 +162,13 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
                 if (n.destination == this) {
                     modulators.remove(n);
                 }
-                axoObj.patch.updateModulation(n);
+                axoObj.getPatchModel().updateModulation(n);
             }
             if (modulators.isEmpty()) {
                 modulators = null;
             }
         }
-        axoObj.patch.SetDirty();
+        axoObj.getPatchModel().SetDirty();
     }
 
     public ArrayList<Modulation> getModulators() {

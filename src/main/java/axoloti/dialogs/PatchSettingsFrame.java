@@ -18,7 +18,7 @@
 package axoloti.dialogs;
 
 import axoloti.DocumentWindow;
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.PatchSettings;
 import axoloti.SubPatchMode;
 import java.io.File;
@@ -37,14 +37,14 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
 
     PatchSettings settings;
 
-    final Patch patch;
+    final PatchModel patch;
 
     /**
      * Creates new form PatchSettingsFrame
      *
      * @param settings settings to load/save
      */
-    public PatchSettingsFrame(PatchSettings settings, Patch patch) {
+    public PatchSettingsFrame(PatchSettings settings, PatchModel patch) {
         initComponents();
         this.patch = patch;
         setTitle("settings");

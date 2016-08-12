@@ -50,7 +50,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     DefaultMutableTreeNode root;
     DefaultTreeModel tm;
     public AxoObjectAbstract type;
-    private final PatchGUI p;
+    private final PatchController patchController;
     public AxoObjectInstanceAbstract target_object;
     private AxoObjectTreeNode objectTree;
 
@@ -59,10 +59,10 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
      *
      * @param p parent
      */
-    public ObjectSearchFrame(PatchGUI p) {
+    public ObjectSearchFrame(PatchController patchController) {
         initComponents();
         getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
-        this.p = p;
+        this.patchController = patchController;
         DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
         this.objectTree = MainFrame.axoObjects.ObjectTree;
         this.root = PopulateJTree(MainFrame.axoObjects.ObjectTree, root1);
@@ -266,7 +266,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
         }
 
-        Point patchFrameOnScreen = p.getPatchframe().patch.objectLayerPanel.getLocationOnScreen();
+        Point patchFrameOnScreen = patchController.patchView.objectLayerPanel.getLocationOnScreen();
 
         if(patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
             patchLoc.x = (int) (allScreenBounds.getWidth() + allScreenBounds.getX() - patchFrameOnScreen.getX() - getWidth());
@@ -292,7 +292,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
-        Point ps = p.objectLayerPanel.getLocationOnScreen();
+        Point ps = patchController.patchView.objectLayerPanel.getLocationOnScreen();
         Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
         setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
@@ -431,8 +431,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             jList1.setListData(listData.toArray());
-//            jList1.doLayout();
-//            jList1.revalidate();
             if (!listData.isEmpty()) {
                 type = listData.get(0);
                 jList1.setSelectedIndex(0);
@@ -440,7 +438,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 ExpandJTreeToEl(listData.get(0));
                 SetPreview(type);
             } else {
-                ArrayList<AxoObjectAbstract> objs = MainFrame.axoObjects.GetAxoObjectFromName(s, p.GetCurrentWorkingDirectory());
+                ArrayList<AxoObjectAbstract> objs = MainFrame.axoObjects.GetAxoObjectFromName(s, patchController.patchModel.GetCurrentWorkingDirectory());
                 if ((objs != null) && (objs.size() > 0)) {
                     jList1.setListData(objs.toArray());
                     SetPreview(objs.get(0));
@@ -455,7 +453,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         accepted = false;
         MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
         setVisible(false);
-        p.repaint();
+        patchController.patchView.repaint();
     }
 
     void Accept() {
@@ -465,7 +463,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             setVisible(false);
             AxoObjectAbstract x = type;
             if (x == null) {
-                ArrayList<AxoObjectAbstract> objs = MainFrame.axoObjects.GetAxoObjectFromName(jTextFieldObjName.getText(), p.GetCurrentWorkingDirectory());
+                ArrayList<AxoObjectAbstract> objs = MainFrame.axoObjects.GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.patchModel.GetCurrentWorkingDirectory());
                 if ((objs != null) && (!objs.isEmpty())) {
                     x = objs.get(0);
                     jTextFieldObjName.setText("");
@@ -473,14 +471,14 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
             if (x != null) {
                 if (target_object == null) {
-                    p.AddObjectInstance(x, new Point(patchLocX, patchLocY));
+                    patchController.patchView.AddObjectInstance(x, new Point(patchLocX, patchLocY));
                 } else {
-                    AxoObjectInstanceAbstract oi = p.ChangeObjectInstanceType(target_object, x);
-                    p.cleanUpIntermediateChangeStates(2);
+                    AxoObjectInstanceAbstract oi = patchController.patchModel.ChangeObjectInstanceType(target_object, x);
+                    patchController.patchModel.cleanUpIntermediateChangeStates(2);
                 }
             }
             setVisible(false);
-            p.repaint();
+            patchController.patchView.repaint();
         }
     }
 

@@ -17,7 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import java.awt.Point;
 import java.io.File;
 import org.simpleframework.xml.Root;
@@ -51,7 +51,7 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
     }
 
     @Override
-    public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
+    public AxoObjectInstanceAbstract CreateInstance(PatchModel patch, String InstanceName1, Point location) {
         Load();
         AxoObjectInstance oi = new AxoObjectInstance(loadedObject, patch, InstanceName1, location);
         if (patch != null) {

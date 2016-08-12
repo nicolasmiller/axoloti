@@ -156,8 +156,8 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             public void ACtrlAdjusted(ACtrlEvent e) {
                 boolean changed = handleAdjustment();
                 if (axoObj != null && changed) {
-                    if (axoObj.getPatch() != null) {
-                        axoObj.getPatch().SetDirty();
+                    if (axoObj.getPatchModel() != null) {
+                        axoObj.getPatchModel().SetDirty();
                     }
                 }
             }
@@ -208,7 +208,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'P';
-        int pid = GetObjectInstance().getPatch().GetIID();
+        int pid = GetObjectInstance().getPatchModel().GetIID();
         data[4] = (byte) pid;
         data[5] = (byte) (pid >> 8);
         data[6] = (byte) (pid >> 16);
@@ -264,8 +264,8 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 
     public void setValue(Value value) {
         if (axoObj != null) {
-            if (axoObj.getPatch() != null) {
-                axoObj.getPatch().SetDirty();
+            if (axoObj.getPatchModel() != null) {
+                axoObj.getPatchModel().SetDirty();
             }
         }
     }

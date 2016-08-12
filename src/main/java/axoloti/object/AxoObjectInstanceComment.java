@@ -17,8 +17,8 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import components.LabelComponent;
 import components.TextFieldComponent;
 import java.awt.Point;
@@ -52,7 +52,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
         }
     }
 
-    public AxoObjectInstanceComment(AxoObjectAbstract type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceComment(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
         if (InstanceName != null) {
             commentText = InstanceName;
@@ -83,12 +83,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                 if (me.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
-                if (patch != null) {
+                if (patchView != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
                             SetSelected(!GetSelected());
                         } else if (Selected == false) {
-                            ((PatchGUI) patch).SelectNone();
+                            patchView.SelectNone();
                             SetSelected(true);
                         }
                     }

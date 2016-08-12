@@ -132,7 +132,7 @@ public class PatchSettings {
         NModulationTargetsPerSource = i;
     }
 
-    void showEditor(Patch patch) {
+    void showEditor(PatchModel patch) {
         if (editor == null) {
             editor = new PatchSettingsFrame(this, patch);
         }

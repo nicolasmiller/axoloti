@@ -98,7 +98,7 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     @Override
     public String CValue() {
         String s = " {";
-        File fp = new File(GetObjectInstance().getPatch().getFileNamePath());
+        File fp = new File(GetObjectInstance().getPatchModel().getFileNamePath());
         File f = new File(fp.getParent() + "/" + waveFilename);
         System.out.println("waveFilename : " + fp.getParent() + "/" + waveFilename + "\n");
 

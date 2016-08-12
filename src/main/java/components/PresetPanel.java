@@ -17,7 +17,7 @@
  */
 package components;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 
 /**
  *
@@ -25,14 +25,14 @@ import axoloti.Patch;
  */
 public class PresetPanel extends javax.swing.JPanel {
 
-    Patch p;
+    PatchModel p;
 
     /**
      * Creates new form PresetPanel
      *
      * @param p patch to recall preset
      */
-    public PresetPanel(Patch p) {
+    public PresetPanel(PatchModel p) {
         this.p = p;
         initComponents();
     }

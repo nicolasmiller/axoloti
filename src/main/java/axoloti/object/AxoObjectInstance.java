@@ -19,9 +19,9 @@ package axoloti.object;
 
 import axoloti.MainFrame;
 import axoloti.Net;
-import axoloti.Patch;
 import axoloti.PatchFrame;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.Theme;
@@ -97,8 +97,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     @Override
     public void refreshIndex() {
-        if (patch != null) {
-            IndexLabel.setText(" " + patch.objectinstances.indexOf(this));
+        if (patchModel != null) {
+            IndexLabel.setText(" " + patchModel.getObjectInstances().indexOf(this));
         }
     }
 
@@ -188,7 +188,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this, null);
+                patchView.ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this, null);
             }
         });
         popup.add(popm_substitute);
@@ -197,7 +197,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    PatchGUI.OpenPatch(getType().GetHelpPatchFile());
+                    PatchView.OpenPatch(getType().GetHelpPatchFile());
                 }
             });
             popup.add(popm_help);
@@ -322,7 +322,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
             InletInstance inlin = new InletInstance(inl, this);
             if (inlinp != null) {
-                Net n = getPatch().GetNet(inlinp);
+                Net n = getPatchModel().GetNet(inlinp);
                 if (n != null) {
                     n.connectInlet(inlin);
                 }
@@ -333,7 +333,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
         // disconnect stale inlets from nets
         for (InletInstance inlin1 : pInletInstances) {
-            getPatch().disconnect(inlin1);
+            getPatchModel().disconnect(inlin1);
         }
 
         for (Outlet o : getType().outlets) {
@@ -345,7 +345,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
             OutletInstance oin = new OutletInstance(o, this);
             if (oinp != null) {
-                Net n = getPatch().GetNet(oinp);
+                Net n = getPatchModel().GetNet(oinp);
                 if (n != null) {
                     n.connectOutlet(oin);
                 }
@@ -356,7 +356,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
         // disconnect stale outlets from nets
         for (OutletInstance oinp1 : pOutletInstances) {
-            getPatch().disconnect(oinp1);
+            getPatchModel().disconnect(oinp1);
         }
 
         /*
@@ -424,8 +424,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         attributeInstances = new ArrayList<AttributeInstance>();
     }
 
-    public AxoObjectInstance(AxoObject type, Patch patch1, String InstanceName1, Point location) {
-        super(type, patch1, InstanceName1, location);
+    public AxoObjectInstance(AxoObject type, PatchModel patchModel, String InstanceName1, Point location) {
+        super(type, patchModel, InstanceName1, location);
         inletInstances = new ArrayList<InletInstance>();
         outletInstances = new ArrayList<OutletInstance>();
         displayInstances = new ArrayList<DisplayInstance>();
@@ -498,8 +498,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     public void updateObj() {
-        getPatch().ChangeObjectInstanceType(this, this.getType());
-        getPatch().cleanUpIntermediateChangeStates(3);
+        getPatchModel().ChangeObjectInstanceType(this, this.getType());
+        getPatchModel().cleanUpIntermediateChangeStates(3);
     }
 
     @Override
@@ -822,7 +822,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return;
         }
         String id = typeName;
-        ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, patch.GetCurrentWorkingDirectory());
+        ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, getPatchModel().GetCurrentWorkingDirectory());
         if (candidates == null) {
             return;
         }
@@ -839,7 +839,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
         //      InletInstance i = null;// = GetInletInstances().get(0);
         for (InletInstance j : GetInletInstances()) {
-            Net n = patch.GetNet(j);
+            Net n = getPatchModel().GetNet(j);
             if (n == null) {
                 continue;
             }
@@ -884,8 +884,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
         if (selected != getType()) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "promoting " + this + " to " + selected);
-            patch.ChangeObjectInstanceType(this, selected);
-            patch.cleanUpIntermediateChangeStates(4);
+            getPatchModel().ChangeObjectInstanceType(this, selected);
+            getPatchModel().cleanUpIntermediateChangeStates(4);
         } else {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "no promotion for {0}", typeName);
         }
@@ -901,8 +901,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     @Override
     public void ObjectModified(Object src) {
-        if (getPatch() != null) {
-            if (!getPatch().IsLocked()) {
+        if (getPatchModel() != null) {
+            if (!getPatchModel().IsLocked()) {
                 updateObj();
             } else {
                 deferredObjTypeUpdate = true;
@@ -941,15 +941,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         assert (!ol.isEmpty());
         AxoObjectAbstract o = ol.get(0);
         String iname = getInstanceName();
-        AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatch().ChangeObjectInstanceType1(this, o);
+        AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().ChangeObjectInstanceType1(this, o);
         AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
-        PatchFrame pf = PatchGUI.OpenPatch(ao.f);
+        PatchFrame pf = PatchView.OpenPatch(ao.f);
         oi.pf = pf;
-        oi.pg = pf.getPatch();
+        oi.patchModel = pf.getPatchModel();
         oi.setInstanceName(iname);
         oi.updateObj();
-        getPatch().delete(this);
-        getPatch().SetDirty();
+        getPatchModel().delete(this);
+        getPatchModel().SetDirty();
     }
 
     void ConvertToEmbeddedObj() {
@@ -961,7 +961,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             assert (!ol.isEmpty());
             AxoObjectAbstract o = ol.get(0);
             String iname = getInstanceName();
-            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatch().ChangeObjectInstanceType1(this, o);
+            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o);
             AxoObject ao = getType();
             oi.ao = new AxoObject(ao.id, ao.sDescription);
             oi.ao.copy(ao);
@@ -970,8 +970,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             oi.ao.CloseEditor();
             oi.setInstanceName(iname);
             oi.updateObj();
-            getPatch().delete(this);
-            getPatch().SetDirty();
+            getPatchModel().delete(this);
+            getPatchModel().SetDirty();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
         }

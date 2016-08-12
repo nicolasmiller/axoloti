@@ -106,9 +106,9 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         String o2 = "parent->";
 
         if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
-                && ((GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
-                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polychannel)
-                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyexpression))) {
+                && ((GetObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyphonic)
+                || (GetObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polychannel)
+                || (GetObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyexpression))) {
             o2 = o2 + "common->";
         }
 

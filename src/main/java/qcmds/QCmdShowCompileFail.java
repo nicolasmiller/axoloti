@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 
 /**
  *
@@ -25,9 +25,9 @@ import axoloti.Patch;
  */
 public class QCmdShowCompileFail implements QCmdGUITask {
 
-    Patch p;
+    PatchModel p;
 
-    public QCmdShowCompileFail(Patch p) {
+    public QCmdShowCompileFail(PatchModel p) {
         this.p = p;
     }
 

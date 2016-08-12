@@ -19,7 +19,7 @@ package axoloti.object;
 
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeInt32;
@@ -342,8 +342,8 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public AxoObjectInstance CreateInstance(Patch patch, String InstanceName1, Point location) {
-        if (patch != null) {
+    public AxoObjectInstance CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
+        if (patchModel != null) {
             if ((sMidiCCCode != null)
                     || (sMidiAllNotesOffCode != null)
                     || (sMidiCCCode != null)
@@ -356,9 +356,9 @@ public class AxoObject extends AxoObjectAbstract {
             }
         }
 
-        AxoObjectInstance o = new AxoObjectInstance(this, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(o);
+        AxoObjectInstance o = new AxoObjectInstance(this, patchModel, InstanceName1, location);
+        if (patchModel != null) {
+            patchModel.getObjectInstances().add(o);
         }
         o.PostConstructor();
         return o;

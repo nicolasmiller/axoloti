@@ -43,7 +43,7 @@ public class AssignPresetPanel extends JPanel {
 
     public AssignPresetPanel(ParameterInstance param) {
         this.param = param;
-        int n = param.GetObjectInstance().getPatch().getSettings().GetNPresets();
+        int n = param.GetObjectInstance().getPatchModel().getSettings().GetNPresets();
         ctrls = new ArrayList<ACtrlComponent>(n);
 
         setLayout(new GridBagLayout());
@@ -84,7 +84,7 @@ public class AssignPresetPanel extends JPanel {
                 ctrls.get(i).setEnabled(false);
                 param.RemovePreset(i + 1);
             }
-            param.GetObjectInstance().patch.presetUpdatePending = true;
+            param.GetObjectInstance().getPatchModel().presetUpdatePending = true;
         }
 
     };
@@ -103,7 +103,7 @@ public class AssignPresetPanel extends JPanel {
                     }
                 }
             }
-            param.GetObjectInstance().patch.presetUpdatePending = true;
+            param.GetObjectInstance().getPatchModel().presetUpdatePending = true;
         }
     };
 }

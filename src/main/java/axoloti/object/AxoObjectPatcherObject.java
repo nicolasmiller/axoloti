@@ -17,7 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import java.awt.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class AxoObjectPatcherObject extends AxoObject {
     }
 
     @Override
-    public AxoObjectInstance CreateInstance(Patch patch, String InstanceName1, Point location) {
+    public AxoObjectInstance CreateInstance(PatchModel patch, String InstanceName1, Point location) {
         if ((sMidiCCCode != null)
                 || (sMidiAllNotesOffCode != null)
                 || (sMidiCCCode != null)

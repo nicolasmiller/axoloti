@@ -17,7 +17,7 @@
  */
 package axoloti.dialogs;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.parameters.ParameterInstance;
 import java.util.Collection;
@@ -38,7 +38,7 @@ public class MidiAssignments extends javax.swing.JDialog {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Patch patch = param.GetObjectInstance().patch;
+        PatchModel patch = param.GetObjectInstance().getPatchModel();
         String CCObj[] = new String[128];
         String CCParam[] = new String[128];
         for (AxoObjectInstanceAbstract obj : patch.objectinstances) {

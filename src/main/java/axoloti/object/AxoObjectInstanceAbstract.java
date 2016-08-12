@@ -19,8 +19,9 @@ package axoloti.object;
 
 import axoloti.MainFrame;
 import axoloti.Net;
-import axoloti.Patch;
-import axoloti.PatchGUI;
+import axoloti.PatchController;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import axoloti.SDFileReference;
 import axoloti.Theme;
 import axoloti.attribute.AttributeInstance;
@@ -73,7 +74,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     int x;
     @Attribute
     int y;
-    public Patch patch;
+    public PatchController patchController;
+    public PatchModel patchModel;
+    public PatchView patchView;
     AxoObjectAbstract type;
     boolean dragging = false;
     int dX, dY;
@@ -89,12 +92,12 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public AxoObjectInstanceAbstract() {
     }
 
-    public AxoObjectInstanceAbstract(AxoObjectAbstract type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceAbstract(AxoObjectAbstract type, PatchModel patchModel, String InstanceName1, Point location) {
         super();
         this.type = type;
         typeName = type.id;
-        if (type.createdFromRelativePath && (patch1 != null)) {
-            String pPath = patch1.getFileNamePath();
+        if (type.createdFromRelativePath && (patchModel != null)) {
+            String pPath = patchModel.getFileNamePath();
             String oPath = type.sPath;
 
             if (oPath.endsWith(".axp") || oPath.endsWith(".axo") || oPath.endsWith(".axs")) {
@@ -129,15 +132,18 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         this.InstanceName = InstanceName1;
         this.x = location.x;
         this.y = location.y;
-        this.patch = patch1;
+        this.patchModel = patchModel;
     }
 
-    public Patch getPatch() {
-        return patch;
+    public PatchModel getPatchModel() {
+        return patchModel;
     }
 
-    public PatchGUI getPatchGUI() {
-        return (PatchGUI) patch;
+    public PatchView getPatchView() {
+        if(patchView == null) {
+            patchView = patchController.patchView;
+        }
+        return patchView;
     }
 
     public String getInstanceName() {
@@ -153,8 +159,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (this.InstanceName.equals(InstanceName)) {
             return;
         }
-        if (patch != null) {
-            AxoObjectInstanceAbstract o1 = patch.GetObjectInstance(InstanceName);
+        if (getPatchModel() != null) {
+            AxoObjectInstanceAbstract o1 = getPatchModel().GetObjectInstance(InstanceName);
             if ((o1 != null) && (o1 != this)) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
                 doLayout();
@@ -185,7 +191,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             }
         }
         if (type == null) {
-            ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patch.GetCurrentWorkingDirectory());
+            ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, getPatchModel().GetCurrentWorkingDirectory());
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
             } else { // pick first
@@ -234,42 +240,24 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         ml = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
-                if (patch != null) {
+                if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
                             SetSelected(!GetSelected());
                             me.consume();
                         } else if (Selected == false) {
-                            ((PatchGUI) patch).SelectNone();
+                            getPatchView().SelectNone();
                             SetSelected(true);
                             me.consume();
                         }
                     }
                     if (me.getClickCount() == 2) {
-                        ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this, null);
+                        getPatchView().ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this, null);
                         me.consume();
                     }
                 }
             }
 
-            /*
-             ClassSelector cs = ((PatchGUI)patch).cs;
-             cs.setText(getType().id);
-             //                        getParent().add(cs, 0);
-             cs.setLocation(getLocation());
-             //                        newObjTF.setSize(400,300);
-             cs.setVisible(true);
-             cs.requestFocus();
-             * /
-             }
-             } else {
-             for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-             o.SetSelected(false);
-             }
-             SetSelected(true);
-             }
-             //patch.invalidate();
-             }*/
             @Override
             public void mousePressed(MouseEvent me) {
                 handleMousePressed(me);
@@ -295,9 +283,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         mml = new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent me) {
-                if (patch != null) {
+                if (getPatchModel() != null) {
                     if (dragging) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                        for (AxoObjectInstanceAbstract o : getPatchModel().getObjectInstances()) {
                             if (o.dragging) {
                                 o.x = me.getLocationOnScreen().x - o.dX;
                                 o.y = me.getLocationOnScreen().y - o.dY;
@@ -321,24 +309,23 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     private void moveToDraggedLayer(AxoObjectInstanceAbstract o) {
-        if (getPatchGUI().objectLayerPanel.isAncestorOf(o)) {
-            getPatchGUI().draggedObjectLayerPanel.add(o);
-            getPatchGUI().objectLayerPanel.remove(o);
+        if (getPatchView().objectLayerPanel.isAncestorOf(o)) {
+            getPatchView().draggedObjectLayerPanel.add(o);
+            getPatchView().objectLayerPanel.remove(o);
         }
     }
 
     protected void handleMousePressed(MouseEvent me) {
-        if (patch != null) {
+        if (getPatchModel() != null) {
             if (me.isPopupTrigger()) {
 
             } else if (!IsLocked()) {
-                ArrayList<AxoObjectInstanceAbstract> toMove = new ArrayList<AxoObjectInstanceAbstract>();
                 dX = me.getXOnScreen() - getX();
                 dY = me.getYOnScreen() - getY();
                 dragging = true;
                 moveToDraggedLayer(this);
                 if (IsSelected()) {
-                    for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                    for (AxoObjectInstanceAbstract o : getPatchModel().getObjectInstances()) {
                         if (o.IsSelected()) {
                             moveToDraggedLayer(o);
 
@@ -353,10 +340,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     private void moveToObjectLayer(AxoObjectInstanceAbstract o, int z) {
-        if (getPatchGUI().draggedObjectLayerPanel.isAncestorOf(o)) {
-            getPatchGUI().objectLayerPanel.add(o);
-            getPatchGUI().draggedObjectLayerPanel.remove(o);
-            getPatchGUI().objectLayerPanel.setComponentZOrder(o, z);
+        if (getPatchView().draggedObjectLayerPanel.isAncestorOf(o)) {
+            getPatchView().objectLayerPanel.add(o);
+            getPatchView().draggedObjectLayerPanel.remove(o);
+            getPatchView().objectLayerPanel.setComponentZOrder(o, z);
         }
     }
 
@@ -364,12 +351,12 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         int maxZIndex = 0;
         if (dragging) {
             dragging = false;
-            if (patch != null) {
+            if (getPatchModel() != null) {
                 boolean setDirty = false;
-                for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                for (AxoObjectInstanceAbstract o : getPatchModel().getObjectInstances()) {
                     moveToObjectLayer(o, 0);
-                    if (getPatchGUI().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
-                        maxZIndex = getPatchGUI().objectLayerPanel.getComponentZOrder(o);
+                    if (getPatchView().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
+                        maxZIndex = getPatchView().objectLayerPanel.getComponentZOrder(o);
                     }
                     o.dragging = false;
                     int original_x = o.x;
@@ -382,9 +369,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     }
                 }
                 if (setDirty) {
-                    patch.SetDirty();
+                    getPatchModel().SetDirty();
                 }
-                patch.AdjustSize();
+                getPatchView().AdjustSize();
             }
         }
         moveToObjectLayer(this, maxZIndex);
@@ -395,17 +382,17 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         super.setLocation(x, y);
         this.x = x;
         this.y = y;
-        if (patch != null) {
+        if (getPatchModel() != null) {
             repaint();
             for (InletInstance i : GetInletInstances()) {
-                Net n = getPatch().GetNet(i);
+                Net n = getPatchModel().GetNet(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
                 }
             }
             for (OutletInstance i : GetOutletInstances()) {
-                Net n = getPatch().GetNet(i);
+                Net n = getPatchModel().GetNet(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
@@ -579,8 +566,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         x = x1;
         y = y1;
 
-        if (patch != null) {
-            for (Net n : patch.nets) {
+        if (getPatchModel() != null) {
+            for (Net n : getPatchModel().getNets()) {
                 n.updateBounds();
             }
         }
@@ -678,5 +665,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     public void Close() {
+    }
+    
+    public void setPatchController(PatchController patchController) {
+        this.patchController = patchController;
     }
 }

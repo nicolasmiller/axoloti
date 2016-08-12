@@ -32,11 +32,8 @@ import javax.swing.SwingUtilities;
  */
 public class NetDragging extends Net {
 
-    private PatchGUI patchGUI;
-
-    public NetDragging(PatchGUI patchGUI) {
-        super(patchGUI);
-        this.patchGUI = patchGUI;
+    public NetDragging(PatchModel patchModel) {
+        super(patchModel);
     }
 
     Point p0;
@@ -80,11 +77,11 @@ public class NetDragging extends Net {
             }
         }
         if (p0 != null) {
-            Point from = SwingUtilities.convertPoint(getPatchGui().Layers, p0, this);
+            Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
             for (InletInstance i : dest) {
                 Point p1 = i.getJackLocInCanvas();
 
-                Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+                Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
@@ -93,7 +90,7 @@ public class NetDragging extends Net {
             for (OutletInstance i : source) {
                 Point p1 = i.getJackLocInCanvas();
 
-                Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+                Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);

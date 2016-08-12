@@ -3,7 +3,8 @@ package axoloti.iolet;
 import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.NetDragging;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
@@ -72,7 +73,7 @@ public abstract class IoletAbstract extends JPanel {
             Point jackLocation = jack.getLocationOnScreen();
             jackLocation.x += 5;
             jackLocation.y += 5;
-            SwingUtilities.convertPointFromScreen(jackLocation, getPatchGui().Layers);
+            SwingUtilities.convertPointFromScreen(jackLocation, getPatchView().Layers);
             return jackLocation;
         } catch (IllegalComponentStateException e) {
             return getJackLocInCanvasHidden();
@@ -83,12 +84,12 @@ public abstract class IoletAbstract extends JPanel {
 
     abstract public JPopupMenu getPopup();
 
-    public PatchGUI getPatchGui() {
-        try {
-            return (PatchGUI) axoObj.getPatch();
-        } catch (ClassCastException e) {
-            return null;
-        }
+    public PatchView getPatchView() {
+        return axoObj.getPatchView();
+    }
+    
+    public PatchModel getPatchModel() {
+        return axoObj.getPatchModel();
     }
 
     NetDragging dragnet = null;
@@ -109,7 +110,8 @@ public abstract class IoletAbstract extends JPanel {
                     setHighlighted(true);
                     if (!axoObj.IsLocked()) {
                         if (dragnet == null) {
-                            dragnet = new NetDragging(getPatchGui());
+                            dragnet = new NetDragging(getPatchModel());
+                            dragnet.setPatchView(getPatchView());
                             dragtarget = null;
                             if (IoletAbstract.this instanceof InletInstance) {
                                 dragnet.connectInlet((InletInstance) IoletAbstract.this);
@@ -118,7 +120,7 @@ public abstract class IoletAbstract extends JPanel {
                             }
                         }
                         dragnet.setVisible(true);
-                        getPatchGui().selectionRectLayerPanel.add(dragnet);
+                        getPatchView().selectionRectLayerPanel.add(dragnet);
                         e.consume();
                     }
                 }
@@ -128,33 +130,32 @@ public abstract class IoletAbstract extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (dragnet != null) {
                     dragnet.repaint();
-                    getPatchGui().selectionRectLayerPanel.remove(dragnet);
+                    getPatchView().selectionRectLayerPanel.remove(dragnet);
                     dragnet = null;
                     if (dragtarget == null) {
-                        final PatchGUI patchGUI = getPatchGui();
-                        Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.selectionRectLayerPanel);
-                        Component c = patchGUI.objectLayerPanel.findComponentAt(p);
+                        Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), getPatchView().selectionRectLayerPanel);
+                        Component c = getPatchView().objectLayerPanel.findComponentAt(p);
                         while ((c != null) && !(c instanceof IoletAbstract)) {
                             c = c.getParent();
                         }
                         if (IoletAbstract.this != c) {
-                            patchGUI.disconnect(IoletAbstract.this);
+                            getPatchView().disconnect(IoletAbstract.this);
                         }
                     } else {
                         if (IoletAbstract.this instanceof InletInstance) {
                             if (dragtarget instanceof InletInstance) {
-                                getPatchGui().AddConnection((InletInstance) IoletAbstract.this, (InletInstance) dragtarget);
+                                getPatchView().AddConnection((InletInstance) IoletAbstract.this, (InletInstance) dragtarget);
                             } else if (dragtarget instanceof OutletInstance) {
-                                getPatchGui().AddConnection((InletInstance) IoletAbstract.this, (OutletInstance) dragtarget);
+                                getPatchView().AddConnection((InletInstance) IoletAbstract.this, (OutletInstance) dragtarget);
                             }
                         } else if (IoletAbstract.this instanceof OutletInstance) {
                             if (dragtarget instanceof InletInstance) {
-                                getPatchGui().AddConnection((InletInstance) dragtarget, (OutletInstance) IoletAbstract.this);
+                                getPatchView().AddConnection((InletInstance) dragtarget, (OutletInstance) IoletAbstract.this);
                             }
                         }
-                        axoObj.patch.PromoteOverloading(false);
+                        axoObj.getPatchModel().PromoteOverloading(false);
                     }
-                    getPatchGui().selectionRectLayerPanel.repaint();
+                    getPatchView().selectionRectLayerPanel.repaint();
                     e.consume();
                 }
             }
@@ -170,15 +171,13 @@ public abstract class IoletAbstract extends JPanel {
             }
         }
         );
-        addMouseMotionListener(
-                new MouseMotionListener() {
+        addMouseMotionListener(new MouseMotionListener() {
 
                     @Override
                     public void mouseDragged(MouseEvent e) {
                         if (!axoObj.IsLocked()) {
-                            final PatchGUI patchGUI = getPatchGui();
-                            Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.objectLayerPanel);
-                            Component c = patchGUI.objectLayerPanel.findComponentAt(p);
+                            Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), getPatchView().objectLayerPanel);
+                            Component c = getPatchView().objectLayerPanel.findComponentAt(p);
                             while ((c != null) && !(c instanceof IoletAbstract)) {
                                 c = c.getParent();
                             }
@@ -213,18 +212,18 @@ public abstract class IoletAbstract extends JPanel {
         if (axoObj == null) {
             return false;
         }
-        if (axoObj.patch == null) {
+        if (axoObj.getPatchModel() == null) {
             return false;
         }
-        return (axoObj.patch.GetNet(this) != null);
+        return (axoObj.getPatchModel().GetNet(this) != null);
     }
 
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)
                 && axoObj != null
-                && axoObj.patch != null) {
-            Net n = axoObj.patch.GetNet(this);
+                && axoObj.getPatchModel() != null) {
+            Net n = axoObj.getPatchModel().GetNet(this);
             if (n != null
                     && n.getSelected() != highlighted) {
                 n.setSelected(highlighted);
@@ -233,13 +232,13 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     public void disconnect() {
-        axoObj.patch.disconnect(this);
-        axoObj.patch.SetDirty();
+        axoObj.getPatchModel().disconnect(this);
+        axoObj.getPatchModel().SetDirty();
     }
 
     public void deleteNet() {
-        Net n = axoObj.patch.GetNet(this);
-        axoObj.patch.delete(n);
-        axoObj.patch.SetDirty();
+        Net n = axoObj.getPatchModel().GetNet(this);
+        axoObj.getPatchModel().delete(n);
+        axoObj.getPatchModel().SetDirty();
     }
 }
