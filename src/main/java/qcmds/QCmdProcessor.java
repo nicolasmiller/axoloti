@@ -20,7 +20,6 @@ package qcmds;
 import axoloti.Connection;
 import axoloti.MainFrame;
 import axoloti.PatchController;
-import axoloti.PatchModel;
 import axoloti.USBBulkConnection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;

@@ -78,9 +78,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         initComponents();
         fileMenu1.initComponents();
         this.patchController = patchController;
-        this.patchController.patchModel.patchframe = this;
+        this.patchController.setPatchFrame(this);
 
-        presetPanel = new PresetPanel(patchController.patchModel);
+        presetPanel = new PresetPanel(patchController);
         visibleCablePanel = new VisibleCablePanel(patchController.patchView);
         
         jToolbarPanel.add(presetPanel);
@@ -846,15 +846,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuGenerateCodeActionPerformed
 
     private void jMenuCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCompileCodeActionPerformed
-        patchController.patchModel.Compile();
+        patchController.Compile();
     }//GEN-LAST:event_jMenuCompileCodeActionPerformed
 
     private void jMenuUploadCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUploadCodeActionPerformed
-        patchController.patchModel.GetQCmdProcessor().setPatchController(null);
-        patchController.patchModel.GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        patchController.patchModel.GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-        patchController.patchModel.GetQCmdProcessor().AppendToQueue(new QCmdStart(patchController));
-        patchController.patchModel.GetQCmdProcessor().AppendToQueue(new QCmdLock(patchController));
+        patchController.GetQCmdProcessor().setPatchController(null);
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdStop());
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdStart(patchController));
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdLock(patchController));
     }//GEN-LAST:event_jMenuUploadCodeActionPerformed
 
     private void jMenuItemLockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLockActionPerformed
@@ -910,7 +910,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             if (patchController.patchModel.settings == null) {
                 patchController.patchModel.settings = new PatchSettings();
             }
-            patchController.patchModel.settings.showEditor(patchController.patchModel);
+            patchController.patchModel.settings.showEditor(patchController);
         }
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
@@ -991,16 +991,16 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jMenuGenerateAndCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateAndCompileCodeActionPerformed
         patchController.patchModel.WriteCode();
-        patchController.patchModel.Compile();
+        patchController.Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
-        patchController.patchModel.undo();
+        patchController.undo();
         this.updateUndoRedoEnabled();
     }//GEN-LAST:event_undoItemActionPerformed
 
     private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
-        patchController.patchModel.redo();
+        patchController.redo();
         this.updateUndoRedoEnabled();
     }//GEN-LAST:event_redoItemActionPerformed
 

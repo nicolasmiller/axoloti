@@ -28,7 +28,6 @@ import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -67,7 +66,6 @@ import javax.swing.JFrame;
 import javax.swing.JLayer;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
 import org.simpleframework.xml.Root;
@@ -667,7 +665,7 @@ public class PatchView {
 
     void ShowNotesFrame() {
         if (NotesFrame == null) {
-            NotesFrame = new TextEditor(new StringRef(), PatchView.this.patchController.patchModel.getPatchframe());
+            NotesFrame = new TextEditor(new StringRef(), patchController.getPatchFrame());
             NotesFrame.setTitle("notes");
             NotesFrame.SetText(PatchView.this.patchController.patchModel.notes);
             NotesFrame.addFocusListener(new FocusListener() {
@@ -765,14 +763,14 @@ public class PatchView {
     }
 
     public void PostContructor() {
-        PatchView.this.patchController.patchModel.PostContructor();
+        patchController.patchModel.PostContructor();
         objectLayerPanel.removeAll();
         netLayerPanel.removeAll();
-        for (AxoObjectInstanceAbstract o : PatchView.this.patchController.patchModel.objectinstances) {
-            o.setPatchController(PatchView.this.patchController);
+        for (AxoObjectInstanceAbstract o : patchController.patchModel.objectinstances) {
+            o.setPatchController(patchController);
             objectLayerPanel.add(o);
         }
-        for (Net n : PatchView.this.patchController.patchModel.nets) {
+        for (Net n : patchController.patchModel.nets) {
             n.setPatchView(this);
             netLayerPanel.add(n);
         }
@@ -790,7 +788,7 @@ public class PatchView {
 
     public void setFileNamePath(String FileNamePath) {
         PatchView.this.patchController.patchModel.setFileNamePath(FileNamePath);
-        PatchView.this.patchController.patchModel.getPatchframe().setTitle(FileNamePath);
+        PatchView.this.patchController.getPatchFrame().setTitle(FileNamePath);
     }
 
     public Net AddConnection(InletInstance il, OutletInstance ol) {
@@ -870,15 +868,14 @@ public class PatchView {
             patchView.Unlock();
         }
         
-        QCmdProcessor qCmdProcessor = patchController.patchModel.GetQCmdProcessor();
+        QCmdProcessor qCmdProcessor = patchController.GetQCmdProcessor();
         
         qCmdProcessor.AppendToQueue(new QCmdStop());
         String f = "/" + patchController.patchModel.getSDCardPath();
         System.out.println("pathf" + f);
         qCmdProcessor.AppendToQueue(new QCmdCreateDirectory(f));
         qCmdProcessor.AppendToQueue(new QCmdChangeWorkingDirectory(f));
-//        GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        patchController.patchModel.UploadDependentFiles();
+        patchController.UploadDependentFiles();
         patchController.patchModel.ShowPreset(0);
         patchController.patchModel.WriteCode();
         patchController.patchModel.presetUpdatePending = false;
@@ -890,19 +887,19 @@ public class PatchView {
     }
 
     public void Lock() {
-        PatchView.this.patchController.patchModel.Lock();
-        PatchView.this.patchController.patchModel.getPatchframe().SetLive(true);
+        patchController.patchModel.Lock();
+        patchController.getPatchFrame().SetLive(true);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
     }
 
     public void Unlock() {
-        PatchView.this.patchController.patchModel.Unlock();
-        PatchView.this.patchController.patchModel.getPatchframe().SetLive(false);
+        patchController.patchModel.Unlock();
+        patchController.getPatchFrame().SetLive(false);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
     }
 
     void invalidate() {
-        PatchView.this.patchController.patchModel.invalidate();
+        patchController.patchModel.invalidate();
         Layers.invalidate();
     }
 
@@ -911,13 +908,13 @@ public class PatchView {
     }
 
     void SetDSPLoad(int pct) {
-        PatchView.this.patchController.patchModel.getPatchframe().ShowDSPLoad(pct);
+        patchController.getPatchFrame().ShowDSPLoad(pct);
     }
 
     Dimension GetInitialSize() {
         int mx = 100; // min size
         int my = 100;
-        for (AxoObjectInstanceAbstract i : PatchView.this.patchController.patchModel.getObjectInstances()) {
+        for (AxoObjectInstanceAbstract i : patchController.patchModel.getObjectInstances()) {
 
             Dimension s = i.getPreferredSize();
 
@@ -946,7 +943,7 @@ public class PatchView {
     }
 
     public void AdjustSize() {
-        Dimension s = PatchView.this.patchController.patchModel.GetSize();
+        Dimension s = patchController.patchModel.GetSize();
         clampLayerSize(s);
         Dimension s2 = Layers.getSize();
         if (s2.equals(s)) {
@@ -961,7 +958,7 @@ public class PatchView {
         if (NotesFrame != null) {
             PatchView.this.patchController.patchModel.notes = NotesFrame.GetText();
         }
-        PatchView.this.patchController.patchModel.windowPos = PatchView.this.patchController.patchModel.getPatchframe().getBounds();
+        PatchView.this.patchController.patchModel.windowPos = patchController.getPatchFrame().getBounds();
     }
 
     boolean save(File f) {

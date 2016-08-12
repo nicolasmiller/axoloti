@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
 import components.LabelComponent;
 import components.TextFieldComponent;
 import java.awt.Point;
@@ -83,12 +82,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                 if (me.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
-                if (patchView != null) {
+                if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
                             SetSelected(!GetSelected());
                         } else if (Selected == false) {
-                            patchView.SelectNone();
+                            getPatchView().SelectNone();
                             SetSelected(true);
                         }
                     }

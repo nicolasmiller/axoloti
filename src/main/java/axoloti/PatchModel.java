@@ -71,14 +71,9 @@ import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.core.Validate;
 import org.simpleframework.xml.strategy.Strategy;
-import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompilePatch;
-import qcmds.QCmdCreateDirectory;
-import qcmds.QCmdLock;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
-import qcmds.QCmdStart;
-import qcmds.QCmdStop;
 import qcmds.QCmdUploadFile;
 import qcmds.QCmdUploadPatch;
 
@@ -108,7 +103,6 @@ public class PatchModel {
     @Element(required = false)
     Rectangle windowPos;
     private String FileNamePath;
-    PatchFrame patchframe;
     ArrayList<ParameterInstance> ParameterInstances = new ArrayList<ParameterInstance>();
     ArrayList<DisplayInstance> DisplayInstances = new ArrayList<DisplayInstance>();
     private ArrayList<Modulator> Modulators = new ArrayList<Modulator>();
@@ -125,7 +119,7 @@ public class PatchModel {
     public boolean presetUpdatePending = false;
 
     private List<String> previousStates = new ArrayList<String>();
-    private int currentState = 0;
+    public int currentState = 0;
 
     static public class PatchVersionException
             extends RuntimeException {
@@ -230,62 +224,13 @@ public class PatchModel {
         appVersion = Version.AXOLOTI_SHORT_VERSION;
     }
 
-    MainFrame GetMainFrame() {
-        return MainFrame.mainframe;
-    }
-
-    QCmdProcessor GetQCmdProcessor() {
-        if (patchframe == null) {
-            return null;
-        }
-        return patchframe.qcmdprocessor;
-    }
-
     public PatchSettings getSettings() {
         return settings;
-    }
-
-    void UploadDependentFiles() {
-        String sdpath = getSDCardPath();
-        ArrayList<SDFileReference> files = GetDependendSDFiles();
-        for (SDFileReference fref : files) {
-            File f = fref.localfile;
-            if (!f.exists()) {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "File reference unresolved: {0}", f.getName());
-                continue;
-            }
-            if (!f.canRead()) {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Can't read file {0}", f.getName());
-                continue;
-            }
-            if (!SDCardInfo.getInstance().exists("/" + sdpath + "/" + fref.targetPath, f.lastModified(), f.length())) {
-                if (f.length() > 8 * 1024 * 1024) {
-                    Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
-                    continue;
-                }
-                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, "/" + sdpath + "/" + fref.targetPath));
-            } else {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
-            }
-        }
     }
 
     public void ShowCompileFail() {
         Unlock();
     }
-
-    void ShowDisconnect() {
-        if (patchframe != null) {
-            patchframe.ShowDisconnect();
-        }
-    }
-
-    void ShowConnect() {
-        if (patchframe != null) {
-            patchframe.ShowConnect();
-        }
-    }
-
     public void setFileNamePath(String FileNamePath) {
         this.FileNamePath = FileNamePath;
     }
@@ -321,7 +266,7 @@ public class PatchModel {
             AxoObjectAbstract t = o.getType();
             if ((t != null) && (!t.providesModulationSource())) {
                 o.patchModel = this;
-                o.patchView = o.patchModel.patchframe.patchController.patchView;
+          //      o.patchView = o.patchModel.patchframe.patchController.patchView;
                 o.PostConstructor();
                 System.out.println("Obj added " + o.getInstanceName());
             } else if (t == null) {
@@ -378,9 +323,6 @@ public class PatchModel {
         if (shouldSaveState) {
             currentState += 1;
             saveState();
-        }
-        if(patchframe != null) {
-            patchframe.updateUndoRedoEnabled();
         }
     }
 
@@ -705,7 +647,6 @@ public class PatchModel {
             this.objectinstances = p.objectinstances;
             this.nets = p.nets;
             this.cleanDanglingStates = false;
-            this.patchframe.patchController.patchView.PostContructor();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2148,10 +2089,6 @@ public class PatchModel {
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
     }
 
-    public void Compile() {
-        GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
-    }
-
     public void ShowPreset(int i) {
         presetNo = i;
         
@@ -2313,10 +2250,6 @@ public class PatchModel {
         return pdata;
     }
 
-    void Upload() {
-        GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-    }
-
     public void Lock() {
         locked = true;
         for (AxoObjectInstanceAbstract o : objectinstances) {
@@ -2384,10 +2317,6 @@ public class PatchModel {
     }
 
     void SetDSPLoad(int pct) {
-    }
-
-    public void RecallPreset(int i) {
-        GetQCmdProcessor().AppendToQueue(new QCmdRecallPreset(i));
     }
 
     /**
@@ -2462,10 +2391,6 @@ public class PatchModel {
 
     public Rectangle getWindowPos() {
         return windowPos;
-    }
-
-    public PatchFrame getPatchframe() {
-        return patchframe;
     }
 
     public String getNotes() {
@@ -2553,24 +2478,6 @@ public class PatchModel {
         return !this.IsLocked() && (currentState < previousStates.size() - 1);
     }
 
-    public void undo() {
-        if (canUndo()) {
-            currentState -= 1;
-            loadState();
-            SetDirty(false);
-            patchframe.updateUndoRedoEnabled();
-        }
-    }
-
-    public void redo() {
-        if (canRedo()) {
-            currentState += 1;
-            loadState();
-            SetDirty(false);
-            patchframe.updateUndoRedoEnabled();
-        }
-    }
-    
     public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {
         return this.objectinstances;
     }

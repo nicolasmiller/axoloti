@@ -54,6 +54,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
+import qcmds.QCmdCompilePatch;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
 
@@ -762,10 +763,10 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         PatchFrame pf = PatchView.OpenPatchInvisible(f);
         if (pf != null) {
             boolean isVisible = pf.isVisible();
-            PatchModel p = pf.getPatchModel();
-            p.WriteCode();
-            p.Compile();
-            p.UploadToSDCard();
+            PatchModel patchModel = pf.getPatchModel();
+            patchModel.WriteCode();
+            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdCompilePatch(patchModel));
+            patchModel.UploadToSDCard();
             if (!isVisible) {
                 pf.Close();
             }

@@ -107,12 +107,12 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
-                if (patchView != null) {
+                if (getPatchView() != null) {
                     if (e.getClickCount() == 1) {
                         if (e.isShiftDown()) {
                             SetSelected(!GetSelected());
                         } else if (Selected == false) {
-                            patchView.SelectNone();
+                            getPatchView().SelectNone();
                             SetSelected(true);
                         }
                     }

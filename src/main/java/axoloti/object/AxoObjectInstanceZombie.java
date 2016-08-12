@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
 import axoloti.Theme;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
@@ -82,7 +81,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                patchView.ShowClassSelector(AxoObjectInstanceZombie.this.getLocation(), AxoObjectInstanceZombie.this, null);
+                getPatchView().ShowClassSelector(AxoObjectInstanceZombie.this.getLocation(), AxoObjectInstanceZombie.this, null);
             }
         });
         popup.add(popm_substitute);
