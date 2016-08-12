@@ -574,7 +574,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     public void moveToFront() {
-        getPatchGUI().objectLayerPanel.setComponentZOrder(this, 0);
+        getPatchView().objectLayerPanel.setComponentZOrder(this, 0);
     }
 
     public boolean providesModulationSource() {
