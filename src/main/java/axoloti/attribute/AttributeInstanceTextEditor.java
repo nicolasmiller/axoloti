@@ -18,11 +18,10 @@
 package axoloti.attribute;
 
 import axoloti.StringRef;
-import axoloti.TextEditor;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
+import axoloti.attributeviews.AttributeInstanceViewTextEditor;
 import axoloti.object.AxoObjectInstance;
-import components.ButtonComponent;
-import javax.swing.JLabel;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.Element;
 
 /**
@@ -37,9 +36,6 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     String getSText() {
         return sRef.s;
     }
-    ButtonComponent bEdit;
-    JLabel vlabel;
-    TextEditor editor;
 
     public AttributeInstanceTextEditor() {
     }
@@ -57,41 +53,8 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        bEdit = new ButtonComponent("Edit");
-        add(bEdit);
-        bEdit.addActListener(new ButtonComponent.ActListener() {
-            @Override
-            public void OnPushed() {
-                if (editor == null) {
-                    editor = new TextEditor(sRef, GetObjectInstance().getPatch().getPatchframe());
-                    editor.setTitle(GetObjectInstance().getInstanceName() + "/" + attr.getName());
-                }
-                editor.setState(java.awt.Frame.NORMAL);
-                editor.setVisible(true);
-
-            }
-        });
-    }
-
-    @Override
     public String CValue() {
         return sRef.s;
-    }
-
-    @Override
-    public void Lock() {
-        if (bEdit != null) {
-            bEdit.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (bEdit != null) {
-            bEdit.setEnabled(true);
-        }
     }
 
     @Override
@@ -105,8 +68,14 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
             sRef = new StringRef();
         }
         sRef.s = sText;
-        if (editor != null) {
-            editor.SetText(sText);
-        }
+    }
+    
+    @Override
+    public AttributeInstanceViewTextEditor ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceViewTextEditor(this, o);
+    }
+    
+    public StringRef getStringRef() {
+        return sRef;
     }
 }

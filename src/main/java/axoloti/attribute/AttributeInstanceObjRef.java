@@ -19,18 +19,10 @@ package axoloti.attribute;
 
 import axoloti.SubPatchMode;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributeviews.AttributeInstanceViewObjRef;
 import axoloti.object.AxoObjectInstance;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.utils.CharEscape;
-import axoloti.utils.Constants;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -41,8 +33,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
 
     @Attribute(name = "obj")
     String objName = "";
-    JTextField TFObjName;
-    JLabel vlabel;
+
     private AxoObjectInstance axoObj;
 
     public AttributeInstanceObjRef() {
@@ -54,61 +45,14 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        TFObjName = new JTextField(objName);
-        Dimension d = TFObjName.getSize();
-        d.width = 92;
-        d.height = 22;
-        TFObjName.setFont(Constants.FONT);
-        TFObjName.setMaximumSize(d);
-        TFObjName.setMinimumSize(d);
-        TFObjName.setPreferredSize(d);
-        TFObjName.setSize(d);
-        add(TFObjName);
-        TFObjName.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                repaint();
-            }
-        });
-        TFObjName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                objName = TFObjName.getText();
-                System.out.println("objref change " + objName);
-            }
-        });
-        TFObjName.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                objName = TFObjName.getText();
-                System.out.println("objref change " + objName);
-            }
-        });
-    }
-
-    @Override
     public String CValue() {
         String o = objName;
         String o2 = "parent->";
 
         if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
-                && ((GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
-                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polychannel)
-                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyexpression))) {
+                && ((getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyphonic)
+                || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polychannel)
+                || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyexpression))) {
             o2 = o2 + "common->";
         }
 
@@ -124,21 +68,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         o2 = o2 + "instance" + CharEscape.CharEscape(ao[0]) + "_i" + o3;
         return o2;
     }
-
-    @Override
-    public void Lock() {
-        if (TFObjName != null) {
-            TFObjName.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (TFObjName != null) {
-            TFObjName.setEnabled(true);
-        }
-    }
-
+    
     @Override
     public String getString() {
         return objName;
@@ -147,8 +77,10 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     @Override
     public void setString(String objName) {
         this.objName = objName;
-        if (TFObjName != null) {
-            TFObjName.setText(objName);
-        }
+    }
+    
+    @Override
+    public AttributeInstanceViewObjRef ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceViewObjRef(this, o);
     }
 }

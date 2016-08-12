@@ -17,13 +17,10 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
-import axoloti.objecteditor.AxoObjectEditor;
-import components.ButtonComponent;
-import components.ButtonComponent.ActListener;
-import java.awt.Component;
+import axoloti.PatchModel;
+import axoloti.PatchView;
+import axoloti.objectviews.AxoObjectInstanceViewPatcherObject;
 import java.awt.Point;
-import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Element;
 
 /**
@@ -32,15 +29,13 @@ import org.simpleframework.xml.Element;
  */
 public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
-    AxoObjectEditor aoe;
     @Element(name = "object")
     AxoObjectPatcherObject ao;
-    ButtonComponent BtnEdit;
 
     public AxoObjectInstancePatcherObject() {
     }
 
-    public AxoObjectInstancePatcherObject(AxoObject type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstancePatcherObject(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 
@@ -62,66 +57,15 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override
-    public void updateObj() {
-        if (ao != null) {
-            ao.id = "patch/object";
-            setType(ao);
-            PostConstructor();
-        }
-        validate();
+    public AxoObjectInstanceViewPatcherObject ViewFactory(PatchView patchView) {
+        return new AxoObjectInstanceViewPatcherObject(this, patchView);
     }
-
-    @Override
-    public void OpenEditor() {
-        edit();
+    
+    public AxoObject getAxoObject() {
+        return ao;
     }
-
-    public void edit() {
-        if (ao == null) {
-            ao = new AxoObjectPatcherObject();
-//            ao.id = "id";
-            ao.sDescription = "";
-        }
-        if (aoe == null) {
-            aoe = new AxoObjectEditor(ao);
-        } else {
-            aoe.updateReferenceXML();
-        }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                aoe.setState(java.awt.Frame.NORMAL);
-                aoe.setVisible(true);
-            }
-        });
-    }
-
-    public boolean isEditorOpen() {
-        return aoe != null && aoe.isVisible();
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        //updateObj();
-        BtnEdit = new ButtonComponent("edit");
-        BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
-        BtnEdit.setAlignmentY(TOP_ALIGNMENT);
-        BtnEdit.addActListener(new ActListener() {
-            @Override
-            public void OnPushed() {
-                edit();
-            }
-        });
-        add(BtnEdit);
-        resizeToGrid();
-    }
-
-    @Override
-    public void Close() {
-        super.Close();
-        if (aoe != null) {
-            aoe.Close();
-        }
+    
+    public void setAxoObject(AxoObjectPatcherObject axoObject) {
+        this.ao = axoObject;
     }
 }

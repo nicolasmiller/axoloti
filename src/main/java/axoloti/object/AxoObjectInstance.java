@@ -19,40 +19,25 @@ package axoloti.object;
 
 import axoloti.MainFrame;
 import axoloti.Net;
-import axoloti.Patch;
 import axoloti.PatchFrame;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
-import axoloti.Theme;
 import axoloti.attribute.*;
-import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.Frac32buffer;
-import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
-import axoloti.outlets.Outlet;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
-import components.LabelComponent;
-import components.PopupIcon;
-import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persist;
 
@@ -61,10 +46,10 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "obj")
-public class AxoObjectInstance extends AxoObjectInstanceAbstract implements ObjectModifiedListener {
+public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
-    public ArrayList<InletInstance> inletInstances;
-    public ArrayList<OutletInstance> outletInstances;
+    public ArrayList<InletInstance> inletInstances = new ArrayList<InletInstance>();
+    public ArrayList<OutletInstance> outletInstances = new ArrayList<OutletInstance>();
     @Path("params")
     @ElementListUnion({
         @ElementList(entry = "frac32.u.map", type = ParameterInstanceFrac32UMap.class, inline = true, required = false),
@@ -81,7 +66,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "bin32", type = ParameterInstanceBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterInstanceBin1.class, inline = true, required = false),
         @ElementList(entry = "bool32.mom", type = ParameterInstanceBin1Momentary.class, inline = true, required = false)})
-    public ArrayList<ParameterInstance> parameterInstances;
+    public ArrayList<ParameterInstance> parameterInstances = new ArrayList<ParameterInstance>();
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = "objref", type = AttributeInstanceObjRef.class, inline = true, required = false),
@@ -91,18 +76,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
         @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
-    public ArrayList<AttributeInstance> attributeInstances;
-    public ArrayList<DisplayInstance> displayInstances;
-    LabelComponent IndexLabel;
+    public ArrayList<AttributeInstance> attributeInstances = new ArrayList<AttributeInstance>();
+    public ArrayList<DisplayInstance> displayInstances = new ArrayList<DisplayInstance>();
 
-    boolean deferredObjTypeUpdate = false;
-
-    @Override
-    public void refreshIndex() {
-        if (patch != null && IndexLabel != null) {
-            IndexLabel.setText(" " + patch.objectinstances.indexOf(this));
-        }
-    }
 
     @Override
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -114,339 +90,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return attributeInstances;
     }
 
-    public final JPanel p_params = new JPanel();
-    public final JPanel p_displays = new JPanel();
-    public final JPanel p_iolets = new JPanel();
-    public final JPanel p_inlets = new JPanel();
-    public final JPanel p_outlets = new JPanel();
-
-    void updateObj1() {
-        getType().addObjectModifiedListener(this);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        updateObj1();
-        ArrayList<ParameterInstance> pParameterInstances = parameterInstances;
-        ArrayList<AttributeInstance> pAttributeInstances = attributeInstances;
-        ArrayList<InletInstance> pInletInstances = inletInstances;
-        ArrayList<OutletInstance> pOutletInstances = outletInstances;
-        parameterInstances = new ArrayList<ParameterInstance>();
-        attributeInstances = new ArrayList<AttributeInstance>();
-        displayInstances = new ArrayList<DisplayInstance>();
-        inletInstances = new ArrayList<InletInstance>();
-        outletInstances = new ArrayList<OutletInstance>();
-
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        final PopupIcon popupIcon = new PopupIcon();
-        popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
-            @Override
-            public void ShowPopup() {
-                JPopupMenu popup = CreatePopupMenu();
-                popupIcon.add(popup);
-                popup.show(popupIcon,
-                        0, popupIcon.getHeight());
-            }
-        });
-        popupIcon.setAlignmentX(LEFT_ALIGNMENT);
-        Titlebar.add(popupIcon);
-        LabelComponent idlbl = new LabelComponent(typeName);
-        idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
-        idlbl.setAlignmentX(LEFT_ALIGNMENT);
-        Titlebar.add(idlbl);
-
-        String tooltiptxt = "<html>";
-        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
-            tooltiptxt += getType().sDescription;
-        }
-        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
-            tooltiptxt += "<p>Author: " + getType().sAuthor;
-        }
-        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
-            tooltiptxt += "<p>License: " + getType().sLicense;
-        }
-        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
-            tooltiptxt += "<p>Path: " + getType().sPath;
-        }
-        Titlebar.setToolTipText(tooltiptxt);
-
-
-        /*
-         h.add(Box.createHorizontalStrut(3));
-         h.add(Box.createHorizontalGlue());
-         h.add(new JSeparator(SwingConstants.VERTICAL));*/
-        ////IndexLabel not shown, maybe useful later...
-        //IndexLabel.setSize(IndexLabel.getMinimumSize());
-        //IndexLabel = new LabelComponent("");
-        //refreshIndex();
-        //h.add(IndexLabel);
-        //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
-        Titlebar.setAlignmentX(LEFT_ALIGNMENT);
-        add(Titlebar);
-        InstanceLabel = new LabelComponent(getInstanceName());
-        InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        InstanceLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    addInstanceNameEditor();
-                    e.consume();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-        add(InstanceLabel);
-
-        p_iolets.removeAll();
-        p_inlets.removeAll();
-        p_outlets.removeAll();
-        p_params.removeAll();
-
-        if (getType().getRotatedParams()) {
-            p_params.setLayout(new BoxLayout(p_params, BoxLayout.LINE_AXIS));
-        } else {
-            p_params.setLayout(new BoxLayout(p_params, BoxLayout.PAGE_AXIS));
-        }
-
-        p_displays.removeAll();
-
-        if (getType().getRotatedParams()) {
-            p_displays.setLayout(new BoxLayout(p_displays, BoxLayout.LINE_AXIS));
-        } else {
-            p_displays.setLayout(new BoxLayout(p_displays, BoxLayout.PAGE_AXIS));
-        }
-        p_displays.add(Box.createHorizontalGlue());
-        p_params.add(Box.createHorizontalGlue());
-
-        for (Inlet inl : getType().inlets) {
-            InletInstance inlinp = null;
-            for (InletInstance inlin1 : pInletInstances) {
-                if (inlin1.GetLabel().equals(inl.getName())) {
-                    inlinp = inlin1;
-                }
-            }
-            InletInstance inlin = new InletInstance(inl, this);
-            if (inlinp != null) {
-                Net n = getPatch().GetNet(inlinp);
-                if (n != null) {
-                    n.connectInlet(inlin);
-                }
-            }
-            inletInstances.add(inlin);
-            inlin.setAlignmentX(LEFT_ALIGNMENT);
-            p_inlets.add(inlin);
-        }
-        // disconnect stale inlets from nets
-        for (InletInstance inlin1 : pInletInstances) {
-            getPatch().disconnect(inlin1);
-        }
-
-        for (Outlet o : getType().outlets) {
-            OutletInstance oinp = null;
-            for (OutletInstance oinp1 : pOutletInstances) {
-                if (oinp1.GetLabel().equals(o.getName())) {
-                    oinp = oinp1;
-                }
-            }
-            OutletInstance oin = new OutletInstance(o, this);
-            if (oinp != null) {
-                Net n = getPatch().GetNet(oinp);
-                if (n != null) {
-                    n.connectOutlet(oin);
-                }
-            }
-            outletInstances.add(oin);
-            oin.setAlignmentX(RIGHT_ALIGNMENT);
-            p_outlets.add(oin);
-        }
-        // disconnect stale outlets from nets
-        for (OutletInstance oinp1 : pOutletInstances) {
-            getPatch().disconnect(oinp1);
-        }
-
-        /*
-         if (p_inlets.getComponents().length == 0){
-         p_inlets.add(Box.createHorizontalGlue());
-         }
-         if (p_outlets.getComponents().length == 0){
-         p_outlets.add(Box.createHorizontalGlue());
-         }*/
-        p_iolets.add(p_inlets);
-        p_iolets.add(Box.createHorizontalGlue());
-        p_iolets.add(p_outlets);
-        add(p_iolets);
-
-        for (AxoAttribute p : getType().attributes) {
-            AttributeInstance attrp1 = null;
-            for (AttributeInstance attrp : pAttributeInstances) {
-                if (attrp.getName().equals(p.getName())) {
-                    attrp1 = attrp;
-                }
-            }
-            AttributeInstance attri = p.CreateInstance(this, attrp1);
-            attri.setAlignmentX(LEFT_ALIGNMENT);
-            add(attri);
-            attributeInstances.add(attri);
-        }
-
-        for (Parameter p : getType().params) {
-            ParameterInstance pin = p.CreateInstance(this);
-            for (ParameterInstance pinp : pParameterInstances) {
-                if (pinp.getName().equals(pin.getName())) {
-                    pin.CopyValueFrom(pinp);
-                }
-            }
-            pin.PostConstructor();
-            pin.setAlignmentX(RIGHT_ALIGNMENT);
-            parameterInstances.add(pin);
-        }
-
-        for (Display p : getType().displays) {
-            DisplayInstance pin = p.CreateInstance(this);
-            pin.setAlignmentX(RIGHT_ALIGNMENT);
-            displayInstances.add(pin);
-        }
-//        p_displays.add(Box.createHorizontalGlue());
-//        p_params.add(Box.createHorizontalGlue());
-        add(p_params);
-        add(p_displays);
-
-        getType().addObjectModifiedListener(this);
-
-        synchronized (getTreeLock()) {
-            validateTree();
-        }
-        setLocation(x, y);
-        resizeToGrid();
-    }
-
-    @Override
-    JPopupMenu CreatePopupMenu() {
-        JPopupMenu popup = super.CreatePopupMenu();
-        JMenuItem popm_edit = new JMenuItem("edit object definition");
-        popm_edit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                OpenEditor();
-            }
-        });
-        popup.add(popm_edit);
-        JMenuItem popm_editInstanceName = new JMenuItem("edit instance name");
-        popm_editInstanceName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                addInstanceNameEditor();
-            }
-        });
-        popup.add(popm_editInstanceName);
-        JMenuItem popm_substitute = new JMenuItem("replace");
-        popm_substitute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this, null);
-            }
-        });
-        popup.add(popm_substitute);
-        if (getType().GetHelpPatchFile() != null) {
-            JMenuItem popm_help = new JMenuItem("help");
-            popm_help.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    PatchGUI.OpenPatch(getType().GetHelpPatchFile());
-                }
-            });
-            popup.add(popm_help);
-        }
-        if (MainFrame.prefs.getExpertMode()) {
-            JMenuItem popm_adapt = new JMenuItem("adapt homonym");
-            popm_adapt.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    PromoteToOverloadedObj();
-                }
-            });
-            popup.add(popm_adapt);
-        }
-
-        if (type instanceof AxoObjectFromPatch) {
-            JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
-            popm_embed.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    ConvertToPatchPatcher();
-                }
-            });
-            popup.add(popm_embed);
-        } else if (!(this instanceof AxoObjectInstancePatcherObject)) {
-            JMenuItem popm_embed = new JMenuItem("embed as patch/object");
-            popm_embed.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    ConvertToEmbeddedObj();
-                }
-            });
-            popup.add(popm_embed);
-        }
-        return popup;
-    }
-
-    final void init1() {
-        inletInstances = new ArrayList<InletInstance>();
-        outletInstances = new ArrayList<OutletInstance>();
-        displayInstances = new ArrayList<DisplayInstance>();
-        parameterInstances = new ArrayList<ParameterInstance>();
-        attributeInstances = new ArrayList<AttributeInstance>();
-
-        p_iolets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
-        p_iolets.setAlignmentX(LEFT_ALIGNMENT);
-        p_iolets.setAlignmentY(TOP_ALIGNMENT);
-
-        p_inlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
-        p_inlets.setAlignmentX(LEFT_ALIGNMENT);
-        p_inlets.setAlignmentY(TOP_ALIGNMENT);
-
-        p_outlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
-        p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
-        p_outlets.setAlignmentY(TOP_ALIGNMENT);
-
-        p_params.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        p_params.setAlignmentX(LEFT_ALIGNMENT);
-
-        p_displays.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        p_displays.setAlignmentX(LEFT_ALIGNMENT);
-    }
-
     public AxoObjectInstance() {
         super();
-        init1();
     }
 
-    public AxoObjectInstance(AxoObject type, Patch patch1, String InstanceName1, Point location) {
-        super(type, patch1, InstanceName1, location);
-        init1();
-    }
-
-    public void OpenEditor() {
-        getType().OpenEditor(editorBounds, editorActiveTabIndex);
+    public AxoObjectInstance(AxoObject type, PatchModel patchModel, String InstanceName1, Point location) {
+        super(type, patchModel, InstanceName1, location);
     }
 
     @Override
@@ -501,30 +150,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return null;
     }
 
-    @Override
-    public void Lock() {
-        super.Lock();
-        for (AttributeInstance a : attributeInstances) {
-            a.Lock();
-        }
-    }
 
-    public void updateObj() {
-        getPatch().ChangeObjectInstanceType(this, this.getType());
-        getPatch().cleanUpIntermediateChangeStates(3);
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        for (AttributeInstance a : attributeInstances) {
-            a.UnLock();
-        }
-        if (deferredObjTypeUpdate) {
-            updateObj();
-            deferredObjTypeUpdate = false;
-        }
-    }
 
     @Override
     public ArrayList<InletInstance> GetInletInstances() {
@@ -834,7 +460,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return;
         }
         String id = typeName;
-        ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, patch.GetCurrentWorkingDirectory());
+        ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, getPatchModel().GetCurrentWorkingDirectory());
         if (candidates == null) {
             return;
         }
@@ -851,11 +477,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
         //      InletInstance i = null;// = GetInletInstances().get(0);
         for (InletInstance j : GetInletInstances()) {
-            Net n = patch.GetNet(j);
+            Net n = getPatchModel().GetNet(j);
             if (n == null) {
                 continue;
             }
-            DataType d = n.GetDataType();
+            DataType d = n.getDataType();
             if (d == null) {
                 continue;
             }
@@ -891,13 +517,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
 
         if (selected == null) {
-            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);            
+            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
             return;
         }
         if (selected != getType()) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "promoting " + this + " to " + selected);
-            patch.ChangeObjectInstanceType(this, selected);
-            patch.cleanUpIntermediateChangeStates(4);
+            getPatchModel().ChangeObjectInstanceType(this, selected);
+            getPatchModel().cleanUpIntermediateChangeStates(4);
         } else {
 //            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "no promotion for {0}", typeName);
         }
@@ -906,31 +532,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     @Override
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
-    }
-
-    Rectangle editorBounds;
-    Integer editorActiveTabIndex;
-
-    @Override
-    public void ObjectModified(Object src) {
-        if (getPatch() != null) {
-            if (!getPatch().IsLocked()) {
-                updateObj();
-            } else {
-                deferredObjTypeUpdate = true;
-            }
-        }
-
-        try {
-            AxoObject o = (AxoObject) src;
-            if (o.editor != null && o.editor.getBounds() != null) {
-                editorBounds = o.editor.getBounds();
-                editorActiveTabIndex = o.editor.getActiveTabIndex();
-                this.getType().editorBounds = editorBounds;
-                this.getType().editorActiveTabIndex = editorActiveTabIndex;
-            }
-        } catch (ClassCastException ex) {
-        }
     }
 
     @Override
@@ -945,35 +546,28 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return files;
     }
 
-    void ConvertToPatchPatcher() {
-        if (IsLocked()) {
-            return;
-        }
+    public void ConvertToPatchPatcher() {
         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
         assert (!ol.isEmpty());
         AxoObjectAbstract o = ol.get(0);
         String iname = getInstanceName();
-        AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatch().ChangeObjectInstanceType1(this, o);
+        AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().ChangeObjectInstanceType1(this, o);
         AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
-        PatchFrame pf = PatchGUI.OpenPatch(ao.f);
+        PatchFrame pf = PatchView.OpenPatch(ao.f);
         oi.pf = pf;
-        oi.pg = pf.getPatch();
+        oi.patchModel = pf.getPatchModel();
         oi.setInstanceName(iname);
-        oi.updateObj();
-        getPatch().delete(this);
-        getPatch().SetDirty();
+        getPatchModel().delete(this);
+        getPatchModel().SetDirty();
     }
 
-    void ConvertToEmbeddedObj() {
-        if (IsLocked()) {
-            return;
-        }
+    public void ConvertToEmbeddedObj() {
         try {
             ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
             assert (!ol.isEmpty());
             AxoObjectAbstract o = ol.get(0);
             String iname = getInstanceName();
-            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatch().ChangeObjectInstanceType1(this, o);
+            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o);
             AxoObject ao = getType();
             oi.ao = new AxoObjectPatcherObject(ao.id, ao.sDescription);
             oi.ao.copy(ao);
@@ -981,9 +575,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             oi.ao.upgradeSha = null;
             oi.ao.CloseEditor();
             oi.setInstanceName(iname);
-            oi.updateObj();
-            getPatch().delete(this);
-            getPatch().SetDirty();
+            getPatchModel().delete(this);
+            getPatchModel().SetDirty();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -998,5 +591,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 typeSHA = null;
             }
         }
+    }
+
+    @Override
+    public AxoObjectInstanceView ViewFactory(PatchView patchView) {
+        return new AxoObjectInstanceView(this, patchView);
+    }
+
+    @Override
+    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
+        AxoObjectInstanceView pi = ViewFactory(patchView);
+        pi.PostConstructor();
+        return pi;
     }
 }

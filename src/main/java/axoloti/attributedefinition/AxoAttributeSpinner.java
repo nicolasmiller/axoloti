@@ -55,7 +55,7 @@ public class AxoAttributeSpinner extends AxoAttribute {
     public int getDefaultValue() {
         return DefaultValue;
     }
-
+    
     @Override
     public AttributeInstanceSpinner InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceSpinner(this, o);
