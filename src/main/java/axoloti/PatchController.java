@@ -1,5 +1,12 @@
 package axoloti;
 
+import axoloti.inlets.InletInstance;
+import axoloti.iolet.IoletAbstract;
+import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.outlets.OutletInstance;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,53 +18,53 @@ import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 
 public class PatchController {
-
+    
     public PatchModel patchModel;
     public PatchView patchView;
     public PatchFrame patchFrame;
-
+    
     public PatchController() {
     }
-
+    
     public void setPatchModel(PatchModel patchModel) {
         this.patchModel = patchModel;
     }
-
+    
     public void setPatchView(PatchView patchView) {
         this.patchView = patchView;
     }
-
+    
     public void setPatchFrame(PatchFrame patchFrame) {
         this.patchFrame = patchFrame;
     }
-
+    
     QCmdProcessor GetQCmdProcessor() {
         if (patchFrame == null) {
             return null;
         }
         return patchFrame.qcmdprocessor;
     }
-
+    
     MainFrame GetMainFrame() {
         return MainFrame.mainframe;
     }
-
+    
     public PatchFrame getPatchFrame() {
         return patchFrame;
     }
-
+    
     void ShowDisconnect() {
         if (patchFrame != null) {
             patchFrame.ShowDisconnect();
         }
     }
-
+    
     void ShowConnect() {
         if (patchFrame != null) {
             patchFrame.ShowConnect();
         }
     }
-
+    
     public void undo() {
         if (patchModel.canUndo()) {
             patchModel.currentState -= 1;
@@ -66,7 +73,7 @@ public class PatchController {
             patchView.PostContructor();
         }
     }
-
+    
     public void redo() {
         if (patchModel.canRedo()) {
             patchModel.currentState += 1;
@@ -75,26 +82,26 @@ public class PatchController {
             patchView.PostContructor();
         }
     }
-
+    
     public void SetDirty(boolean shouldSaveState) {
         patchModel.SetDirty(shouldSaveState);
         patchFrame.updateUndoRedoEnabled();
     }
-
+    
     public void RecallPreset(int i) {
         GetQCmdProcessor().AppendToQueue(new QCmdRecallPreset(i));
     }
-
+    
     public void ShowPreset(int i) {
         patchModel.ShowPreset(i);
     }
-
+    
     public void Compile() {
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(patchModel));
     }
-
+    
     void UploadDependentFiles() {
-        String sdpath = patchModel.getSDCardPath();
+        String sdpath = getSDCardPath();
         ArrayList<SDFileReference> files = patchModel.GetDependendSDFiles();
         for (SDFileReference fref : files) {
             File f = fref.localfile;
@@ -117,7 +124,7 @@ public class PatchController {
             }
         }
     }
-
+    
     public void UploadToSDCard(String sdfilename) {
         patchModel.WriteCode();
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
@@ -147,8 +154,107 @@ public class PatchController {
         }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(patchModel.getBinFile(), sdfilename, cal));
     }
-
+    
     public void UploadToSDCard() {
-        UploadToSDCard("/" + patchModel.getSDCardPath() + "/patch.bin");
+        UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
+    }
+    
+    public Net AddConnection(InletInstance il, OutletInstance ol) {
+        return patchModel.AddConnection(il, ol);
+    }
+    
+    public Net AddConnection(InletInstance il, InletInstance ol) {
+        return patchModel.AddConnection(il, ol);
+    }
+    
+    public void setFileNamePath(String FileNamePath) {
+        patchModel.setFileNamePath(FileNamePath);
+    }
+    
+    public Net disconnect(IoletAbstract io) {
+        return patchModel.disconnect(io);
+    }
+    
+    public Net delete(Net n) {
+        return patchModel.delete(n);
+    }
+    
+    public void delete(AxoObjectInstanceAbstract o) {
+        patchModel.delete(o);
+    }
+    
+    public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
+        return patchModel.AddObjectInstance(obj, loc);
+    }
+    
+    public void deleteSelectedAxoObjInstances() {
+        patchModel.deleteSelectedAxoObjInstances();
+    }
+    
+    public boolean IsLocked() {
+        return patchModel.IsLocked();
+    }
+    
+    public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {
+        return patchModel.getObjectInstances();
+    }
+    
+    public String GetCurrentWorkingDirectory() {
+        return patchModel.GetCurrentWorkingDirectory();
+    }
+    
+    public ArrayList<Net> getNets() {
+        return patchModel.getNets();
+    }
+    
+    public void SetDirty() {
+        patchModel.SetDirty();
+    }
+    
+            
+    public String getSDCardPath() {
+        String FileNameNoPath = patchModel.getFileNamePath();
+        String separator = System.getProperty("file.separator");
+        int lastSeparatorIndex = FileNameNoPath.lastIndexOf(separator);
+        if (lastSeparatorIndex > 0) {
+            FileNameNoPath = FileNameNoPath.substring(lastSeparatorIndex + 1);
+        }
+        String FileNameNoExt = FileNameNoPath;
+        if (FileNameNoExt.endsWith(".axp") || FileNameNoExt.endsWith(".axs") || FileNameNoExt.endsWith(".axh")) {
+            FileNameNoExt = FileNameNoExt.substring(0, FileNameNoExt.length() - 4);
+        }
+        return FileNameNoExt;
+    }
+    
+    public void WriteCode() {
+        patchModel.WriteCode();
+    }
+    
+    public void Lock() {
+        patchModel.Lock();
+    }
+    
+    public void Unlock() {
+        patchModel.Unlock();
+    }
+    
+    public void setPresetUpdatePending(boolean updatePending) {
+        patchModel.presetUpdatePending = updatePending;
+    }
+    
+    public boolean isPresetUpdatePending() {
+        return patchModel.presetUpdatePending;
+    }
+    
+    Dimension GetSize() {
+        return patchModel.GetSize();
+    }
+    
+    public void Close() {
+        patchModel.Close();
+    }
+    
+    public PatchSettings getSettings() {
+        return patchModel.settings;
     }
 }

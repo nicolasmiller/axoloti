@@ -42,7 +42,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         //processor.println("tx dial " + p.getName());
                     }
                 }
-                if (patchModel.presetUpdatePending) {
+                if (patchController.isPresetUpdatePending()) {
                     byte pb[] = new byte[patchModel.getSettings().GetNPresets() * patchModel.getSettings().GetNPresetEntries() * 8];
                     int p = 0;
                     for (int i = 0; i < patchModel.getSettings().GetNPresets(); i++) {
@@ -55,7 +55,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         }
                     }
                     processor.AppendToQueue(new QCmdUpdatePreset(pb));
-                    patchModel.presetUpdatePending = false;
+                    patchController.setPresetUpdatePending(false);
                 }
             }
         }
