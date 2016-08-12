@@ -899,7 +899,6 @@ public class PatchView {
     }
 
     void invalidate() {
-        patchController.patchModel.invalidate();
         Layers.invalidate();
     }
 

@@ -765,8 +765,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             boolean isVisible = pf.isVisible();
             PatchModel patchModel = pf.getPatchModel();
             patchModel.WriteCode();
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdCompilePatch(patchModel));
-            patchModel.UploadToSDCard();
+            pf.getPatchController().Compile();
+            pf.getPatchController().UploadToSDCard();
             if (!isVisible) {
                 pf.Close();
             }

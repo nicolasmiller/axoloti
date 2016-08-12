@@ -2,6 +2,7 @@ package axoloti;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import qcmds.QCmdCompilePatch;
@@ -115,5 +116,39 @@ public class PatchController {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
             }
         }
+    }
+
+    public void UploadToSDCard(String sdfilename) {
+        patchModel.WriteCode();
+        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
+        QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patchModel));
+        // create subdirs...
+
+        for (int i = 1; i < sdfilename.length(); i++) {
+            if (sdfilename.charAt(i) == '/') {
+                qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
+                qcmdprocessor.WaitQueueFinished();
+            }
+        }
+        qcmdprocessor.WaitQueueFinished();
+        Calendar cal;
+        if (patchModel.isDirty()) {
+            cal = Calendar.getInstance();
+        } else {
+            cal = Calendar.getInstance();
+            if (patchModel.getFileNamePath() != null && !patchModel.getFileNamePath().isEmpty()) {
+                File f = new File(patchModel.getFileNamePath());
+                if (f.exists()) {
+                    cal.setTimeInMillis(f.lastModified());
+                }
+            }
+        }
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(patchModel.getBinFile(), sdfilename, cal));
+    }
+
+    public void UploadToSDCard() {
+        UploadToSDCard("/" + patchModel.getSDCardPath() + "/patch.bin");
     }
 }

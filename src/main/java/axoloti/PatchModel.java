@@ -56,7 +56,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -71,11 +70,6 @@ import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.core.Validate;
 import org.simpleframework.xml.strategy.Strategy;
-import qcmds.QCmdCompilePatch;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdRecallPreset;
-import qcmds.QCmdUploadFile;
-import qcmds.QCmdUploadPatch;
 
 /**
  *
@@ -2311,11 +2305,7 @@ public class PatchModel {
         return obj1;
     }
 
-    void invalidate() {
-    }
 
-    void SetDSPLoad(int pct) {
-    }
 
     /**
      *
@@ -2412,39 +2402,7 @@ public class PatchModel {
 //            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());        
     }
 
-    public void UploadToSDCard(String sdfilename) {
-        WriteCode();
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
-        QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
-        // create subdirs...
 
-        for (int i = 1; i < sdfilename.length(); i++) {
-            if (sdfilename.charAt(i) == '/') {
-                qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
-                qcmdprocessor.WaitQueueFinished();
-            }
-        }
-        qcmdprocessor.WaitQueueFinished();
-        Calendar cal;
-        if (dirty) {
-            cal = Calendar.getInstance();
-        } else {
-            cal = Calendar.getInstance();
-            if (FileNamePath != null && !FileNamePath.isEmpty()) {
-                File f = new File(FileNamePath);
-                if (f.exists()) {
-                    cal.setTimeInMillis(f.lastModified());
-                }
-            }
-        }
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), sdfilename, cal));
-    }
-
-    public void UploadToSDCard() {
-        UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
-    }
 
     public String getSDCardPath() {
         String FileNameNoPath = getFileNamePath();

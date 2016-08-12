@@ -929,11 +929,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jCheckBoxMenuItemLiveActionPerformed
 
     private void jMenuItemUploadSDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDActionPerformed
-        patchController.patchModel.UploadToSDCard();
+        patchController.UploadToSDCard();
     }//GEN-LAST:event_jMenuItemUploadSDActionPerformed
 
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
-        patchController.patchModel.UploadToSDCard("/start.bin");
+        patchController.UploadToSDCard("/start.bin");
     }//GEN-LAST:event_jMenuItemUploadSDStartActionPerformed
 
     private void jMenuSaveClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveClipActionPerformed
@@ -1113,6 +1113,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         } else {
             return new File(patchController.patchModel.getFileNamePath());
         }
+    }
+    
+    public PatchController getPatchController() {
+        return patchController;
     }
 
     public PatchModel getPatchModel() {
