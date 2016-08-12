@@ -266,11 +266,9 @@ public class PatchModel {
             AxoObjectAbstract t = o.getType();
             if ((t != null) && (!t.providesModulationSource())) {
                 o.patchModel = this;
-          //      o.patchView = o.patchModel.patchframe.patchController.patchView;
                 o.PostConstructor();
                 System.out.println("Obj added " + o.getInstanceName());
             } else if (t == null) {
-                //o.patch = this;
                 objectinstances.remove(o);
                 AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(new AxoObjectZombie(), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
                 zombie.patchModel = this;
