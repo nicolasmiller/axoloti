@@ -596,6 +596,7 @@ public class PatchView {
                 if (n.source.size() + n.dest.size() > 1) {
                     if ((connectedInlet == null) && (connectedOutlet == null)) {
                         n.patchView = this;
+                        n.patchModel = PatchView.this.patchController.patchModel;
                         n.PostConstructor();
                         PatchView.this.patchController.patchModel.addNet(n);
                         netLayerPanel.add(n);
@@ -696,7 +697,7 @@ public class PatchView {
                 p.objectinstances.add(o);
             }
         }
-        PatchView.this.patchController.patchModel.nets = new ArrayList<Net>();
+        p.nets = new ArrayList<Net>();
         for (Net n : PatchView.this.patchController.patchModel.getNets()) {
             int sel = 0;
             for (InletInstance i : n.dest) {

@@ -705,7 +705,6 @@ public class PatchModel {
             this.objectinstances = p.objectinstances;
             this.nets = p.nets;
             this.cleanDanglingStates = false;
-            this.PostContructor();
             this.patchframe.patchController.patchView.PostContructor();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
