@@ -18,8 +18,8 @@
 package axoloti.displays;
 
 import axoloti.atom.AtomInstance;
-import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceAbstractView;
+import axoloti.object.AxoObjectInstanceView;
 import components.LabelComponent;
 import java.nio.ByteBuffer;
 import javax.swing.BoxLayout;
@@ -38,15 +38,15 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
     Boolean onParent;
     protected int index;
     public T display;
-    AxoObjectInstance axoObj;
+    AxoObjectInstanceView axoObjView;
     protected int offset;
 
     public DisplayInstance() {
     }
 
     @Override
-    public AxoObjectInstanceAbstract GetObjectInstance() {
-        return axoObj;
+    public AxoObjectInstanceAbstractView GetObjectInstance() {
+        return axoObjView;
     }
 
     @Override

@@ -21,7 +21,7 @@ import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
-import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
@@ -75,7 +75,7 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public AtomInstance CreateInstance(AxoObjectInstance o) {
+    public AtomInstance CreateInstance(AxoObjectInstanceView o) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

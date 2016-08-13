@@ -17,17 +17,9 @@
  */
 package axoloti.outlets;
 
-import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectInstance;
-import components.LabelComponent;
-import components.SignalMetaDataIcon;
-import java.awt.Dimension;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JPopupMenu;
 import org.simpleframework.xml.*;
 
 /**
@@ -35,26 +27,32 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "source")
-public class OutletInstance<T extends Outlet> extends IoletAbstract implements Comparable<OutletInstance>, AtomInstance<T> {
+public class OutletInstance<T extends Outlet> implements Comparable<OutletInstance>, AtomInstance<T> {
 
     @Attribute(name = "outlet", required = false)
-    public String outletname;
+    public String outletname;    
+    @Deprecated
+    @Attribute(required = false)
+    public String name;
+    @Attribute(name = "obj", required = false)
+    public String objname;
 
     private final T outlet;
 
-    OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
+    private AxoObjectInstance axoObj;
+
+    @Override
+    public AxoObjectInstance getObjectInstance() {
+        return this.axoObj;
+    }
 
     public String getOutletname() {
-        if (outletname != null) {
-            return outletname;
-        } else {
-            int sepIndex = name.lastIndexOf(' ');
-            return name.substring(sepIndex + 1);
-        }
+        return outletname;
+
     }
 
     @Override
-    public T GetDefinition() {
+    public T getDefinition() {
         return outlet;
     }
 
@@ -66,15 +64,6 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
     public OutletInstance(T outlet, AxoObjectInstance axoObj) {
         this.outlet = outlet;
         this.axoObj = axoObj;
-        RefreshName();
-        PostConstructor();
-    }
-
-    public void RefreshName() {
-        name = axoObj.getInstanceName() + " " + outlet.name;
-        objname = axoObj.getInstanceName();
-        outletname = outlet.name;
-        name = null;
     }
 
     public DataType GetDataType() {
@@ -89,32 +78,23 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         return outlet.GetCName();
     }
 
-    public final void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setMaximumSize(new Dimension(32767, 14));
-        setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(Box.createHorizontalGlue());
-        if (axoObj.getType().GetOutlets().size() > 1) {
-            add(new LabelComponent(outlet.name));
-            add(Box.createHorizontalStrut(2));
-        }
-        add(new SignalMetaDataIcon(outlet.GetSignalMetaData()));
-        jack = new components.JackOutputComponent(this);
-        jack.setForeground(outlet.getDatatype().GetColor());
-        add(jack);
-        setComponentPopupMenu(popup);
-        setToolTipText(outlet.description);
-
-        addMouseListeners();
-    }
-
-    @Override
-    public JPopupMenu getPopup() {
-        return popup;
-    }
-
     @Override
     public int compareTo(OutletInstance t) {
         return axoObj.compareTo(t.axoObj);
+    }
+
+    public Outlet getOutlet() {
+        return outlet;
+    }
+    
+    public void RefreshName() {
+        name = axoObj.getInstanceName() + " " + outlet.name;
+        objname = axoObj.getInstanceName();
+        outletname = outlet.name;
+        name = null;
+    }
+    
+    public String getObjname() {
+        return this.objname;
     }
 }

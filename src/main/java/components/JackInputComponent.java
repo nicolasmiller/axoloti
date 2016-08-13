@@ -19,6 +19,7 @@ package components;
 
 import axoloti.Theme;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceView;
 import java.awt.BasicStroke;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
@@ -38,9 +39,9 @@ public class JackInputComponent extends JComponent {
     private static final int sz = 10;
     private static final int margin = 2;
     private static final Dimension dim = new Dimension(sz, sz);
-    final InletInstance inlet;
+    final InletInstanceView inletInstanceView;
 
-    public JackInputComponent(InletInstance inlet) {
+    public JackInputComponent(InletInstanceView inletInstanceView) {
         setInheritsPopupMenu(true);
         setMinimumSize(dim);
         setMaximumSize(dim);
@@ -49,7 +50,7 @@ public class JackInputComponent extends JComponent {
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
         setOpaque(true);
-        this.inlet = inlet;
+        this.inletInstanceView = inletInstanceView;
     }
     private final Stroke stroke = new BasicStroke(1.5f);
 
@@ -62,7 +63,7 @@ public class JackInputComponent extends JComponent {
         g2.setStroke(stroke);
         g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(0, 0, sz, sz);
-        if (inlet.isConnected()) {
+        if (inletInstanceView.isConnected()) {
             g2.setPaint(Theme.getCurrentTheme().Component_Primary);
             g2.drawOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
             g2.setPaint(getForeground());
@@ -76,7 +77,7 @@ public class JackInputComponent extends JComponent {
         }
     }
     
-    public InletInstance getInlet() {
-        return inlet;
+    public InletInstanceView getInletInstanceView() {
+        return inletInstanceView;
     }
 }

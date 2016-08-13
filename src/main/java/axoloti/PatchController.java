@@ -4,6 +4,7 @@ import axoloti.inlets.InletInstance;
 import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceAbstractView;
 import axoloti.outlets.OutletInstance;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -171,7 +172,11 @@ public class PatchController {
         patchModel.setFileNamePath(FileNamePath);
     }
     
-    public Net disconnect(IoletAbstract io) {
+    public Net disconnect(InletInstance io) {
+        return patchModel.disconnect(io);
+    }
+    
+    public Net disconnect(OutletInstance io) {
         return patchModel.disconnect(io);
     }
     
@@ -179,8 +184,8 @@ public class PatchController {
         return patchModel.delete(n);
     }
     
-    public void delete(AxoObjectInstanceAbstract o) {
-        patchModel.delete(o);
+    public void delete(AxoObjectInstanceAbstractView o) {
+        patchModel.delete(o.getModel());
     }
     
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
@@ -188,7 +193,7 @@ public class PatchController {
     }
     
     public void deleteSelectedAxoObjInstances() {
-        patchModel.deleteSelectedAxoObjInstances();
+        patchView.deleteSelectedAxoObjInstances();
     }
     
     public boolean IsLocked() {
@@ -247,7 +252,7 @@ public class PatchController {
     }
     
     Dimension GetSize() {
-        return patchModel.GetSize();
+        return patchView.GetSize();
     }
     
     public void Close() {

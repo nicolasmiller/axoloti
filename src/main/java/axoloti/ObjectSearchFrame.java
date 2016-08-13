@@ -19,6 +19,7 @@ package axoloti;
 
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceAbstractView;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.utils.Constants;
 import java.awt.GraphicsConfiguration;
@@ -278,7 +279,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         return patchLoc;
     }
 
-    void Launch(Point patchLoc, AxoObjectInstanceAbstract o, String searchString) {
+    void Launch(Point patchLoc, AxoObjectInstanceAbstractView o, String searchString) {
         if (this.objectTree != MainFrame.axoObjects.ObjectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
             this.objectTree = MainFrame.axoObjects.ObjectTree;

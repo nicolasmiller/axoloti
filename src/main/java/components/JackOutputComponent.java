@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceView;
 import java.awt.BasicStroke;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.Dimension;
@@ -38,9 +38,9 @@ public class JackOutputComponent extends JComponent {
     private static final int margin = 2;
     private static final int inset = 1;
     private static final Dimension dim = new Dimension(sz, sz);
-    final OutletInstance outlet;
+    final OutletInstanceView outletInstanceView;
 
-    public JackOutputComponent(OutletInstance outlet) {
+    public JackOutputComponent(OutletInstanceView outletInstanceView) {
         setInheritsPopupMenu(true);
         setMinimumSize(dim);
         setMaximumSize(dim);
@@ -49,7 +49,7 @@ public class JackOutputComponent extends JComponent {
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
         setOpaque(true);
-        this.outlet = outlet;
+        this.outletInstanceView = outletInstanceView;
     }
     private final Stroke stroke = new BasicStroke(1.5f);
 
@@ -65,7 +65,7 @@ public class JackOutputComponent extends JComponent {
         g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);
 
-        if (outlet.isConnected()) {
+        if (outletInstanceView.isConnected()) {
             g2.fillOval(margin + inset, margin + inset + 1, sz - (margin + inset) * 2 + 1, sz - (margin + inset) * 2 + 1);
             g2.setPaint(getForeground());
             g2.fillOval(margin + inset - 1, margin + inset, sz - (margin + inset) * 2 + 1, sz - (margin + inset) * 2 + 1);
@@ -77,8 +77,8 @@ public class JackOutputComponent extends JComponent {
 
         g2.drawRect(margin - 1, margin, sz - margin - margin, sz - margin - margin);
     }
-    
-    public OutletInstance getOutlet() {
-        return outlet;
+
+    public OutletInstanceView getOutletInstanceView() {
+        return outletInstanceView;
     }
 }

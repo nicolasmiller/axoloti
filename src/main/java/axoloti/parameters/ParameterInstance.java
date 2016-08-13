@@ -22,6 +22,7 @@ import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import components.AssignMidiCCComponent;
@@ -62,7 +63,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     @ElementList(required = false)
     ArrayList<Preset> presets;
     protected boolean needsTransmit = false;
-    AxoObjectInstance axoObj;
+    AxoObjectInstanceView axoObjInstanceView;
     LabelComponent valuelbl = new LabelComponent("123456789");
     NativeToReal convs[];
     int selectedConv = 0;
@@ -75,10 +76,10 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public ParameterInstance() {
     }
 
-    public ParameterInstance(T param, AxoObjectInstance axoObj1) {
+    public ParameterInstance(T param, AxoObjectInstanceView axoObjInstanceView) {
         super();
         parameter = param;
-        axoObj = axoObj1;
+        axoObjInstanceView = axoObjInstanceView;
         name = parameter.name;
     }
 
@@ -155,9 +156,9 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
                 boolean changed = handleAdjustment();
-                if (axoObj != null && changed) {
-                    if (axoObj.getPatchModel() != null) {
-                        axoObj.getPatchModel().SetDirty();
+                if (axoObjInstanceView != null && changed) {
+                    if (axoObjInstanceView.getPatchModel() != null) {
+                        axoObjInstanceView.getPatchModel().SetDirty();
                     }
                 }
             }
@@ -208,7 +209,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'P';
-        int pid = GetObjectInstance().getPatchModel().GetIID();
+        int pid = getObjectInstance().getPatchModel().GetIID();
         data[4] = (byte) pid;
         data[5] = (byte) (pid >> 8);
         data[6] = (byte) (pid >> 16);
@@ -263,9 +264,9 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public abstract Value getValue();
 
     public void setValue(Value value) {
-        if (axoObj != null) {
-            if (axoObj.getPatchModel() != null) {
-                axoObj.getPatchModel().SetDirty();
+        if (axoObjInstanceView != null) {
+            if (axoObjInstanceView.getPatchModel() != null) {
+                axoObjInstanceView.getPatchModel().SetDirty();
             }
         }
     }
@@ -284,7 +285,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     }
 
     public String indexName() {
-        return "PARAM_INDEX_" + axoObj.getLegalName() + "_" + getLegalName();
+        return "PARAM_INDEX_" + axoObjInstanceView.getLegalName() + "_" + getLegalName();
 //        return ("" + index);
     }
 
@@ -497,12 +498,12 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     }
 
     @Override
-    public AxoObjectInstance GetObjectInstance() {
+    public AxoObjectInstance getObjectInstance() {
         return axoObj;
     }
 
     @Override
-    public T GetDefinition() {
+    public T getDefinition() {
         return parameter;
     }
 

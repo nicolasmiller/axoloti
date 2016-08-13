@@ -6,7 +6,8 @@ import axoloti.NetDragging;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.inlets.InletInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.inlets.InletInstanceView;
+import axoloti.object.AxoObjectInstanceAbstractView;
 import axoloti.outlets.OutletInstance;
 import java.awt.Component;
 import java.awt.IllegalComponentStateException;
@@ -30,7 +31,7 @@ public abstract class IoletAbstract extends JPanel {
     @Attribute(name = "obj", required = false)
     public String objname;
 
-    public AxoObjectInstanceAbstract axoObj;
+    public AxoObjectInstanceAbstractView axoObj;
     public JLabel lbl;
     public JComponent jack;
 
@@ -50,7 +51,7 @@ public abstract class IoletAbstract extends JPanel {
         }
     }
 
-    public AxoObjectInstanceAbstract GetObjectInstance() {
+    public AxoObjectInstanceAbstractView GetObjectInstance() {
         return axoObj;
     }
 
@@ -108,13 +109,13 @@ public abstract class IoletAbstract extends JPanel {
                     e.consume();
                 } else {
                     setHighlighted(true);
-                    if (!axoObj.IsLocked()) {
+                    if (!axoObj.isLocked()) {
                         if (dragnet == null) {
                             dragnet = new NetDragging(getPatchModel());
                             dragnet.setPatchView(getPatchView());
                             dragtarget = null;
-                            if (IoletAbstract.this instanceof InletInstance) {
-                                dragnet.connectInlet((InletInstance) IoletAbstract.this);
+                            if (IoletAbstract.this instanceof InletInstanceView) {
+                                dragnet.connectInlet((InletInstanceView) IoletAbstract.this);
                             } else {
                                 dragnet.connectOutlet((OutletInstance) IoletAbstract.this);
                             }
@@ -175,7 +176,7 @@ public abstract class IoletAbstract extends JPanel {
 
                     @Override
                     public void mouseDragged(MouseEvent e) {
-                        if (!axoObj.IsLocked()) {
+                        if (!axoObj.isLocked()) {
                             Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), getPatchView().objectLayerPanel);
                             Component c = getPatchView().objectLayerPanel.findComponentAt(p);
                             while ((c != null) && !(c instanceof IoletAbstract)) {

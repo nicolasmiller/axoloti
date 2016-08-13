@@ -42,7 +42,6 @@ public class AxoObjectComment extends AxoObjectAbstract {
         if (patch != null) {
             patch.objectinstances.add(o);
         }
-        o.PostConstructor();
         return o;
     }
 

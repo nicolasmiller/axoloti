@@ -19,7 +19,7 @@ package axoloti.displays;
 
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
-import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
 
@@ -77,7 +77,7 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     }
 
     @Override
-    public DisplayInstance CreateInstance(AxoObjectInstance o) {
+    public DisplayInstance CreateInstance(AxoObjectInstanceView o) {
         DisplayInstance pi = InstanceFactory();
         pi.axoObj = o;
         pi.name = this.name;

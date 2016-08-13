@@ -19,23 +19,14 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
-import components.LabelComponent;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
-import components.control.PulseButtonComponent;
-import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Desktop;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import org.simpleframework.xml.Root;
 
 /**
@@ -57,9 +48,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
         return false;
     }
 
-    private PulseButtonComponent button;
-
-    void Lauch() {
+    void Launch() {
         String link = getInstanceName();
         if (link.startsWith("www.")
                 || link.startsWith("http://")
@@ -78,75 +67,9 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             if (f.canRead()) {
                 PatchView.OpenPatch(f);
             } else {
-                Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());                
+                Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());
             }
         }
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        setOpaque(true);
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        button = new PulseButtonComponent();
-        button.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (e.getValue() == 1.0) {
-                    Lauch();
-                }
-            }
-        });
-        add(button);
-        add(Box.createHorizontalStrut(5));
-        InstanceLabel = new LabelComponent(getInstanceName());
-        InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        InstanceLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    addInstanceNameEditor();
-                }
-                if (getPatchView() != null) {
-                    if (e.getClickCount() == 1) {
-                        if (e.isShiftDown()) {
-                            SetSelected(!GetSelected());
-                        } else if (Selected == false) {
-                            getPatchView().SelectNone();
-                            SetSelected(true);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                ml.mousePressed(e);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                ml.mouseReleased(e);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-        InstanceLabel.addMouseMotionListener(mml);
-        add(InstanceLabel);
-
-        resizeToGrid();
-    }
-
-    @Override
-    public void setInstanceName(String s) {
-        super.setInstanceName(s);
-        resizeToGrid();
     }
 
     @Override

@@ -112,7 +112,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     serializer.write(p, baos);
                     StringSelection s = new StringSelection(baos.toString());
                     clip.setContents(s, (ClipboardOwner) null);
-                    patchController.patchModel.deleteSelectedAxoObjInstances();
+                    patchController.deleteSelectedAxoObjInstances();
                 } catch (Exception ex) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -882,7 +882,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        patchController.patchModel.deleteSelectedAxoObjInstances();
+        patchController.deleteSelectedAxoObjInstances();
     }//GEN-LAST:event_jMenuItemDeleteActionPerformed
 
     private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
@@ -897,8 +897,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         AxoObjectInstanceAbstract selObj = null;
         ArrayList<AxoObjectInstanceAbstract> oi = patchController.patchModel.getObjectInstances();
         if(oi != null) {
+            // need a view here
             for(AxoObjectInstanceAbstract i : oi) {
-                if(i.IsSelected() && i instanceof AxoObjectInstance) {
+                if(i.isSelected() && i instanceof AxoObjectInstance) {
                     selObj = i;
                 }
             }

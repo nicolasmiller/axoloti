@@ -3,9 +3,9 @@ package axoloti.object;
 import javax.swing.JPanel;
 
 public class TitleBarPanel extends JPanel {
-    private AxoObjectInstanceAbstract axoObj;
+    private AxoObjectInstanceAbstractView axoObjView;
     
-    TitleBarPanel(AxoObjectInstanceAbstract axoObj) {
-        this.axoObj = axoObj;
+    TitleBarPanel(AxoObjectInstanceAbstractView axoObjView) {
+        this.axoObjView = axoObjView;
     }
 }

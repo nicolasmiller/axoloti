@@ -242,7 +242,6 @@ public class PatchModel {
             o.patchModel = this;
             AxoObjectAbstract t = o.resolveType();
             if ((t != null) && (t.providesModulationSource())) {
-                o.PostConstructor();
 
                 Modulator[] m = t.getModulators();
                 if (Modulators == null) {
@@ -260,14 +259,12 @@ public class PatchModel {
             AxoObjectAbstract t = o.getType();
             if ((t != null) && (!t.providesModulationSource())) {
                 o.patchModel = this;
-                o.PostConstructor();
                 System.out.println("Obj added " + o.getInstanceName());
             } else if (t == null) {
                 objectinstances.remove(o);
                 AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(new AxoObjectZombie(), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
                 zombie.patchModel = this;
                 zombie.typeName = o.typeName;
-                zombie.PostConstructor();
                 objectinstances.add(zombie);
             }
         }
@@ -362,14 +359,20 @@ public class PatchModel {
         return null;
     }
 
-    public Net GetNet(IoletAbstract io) {
+    public Net GetNet(InletInstance io) {
         for (Net net : nets) {
             for (InletInstance d : net.dest) {
                 if (d == io) {
                     return net;
                 }
             }
-
+        }
+        return null;
+    }
+    
+    
+    public Net GetNet(OutletInstance io) {
+        for (Net net : nets) {
             for (OutletInstance d : net.source) {
                 if (d == io) {
                     return net;
@@ -388,11 +391,11 @@ public class PatchModel {
      }*/
     public Net AddConnection(InletInstance il, OutletInstance ol) {
         if (!IsLocked()) {
-            if (il.GetObjectInstance().patchModel != this) {
+            if (il.getObjectInstance().getPatchModel() != this) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
-            if (ol.GetObjectInstance().patchModel != this) {
+            if (ol.getObjectInstance().getPatchModel() != this) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
@@ -452,11 +455,11 @@ public class PatchModel {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: same inlet");
                 return null;
             }
-            if (il.GetObjectInstance().patchModel != this) {
+            if (il.getObjectInstance().getPatchModel() != this) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
-            if (ol.GetObjectInstance().patchModel != this) {
+            if (ol.getObjectInstance().getPatchModel() != this) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
@@ -493,15 +496,27 @@ public class PatchModel {
         return null;
     }
     
-    public Net disconnect(IoletAbstract io) {
+    public Net disconnect(InletInstance io) {
         if (!IsLocked()) {
             Net n = GetNet(io);
             if (n != null) {
-                if (io instanceof OutletInstance) {
-                    n.source.remove((OutletInstance) io);
-                } else if (io instanceof InletInstance) {
-                    n.dest.remove((InletInstance) io);
+                n.dest.remove(io);
+                if (n.source.size() + n.dest.size() <= 1) {
+                    delete(n);
                 }
+                return n;
+            }
+        } else {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
+        }
+        return null;
+    }
+    
+    public Net disconnect(OutletInstance io) {
+        if (!IsLocked()) {
+            Net n = GetNet(io);
+            if (n != null) {
+                n.source.remove((OutletInstance) io);
                 if (n.source.size() + n.dest.size() <= 1) {
                     delete(n);
                 }
@@ -567,26 +582,6 @@ public class PatchModel {
         if (!m.Modulations.contains(n)) {
             m.Modulations.add(n);
             System.out.println("modulation added to Modulator " + Modulators.indexOf(m));
-        }
-    }
-
-    void deleteSelectedAxoObjInstances() {
-        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
-        if (!IsLocked()) {
-            boolean cont = true;
-            while (cont) {
-                cont = false;
-                for (AxoObjectInstanceAbstract o : objectinstances) {
-                    if (o.IsSelected()) {
-                        this.delete(o);
-                        cont = true;
-                        break;
-                    }
-                }
-            }
-            SetDirty();
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
     }
 
@@ -705,43 +700,6 @@ public class PatchModel {
             }
         }
         displayDataLength = offset;
-    }
-
-    Dimension GetSize() {
-        int nx = 0;
-        int ny = 0;
-        // negative coordinates?
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            Point p = o.getLocation();
-            if (p.x < nx) {
-                nx = p.x;
-            }
-            if (p.y < ny) {
-                ny = p.y;
-            }
-        }
-        if ((nx < 0) || (ny < 0)) { // move all to positive coordinates
-            for (AxoObjectInstanceAbstract o : objectinstances) {
-                Point p = o.getLocation();
-                o.SetLocation(p.x - nx, p.y - ny);
-            }
-        }
-
-        int mx = 0;
-        int my = 0;
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            Point p = o.getLocation();
-            Dimension s = o.getSize();
-            int px = p.x + s.width;
-            int py = p.y + s.height;
-            if (px > mx) {
-                mx = px;
-            }
-            if (py > my) {
-                my = py;
-            }
-        }
-        return new Dimension(mx, my);
     }
 
     void SortByPosition() {
@@ -1181,13 +1139,13 @@ public class PatchModel {
             if ((n != null) && (n.isValidNet())) {
                 if (i.GetDataType().equals(n.GetDataType())) {
                     if (n.NeedsLatch()
-                            && (objectinstances.indexOf(n.source.get(0).GetObjectInstance()) >= objectinstances.indexOf(o))) {
+                            && (objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= objectinstances.indexOf(o))) {
                         c += n.CName() + "Latch";
                     } else {
                         c += n.CName();
                     }
                 } else if (n.NeedsLatch()
-                        && (objectinstances.indexOf(n.source.get(0).GetObjectInstance()) >= objectinstances.indexOf(o))) {
+                        && (objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= objectinstances.indexOf(o))) {
                     c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                 } else {
                     c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
@@ -1196,7 +1154,7 @@ public class PatchModel {
                 c += i.GetDataType().GenerateSetDefaultValueCode();
             } else if (!n.isValidNet()) {
                 c += i.GetDataType().GenerateSetDefaultValueCode();
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.objname + ":" + i.getInletname());
+                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getObjectInstance().getInstanceName() + ":" + i.getInletname());
             }
             needsComma = true;
         }
@@ -2265,8 +2223,7 @@ public class PatchModel {
         if (obj instanceof AxoObjectInstance) {
             String n = obj.getInstanceName();
             obj.setInstanceName(n + "____tmp");
-            AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, obj.getLocation());
-            obj1.setPatchController(((AxoObjectInstance) obj).patchController);
+            AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, new Point(obj.getX(), obj.getY()));
 
             if ((obj1 instanceof AxoObjectInstance)) {
                 AxoObjectInstance new_obj = (AxoObjectInstance) obj1;
@@ -2276,20 +2233,21 @@ public class PatchModel {
                 new_obj.parameterInstances = old_obj.parameterInstances;
                 new_obj.attributeInstances = old_obj.attributeInstances;
             }
-            obj1.setName(n);
+// set in view somehow            
+//            obj1.setName(n);
             return obj1;
         } else if (obj instanceof AxoObjectInstanceZombie) {
             String n = obj.getInstanceName();
             obj.setInstanceName(n + "____tmp");
-            AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, obj.getLocation());
-            obj1.setPatchController(((AxoObjectInstance) obj).patchController);
+            AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, new Point(obj.getX(), obj.getY()));
             if ((obj1 instanceof AxoObjectInstance)) {
                 AxoObjectInstance new_obj = (AxoObjectInstance) obj1;
                 AxoObjectInstanceZombie old_obj = (AxoObjectInstanceZombie) obj;
                 new_obj.outletInstances = old_obj.outletInstances;
                 new_obj.inletInstances = old_obj.inletInstances;
             }
-            obj1.setName(n);
+            // set in view somehow
+//            obj1.setName(n);
             return obj1;
         }
         return obj;
@@ -2298,7 +2256,6 @@ public class PatchModel {
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         AxoObjectInstanceAbstract obj1 = ChangeObjectInstanceType1(obj, objType);
         if (obj1 != obj) {
-            obj1.PostConstructor();
             delete(obj);
             SetDirty();
         }
