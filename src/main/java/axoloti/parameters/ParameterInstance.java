@@ -299,7 +299,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     }
 
     public String KVPName(String vprefix) {
-        return "KVP_" + axoObj.getCInstanceName() + "_" + getLegalName();
+        return "KVP_" + axoObjInstanceView.getCInstanceName() + "_" + getLegalName();
     }
 
     public String PExName(String vprefix) {

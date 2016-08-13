@@ -19,6 +19,7 @@ package axoloti;
 
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceView;
 import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
@@ -28,6 +29,7 @@ import axoloti.object.AxoObjectInstanceAbstractView;
 import axoloti.object.AxoObjectInstanceView;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceView;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import java.awt.Component;
@@ -612,7 +614,7 @@ public class PatchView {
                         for (InletInstance o : n.dest) {
                             InletInstance o2 = PatchView.this.patchController.patchModel.getInletByReference(o.getObjectInstance().getInstanceName(), o.getInletname());
                             if ((o2 != null) && (o2 != connectedInlet)) {
-                                AddConnection(connectedInlet, o2);
+                                patchControllerAddConnection(connectedInlet, o2);
                             }
                         }
                         for (OutletInstance o : n.source) {
@@ -793,6 +795,7 @@ public class PatchView {
         AdjustSize();
         Layers.revalidate();
 
+        // need view here
         for (Net n : patchController.getNets()) {
             n.updateBounds();
         }
@@ -803,24 +806,33 @@ public class PatchView {
         patchController.getPatchFrame().setTitle(FileNamePath);
     }
 
-    public Net AddConnection(InletInstance il, OutletInstance ol) {
-        Net n = patchController.AddConnection(il, ol);
+    public NetView AddConnection(InletInstanceView il, OutletInstanceView ol) {
+        NetView n = patchController.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
         }
         return n;
     }
 
-    public Net AddConnection(InletInstance il, InletInstance ol) {
-        Net n = patchController.AddConnection(il, ol);
+    public NetView AddConnection(InletInstanceView il, InletInstanceView ol) {
+        NetView n = patchController.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
         }
         return n;
     }
 
-    public Net disconnect(IoletAbstract io) {
-        Net n = patchController.disconnect(io);
+    public NetView disconnect(InletInstanceView io) {
+        NetView n = patchController.disconnect(io);
+        if (n != null) {
+            n.updateBounds();
+            n.repaint();
+        }
+        return n;
+    }
+    
+    public NetView disconnect(OutletInstanceView io) {
+        NetView n = patchController.disconnect(io);
         if (n != null) {
             n.updateBounds();
             n.repaint();
@@ -828,13 +840,13 @@ public class PatchView {
         return n;
     }
 
-    public Net delete(Net n) {
+    public NetView delete(NetView n) {
         if (n != null) {
             netLayerPanel.remove(n);
             netLayer.repaint(n.getBounds());
         }
         Net nn = PatchView.this.patchController.delete(n);
-        return nn;
+        return n;
     }
 
     public void delete(AxoObjectInstanceAbstractView o) {
@@ -1061,7 +1073,7 @@ public class PatchView {
 
     public void updateNetVisibility() {
         for (Net n : patchController.getNets()) {
-            DataType d = n.GetDataType();
+            DataType d = n.getDataType();
             if (d != null) {
                 n.setVisible(isCableTypeEnabled(d));
             }

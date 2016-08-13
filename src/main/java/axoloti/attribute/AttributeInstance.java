@@ -55,7 +55,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(new LabelComponent(GetDefinition().getName()));
+        add(new LabelComponent(getDefinition().getName()));
         doLayout();
         setSize(getPreferredSize());
         doLayout();
@@ -79,12 +79,12 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
     }
 
     @Override
-    public AxoObjectInstance GetObjectInstance() {
+    public AxoObjectInstance getObjectInstance() {
         return axoObj;
     }
 
     @Override
-    public T GetDefinition() {
+    public T getDefinition() {
         return attr;
     }
 

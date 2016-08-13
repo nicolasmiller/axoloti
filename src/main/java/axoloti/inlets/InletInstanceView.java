@@ -27,7 +27,6 @@ public class InletInstanceView extends IoletAbstract {
     public InletInstanceView(InletInstance inletInstance) {
         this.inletInstance = inletInstance;
         this.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        RefreshName();
     }
 
     public final void PostConstructor() {
@@ -55,10 +54,12 @@ public class InletInstanceView extends IoletAbstract {
         return popup;
     }
     
-
-    
     public String getInletname() {
         int sepIndex = name.lastIndexOf(' ');
             return name.substring(sepIndex + 1);
+    }
+    
+    public InletInstance getInletInstance() {
+        return this.inletInstance;
     }
 }

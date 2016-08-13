@@ -522,7 +522,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             if (n == null) {
                 continue;
             }
-            DataType d = n.GetDataType();
+            DataType d = n.getDataType();
             if (d == null) {
                 continue;
             }

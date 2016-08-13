@@ -108,8 +108,8 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         ButtonChooseFile.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(GetObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
-                int returnVal = fc.showOpenDialog(GetObjectInstance().patchController.getPatchFrame());
+                JFileChooser fc = new JFileChooser(getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
+                int returnVal = fc.showOpenDialog(getObjectInstance().patchController.getPatchFrame());
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);
@@ -174,7 +174,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     File getFile() {
-        Path basePath = FileSystems.getDefault().getPath(GetObjectInstance().getPatchModel().getFileNamePath());
+        Path basePath = FileSystems.getDefault().getPath(getObjectInstance().getPatchModel().getFileNamePath());
         Path parent = basePath.getParent();
         if (parent == null) {
             return new File(fileName);
@@ -192,7 +192,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         if (f == null) {
             return "";
         }
-        String FilenamePath = GetObjectInstance().getPatchModel().getFileNamePath();
+        String FilenamePath = getObjectInstance().getPatchModel().getFileNamePath();
         if (FilenamePath != null && !FilenamePath.isEmpty()) {
             Path pathAbsolute = Paths.get(f.getPath());
             String parent = new File(FilenamePath).getParent();

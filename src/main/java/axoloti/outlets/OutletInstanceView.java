@@ -54,4 +54,7 @@ public class OutletInstanceView extends IoletAbstract {
         return popup;
     }
 
+    public OutletInstance getOutletInstance() {
+        return this.outletInstance;
+    }
 }

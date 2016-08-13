@@ -1,11 +1,10 @@
 package axoloti;
 
-import axoloti.inlets.InletInstance;
-import axoloti.iolet.IoletAbstract;
+import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceAbstractView;
-import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -160,28 +159,28 @@ public class PatchController {
         UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
     
-    public Net AddConnection(InletInstance il, OutletInstance ol) {
-        return patchModel.AddConnection(il, ol);
+    public NetView AddConnection(InletInstanceView il, OutletInstanceView ol) {
+        return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance()));
     }
     
-    public Net AddConnection(InletInstance il, InletInstance ol) {
-        return patchModel.AddConnection(il, ol);
+    public NetView AddConnection(InletInstanceView il, InletInstanceView ol) {
+        return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance()));
     }
     
     public void setFileNamePath(String FileNamePath) {
         patchModel.setFileNamePath(FileNamePath);
     }
     
-    public Net disconnect(InletInstance io) {
-        return patchModel.disconnect(io);
+    public NetView disconnect(InletInstanceView io) {
+        return new NetView(patchModel.disconnect(io.getInletInstance()));
     }
     
-    public Net disconnect(OutletInstance io) {
-        return patchModel.disconnect(io);
+    public NetView disconnect(OutletInstanceView io) {
+        return new NetView(patchModel.disconnect(io.getOutletInstance()));
     }
     
-    public Net delete(Net n) {
-        return patchModel.delete(n);
+    public Net delete(NetView n) {
+        return patchModel.delete(n.net);
     }
     
     public void delete(AxoObjectInstanceAbstractView o) {

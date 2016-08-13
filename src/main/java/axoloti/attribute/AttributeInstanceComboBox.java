@@ -45,7 +45,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     public void PostConstructor() {
         super.PostConstructor();
 //        final DefaultComboBoxModel model = new DefaultComboBoxModel(((AxoAttributeComboBox) attr).getMenuEntries().toArray());
-        comboBox = new DropDownComponent(GetDefinition().getMenuEntries(), this);
+        comboBox = new DropDownComponent(getDefinition().getMenuEntries(), this);
         comboBox.setFont(Constants.FONT);
         setString(selection);
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
@@ -73,10 +73,10 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public String CValue() {
-        if (GetDefinition().getCEntries().isEmpty()) {
+        if (getDefinition().getCEntries().isEmpty()) {
             return "";
         }
-        String s = GetDefinition().getCEntries().get(comboBox.getSelectedIndex());
+        String s = getDefinition().getCEntries().get(comboBox.getSelectedIndex());
         if (s != null) {
             return s;
         } else {

@@ -817,7 +817,7 @@ public class PatchModel {
             c += "/* parameter instance indices */\n";
             int k = 0;
             for (ParameterInstance p : ParameterInstances) {
-                c += "static const int PARAM_INDEX_" + p.GetObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+                c += "static const int PARAM_INDEX_" + p.getObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
                 k++;
             }
         }
@@ -1111,8 +1111,8 @@ public class PatchModel {
         for (Net n : nets) {
             // check if net has multiple sources
             if (n.NeedsLatch()) {
-                if (n.GetDataType() != null) {
-                    c += n.GetDataType().GenerateCopyCode(n.CName() + "Latch", n.CName());
+                if (n.getDataType() != null) {
+                    c += n.getDataType().GenerateCopyCode(n.CName() + "Latch", n.CName());
                 } else {
                     Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Only inlets connected on net!");
                 }
@@ -1137,7 +1137,7 @@ public class PatchModel {
             }
             Net n = GetNet(i);
             if ((n != null) && (n.isValidNet())) {
-                if (i.GetDataType().equals(n.GetDataType())) {
+                if (i.GetDataType().equals(n.getDataType())) {
                     if (n.NeedsLatch()
                             && (objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= objectinstances.indexOf(o))) {
                         c += n.CName() + "Latch";
@@ -1146,9 +1146,9 @@ public class PatchModel {
                     }
                 } else if (n.NeedsLatch()
                         && (objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= objectinstances.indexOf(o))) {
-                    c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
+                    c += n.getDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                 } else {
-                    c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
+                    c += n.getDataType().GenerateConversionToType(i.GetDataType(), n.CName());
                 }
             } else if (n == null) { // unconnected input
                 c += i.GetDataType().GenerateSetDefaultValueCode();
@@ -1626,7 +1626,7 @@ public class PatchModel {
         ao.sLocalData += "/* parameter instance indices */\n";
         int k = 0;
         for (ParameterInstance p : ParameterInstances) {
-            ao.sLocalData += "static const int PARAM_INDEX_" + p.GetObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+            ao.sLocalData += "static const int PARAM_INDEX_" + p.getObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
             k++;
         }
 
