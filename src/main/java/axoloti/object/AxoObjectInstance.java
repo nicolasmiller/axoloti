@@ -595,4 +595,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @Override    
+    public AxoObjectInstanceView ViewFactory(AxoObjectInstanceView o) {
+        return new AxoObjectInstanceView(this);
+    }
 }

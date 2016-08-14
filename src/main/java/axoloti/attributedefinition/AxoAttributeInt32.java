@@ -17,11 +17,8 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.attribute.AttributeInstanceInt32View;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**

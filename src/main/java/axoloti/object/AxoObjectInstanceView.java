@@ -414,6 +414,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
         }
     }
     
+    @Override
     public AxoObjectInstance getObjectInstance() {
         return this.model;
     }

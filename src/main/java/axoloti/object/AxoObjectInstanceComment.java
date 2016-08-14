@@ -47,7 +47,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
         }
     }
 
-    @Override
     public boolean IsLocked() {
         return false;
     }
@@ -63,5 +62,10 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
 
     public void setCommentText(String commentText) {
         this.commentText = commentText;
+    }
+    
+    @Override
+    public AxoObjectInstanceCommentView ViewFactory() {
+        return new AxoObjectInstanceCommentView(this);
     }
 }

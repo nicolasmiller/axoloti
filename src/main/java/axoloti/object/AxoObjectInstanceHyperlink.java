@@ -76,4 +76,9 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public String getCInstanceName() {
         return "";
     }
+
+    @Override    
+    public AxoObjectInstanceHyperlinkView ViewFactory() {
+        return new AxoObjectInstanceHyperlinkView(this);
+    }
 }

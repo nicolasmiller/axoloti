@@ -59,7 +59,8 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
          */
     }
 
-
-
-
+    @Override    
+    public AxoObjectInstancePatcherObjectView ViewFactory() {
+        return new AxoObjectInstancePatcherObjectView(this);
+    }
 }
