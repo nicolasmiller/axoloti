@@ -18,22 +18,19 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
-import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.util.ArrayList;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel implements AtomInstance<T> {
+public abstract class AttributeInstance<T extends AxoAttribute> implements AtomInstance<T> {
 
     @Attribute
     String attributeName;
@@ -51,24 +48,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
         axoObj = axoObj1;
         attributeName = attr.getName();
     }
-
-    public void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(new LabelComponent(getDefinition().getName()));
-        doLayout();
-        setSize(getPreferredSize());
-        doLayout();
-    }
-
-    @Override
-    public String getName() {
-        return attributeName;
-    }
-
-    public abstract void Lock();
-
-    public abstract void UnLock();
 
     public abstract String CValue();
 

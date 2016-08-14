@@ -32,13 +32,10 @@ import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
-import components.LabelComponent;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
 import org.simpleframework.xml.*;
 
 /**
@@ -46,7 +43,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "obj")
-public class AxoObjectInstance extends AxoObjectInstanceAbstract implements ObjectModifiedListener {
+public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     public ArrayList<InletInstance> inletInstances;
     public ArrayList<OutletInstance> outletInstances;
@@ -79,7 +76,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<AttributeInstance> attributeInstances;
     public ArrayList<DisplayInstance> displayInstances;
 
-    boolean deferredObjTypeUpdate = false;
 
     @Override
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -89,10 +85,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     @Override
     public ArrayList<AttributeInstance> getAttributeInstances() {
         return attributeInstances;
-    }
-
-    void updateObj1() {
-        getType().addObjectModifiedListener(this);
     }
 
     public AxoObjectInstance() {
@@ -110,10 +102,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         displayInstances = new ArrayList<DisplayInstance>();
         parameterInstances = new ArrayList<ParameterInstance>();
         attributeInstances = new ArrayList<AttributeInstance>();
-    }
-
-    public void OpenEditor() {
-        getType().OpenEditor(editorBounds, editorActiveTabIndex);
     }
 
     @Override
@@ -168,30 +156,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return null;
     }
 
-    @Override
-    public void Lock() {
-        super.Lock();
-        for (AttributeInstance a : attributeInstances) {
-            a.Lock();
-        }
-    }
 
-    public void updateObj() {
-        getPatchModel().ChangeObjectInstanceType(this, this.getType());
-        getPatchModel().cleanUpIntermediateChangeStates(3);
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        for (AttributeInstance a : attributeInstances) {
-            a.UnLock();
-        }
-        if (deferredObjTypeUpdate) {
-            updateObj();
-            deferredObjTypeUpdate = false;
-        }
-    }
 
     @Override
     public ArrayList<InletInstance> GetInletInstances() {
@@ -573,31 +538,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     @Override
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
-    }
-
-    Rectangle editorBounds;
-    Integer editorActiveTabIndex;
-
-    @Override
-    public void ObjectModified(Object src) {
-        if (getPatchModel() != null) {
-            if (!getPatchModel().IsLocked()) {
-                updateObj();
-            } else {
-                deferredObjTypeUpdate = true;
-            }
-        }
-
-        try {
-            AxoObject o = (AxoObject) src;
-            if (o.editor != null && o.editor.getBounds() != null) {
-                editorBounds = o.editor.getBounds();
-                editorActiveTabIndex = o.editor.getActiveTabIndex();
-                this.getType().editorBounds = editorBounds;
-                this.getType().editorActiveTabIndex = editorActiveTabIndex;
-            }
-        } catch (ClassCastException ex) {
-        }
     }
 
     @Override

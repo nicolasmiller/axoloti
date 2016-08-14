@@ -58,6 +58,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +101,8 @@ public class PatchView {
         return objectInstanceViews;
     }
 
+    public ArrayList<NetView> netViews = new ArrayList<NetView>();
+
     // shortcut patch names
     final static String patchComment = "patch/comment";
     final static String patchInlet = "patch/inlet";
@@ -128,6 +131,9 @@ public class PatchView {
     public AxoObjectFromPatch ObjEditor;
 
     private PatchController patchController;
+
+    boolean locked = false;
+
 
     public PatchView(PatchController patchController) {
         super();
@@ -213,7 +219,7 @@ public class PatchView {
             @Override
             public boolean importData(JComponent comp, Transferable t) {
                 try {
-                    if (!PatchView.this.patchController.IsLocked()) {
+                    if (!IsLocked()) {
                         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 
                             paste((String) t.getTransferData(DataFlavor.stringFlavor), comp.getMousePosition(), false);
@@ -653,7 +659,7 @@ public class PatchView {
     public ObjectSearchFrame osf;
 
     public void ShowClassSelector(Point p, AxoObjectInstanceAbstractView o, String searchString) {
-        if (patchController.IsLocked()) {
+        if (IsLocked()) {
             return;
         }
         if (osf == null) {
@@ -701,24 +707,24 @@ public class PatchView {
     }
 
     PatchModel GetSelectedObjects() {
-        PatchModel p = new PatchModel();
+        PatchView p = new PatchModel();
         for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
-            if (o.IsSelected()) {
+            if (o.isSelected()) {
                 p.objectinstances.add(o.getModel());
             }
         }
         p.nets = new ArrayList<Net>();
-        
+
         // need to have net views here
-        for (Net n : patchController.getNets()) {
+        for (NetView n : netViews) {
             int sel = 0;
-            for (InletInstance i : n.dest) {
-                if (i.getObjectInstance().isSelected()) {
+            for (InletInstanceView i : n.dest) {
+                if (i.getObjectInstanceView().isSelected()) {
                     sel++;
                 }
             }
-            for (OutletInstance i : n.source) {
-                if (i.getObjectInstance().IsSelected()) {
+            for (OutletInstanceView i : n.source) {
+                if (i.getObjectInstanceView().isSelected()) {
                     sel++;
                 }
             }
@@ -731,7 +737,7 @@ public class PatchView {
     }
 
     void MoveSelectedAxoObjInstances(Direction dir, int xsteps, int ysteps) {
-        if (!patchController.IsLocked()) {
+        if (!IsLocked()) {
             int xgrid = 1;
             int ygrid = 1;
             int xstep = 0;
@@ -756,7 +762,7 @@ public class PatchView {
             }
             boolean isUpdate = false;
             for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
-                if (o.IsSelected()) {
+                if (o.isSelected()) {
                     isUpdate = true;
                     Point p = o.getLocation();
                     p.x = p.x + xstep;
@@ -779,13 +785,13 @@ public class PatchView {
     public void PostContructor() {
         // get rid of this
         patchController.patchModel.PostContructor();
+
         objectLayerPanel.removeAll();
         netLayerPanel.removeAll();
         for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
             objectLayerPanel.add(o);
         }
-        for (Net n : patchController.getNets()) {
-            n.setPatchView(this);
+        for (NetView n : netViews) {
             netLayerPanel.add(n);
         }
         objectLayerPanel.validate();
@@ -795,8 +801,7 @@ public class PatchView {
         AdjustSize();
         Layers.revalidate();
 
-        // need view here
-        for (Net n : patchController.getNets()) {
+        for (NetView n : netViews) {
             n.updateBounds();
         }
     }
@@ -810,6 +815,7 @@ public class PatchView {
         NetView n = patchController.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
+            netViews.add(n);
         }
         return n;
     }
@@ -818,6 +824,7 @@ public class PatchView {
         NetView n = patchController.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
+            netViews.add(n);
         }
         return n;
     }
@@ -830,7 +837,7 @@ public class PatchView {
         }
         return n;
     }
-    
+
     public NetView disconnect(OutletInstanceView io) {
         NetView n = patchController.disconnect(io);
         if (n != null) {
@@ -842,6 +849,7 @@ public class PatchView {
 
     public NetView delete(NetView n) {
         if (n != null) {
+            netViews.remove(n);
             netLayerPanel.remove(n);
             netLayer.repaint(n.getBounds());
         }
@@ -910,17 +918,7 @@ public class PatchView {
         qCmdProcessor.AppendToQueue(new QCmdLock(patchController));
     }
 
-    public void Lock() {
-        patchController.Lock();
-        patchController.getPatchFrame().SetLive(true);
-        Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
-    }
 
-    public void Unlock() {
-        patchController.Unlock();
-        patchController.getPatchFrame().SetLive(false);
-        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
-    }
 
     void invalidate() {
         Layers.invalidate();
@@ -1072,8 +1070,8 @@ public class PatchView {
     }
 
     public void updateNetVisibility() {
-        for (Net n : patchController.getNets()) {
-            DataType d = n.getDataType();
+        for (NetView n : netViews) {
+            DataType d = n.net.getDataType();
             if (d != null) {
                 n.setVisible(isCableTypeEnabled(d));
             }
@@ -1082,7 +1080,11 @@ public class PatchView {
     }
 
     public void Close() {
-        patchController.Close();
+        Unlock();
+        Collection<AxoObjectInstanceAbstractView> c = (Collection<AxoObjectInstanceAbstractView>) objectInstanceViews.clone();
+        for (AxoObjectInstanceAbstractView o : c) {
+            o.Close();
+        }
         if (NotesFrame != null) {
             NotesFrame.dispose();
         }
@@ -1093,7 +1095,7 @@ public class PatchView {
     }
 
     void cleanUpObjectLayer() {
-        if (!patchController.IsLocked()) {
+        if (!IsLocked()) {
             for (Component c : objectLayerPanel.getComponents()) {
                 if (!objectInstanceViews.contains((AxoObjectInstanceAbstractView) c)) {
                     this.objectLayerPanel.remove(c);
@@ -1139,15 +1141,15 @@ public class PatchView {
         }
         return new Dimension(mx, my);
     }
-    
+
     void deleteSelectedAxoObjInstances() {
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
-        if (!patchController.IsLocked()) {
+        if (!IsLocked()) {
             boolean cont = true;
             while (cont) {
                 cont = false;
                 for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
-                    if (o.IsSelected()) {
+                    if (o.isSelected()) {
                         patchController.delete(o);
                         cont = true;
                         break;
@@ -1158,5 +1160,53 @@ public class PatchView {
         } else {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
+    }
+
+    public NetView GetNetView(IoletAbstract io) {
+        for (NetView netView : netViews) {
+            for (IoletAbstract d : netView.dest) {
+                if (d == io) {
+                    return netView;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<NetView> getNetViews() {
+        return this.netViews;
+    }
+
+    public void Lock() {
+        patchController.Lock();
+        patchController.getPatchFrame().SetLive(true);
+        Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
+        locked = true;
+        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+            o.Lock();
+        }
+    }
+
+    public void Unlock() {
+        patchController.Unlock();
+        patchController.getPatchFrame().SetLive(false);
+        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+        locked = false;
+        ArrayList<AxoObjectInstanceAbstractView> objInstsClone = (ArrayList<AxoObjectInstanceAbstractView>) objectInstanceViews.clone();
+        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+            o.Unlock();
+        }
+    }
+
+    public boolean IsLocked() {
+        return locked;
+    }
+
+    public void ShowCompileFail() {
+        Unlock();
+    }
+
+    public PatchController getPatchController() {
+        return this.patchController;
     }
 }

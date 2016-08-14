@@ -6,11 +6,12 @@
 package axoloti.object;
 
 import axoloti.Net;
+import axoloti.NetView;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.Theme;
-import axoloti.inlets.InletInstance;
-import axoloti.outlets.OutletInstance;
+import axoloti.inlets.InletInstanceView;
+import axoloti.outlets.OutletInstanceView;
 import axoloti.utils.Constants;
 import components.LabelComponent;
 import components.TextFieldComponent;
@@ -24,6 +25,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -33,7 +35,7 @@ import javax.swing.JPopupMenu;
  *
  * @author nicolas
  */
-public class AxoObjectInstanceAbstractView extends JPanel {
+public class AxoObjectInstanceAbstractView extends JPanel implements ObjectModifiedListener {
 
     protected AxoObjectInstanceAbstract model;
     protected JPanel Titlebar;
@@ -43,8 +45,10 @@ public class AxoObjectInstanceAbstractView extends JPanel {
     protected MouseMotionListener mml;
     protected boolean dragging = false;
     protected String InstanceName;
-    protected boolean Selected = false;
+    protected boolean selected = false;
     protected int dX, dY;
+    private boolean Locked = false;
+
 
     AxoObjectInstanceAbstractView(AxoObjectInstanceAbstract model) {
         this.model = model;
@@ -53,9 +57,17 @@ public class AxoObjectInstanceAbstractView extends JPanel {
     public AxoObjectInstanceAbstract getModel() {
         return model;
     }
+    
+    public void Lock() {
+        Locked = true;
+    }
+
+    public void Unlock() {
+        Locked = false;
+    }
 
     public boolean isLocked() {
-        return model.IsLocked();
+        return Locked;
     }
 
     public void PostConstructor() {
@@ -87,9 +99,9 @@ public class AxoObjectInstanceAbstractView extends JPanel {
                 if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
-                            SetSelected(!GetSelected());
+                            SetSelected(!getSelected());
                             me.consume();
-                        } else if (Selected == false) {
+                        } else if (selected == false) {
                             getPatchView().SelectNone();
                             SetSelected(true);
                             me.consume();
@@ -168,14 +180,14 @@ public class AxoObjectInstanceAbstractView extends JPanel {
         if (getPatchModel() != null) {
             if (me.isPopupTrigger()) {
 
-            } else if (!model.IsLocked()) {
+            } else if (!patchView.IsLocked()) {
                 dX = me.getXOnScreen() - getX();
                 dY = me.getYOnScreen() - getY();
                 dragging = true;
                 moveToDraggedLayer(this);
-                if (IsSelected()) {
+                if (isSelected()) {
                     for (AxoObjectInstanceAbstractView o : getPatchView().getObjectInstanceViews()) {
-                        if (o.IsSelected()) {
+                        if (o.isSelected()) {
                             moveToDraggedLayer(o);
 
                             o.dX = me.getXOnScreen() - o.getX();
@@ -236,6 +248,14 @@ public class AxoObjectInstanceAbstractView extends JPanel {
     public PatchModel getPatchModel() {
         return this.patchModel;
     }
+    
+    public ArrayList<InletInstanceView> getInletInstanceViews() {
+        return new ArrayList<InletInstanceView>();
+    }
+
+    public ArrayList<OutletInstanceView> getOutletInstanceViews() {
+        return new ArrayList<OutletInstanceView>();
+    }
 
     @Override
     public void setLocation(int x, int y) {
@@ -244,17 +264,17 @@ public class AxoObjectInstanceAbstractView extends JPanel {
         // set on model
         model.x = x;
         model.y = y;
-        if (getPatchModel() != null) {
+        if (getPatchView() != null) {
             repaint();
-            for (InletInstance i : model.GetInletInstances()) {
-                Net n = getPatchModel().GetNet(i);
+            for (InletInstanceView i : getInletInstanceViews()) {
+                NetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
                 }
             }
-            for (OutletInstance i : model.GetOutletInstances()) {
-                Net n = getPatchModel().GetNet(i);
+            for (OutletInstanceView i : getOutletInstanceViews()) {
+                NetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
@@ -337,7 +357,7 @@ public class AxoObjectInstanceAbstractView extends JPanel {
     }
 
     public void SetSelected(boolean Selected) {
-        if (this.Selected != Selected) {
+        if (this.selected != Selected) {
             if (Selected) {
                 setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected));
             } else {
@@ -345,7 +365,7 @@ public class AxoObjectInstanceAbstractView extends JPanel {
             }
             repaint();
         }
-        this.Selected = Selected;
+        this.selected = Selected;
     }
 
     public void SetLocation(int x1, int y1) {
@@ -354,8 +374,8 @@ public class AxoObjectInstanceAbstractView extends JPanel {
 // set on model?        
 //        x = x1;
 //        y = y1;
-        if (getPatchModel() != null) {
-            for (Net n : getPatchModel().getNets()) {
+        if (getPatchView() != null) {
+            for (NetView n : getPatchView().getNetViews()) {
                 n.updateBounds();
             }
         }
@@ -373,11 +393,24 @@ public class AxoObjectInstanceAbstractView extends JPanel {
         setSize(d);
     }
 
-    public boolean IsSelected() {
-        return Selected;
+    public boolean isSelected() {
+        return selected;
     }
 
-    public boolean GetSelected() {
-        return Selected;
+    public boolean getSelected() {
+        return selected;
+    }
+    
+    public void Close() {
+    }
+    
+    public void updateObj() {
+        model.getType().addObjectModifiedListener(this);
+        getPatchModel().ChangeObjectInstanceType(this, this.getType());
+        getPatchModel().cleanUpIntermediateChangeStates(3);
+    }
+    
+    @Override
+    public void ObjectModified(Object src) {
     }
 }

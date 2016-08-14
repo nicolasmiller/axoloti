@@ -38,7 +38,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener {
+public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectInstanceAbstract> {
 
     @Attribute(name = "type")
     public String typeName;
@@ -55,7 +55,6 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     int y;
     public PatchModel patchModel;
     AxoObjectAbstract type;
-    private boolean Locked = false;
     private boolean typeWasAmbiguous = false;
 
 
@@ -237,18 +236,6 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     public void refreshIndex() {
     }
 
-    public void Lock() {
-        Locked = true;
-    }
-
-    public void Unlock() {
-        Locked = false;
-    }
-
-    public boolean IsLocked() {
-        return Locked;
-    }
-
     public void SetLocation(int x1, int y1) {
         x = x1;
         y = y1;
@@ -321,9 +308,7 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
         return false;
     }
 
-    @Override
-    public void ObjectModified(Object src) {
-    }
+
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
@@ -332,11 +317,11 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     public boolean isTypeWasAmbiguous() {
         return typeWasAmbiguous;
     }
-
-    public void Close() {
-    }
     
     public PatchModel getPatchModel() {
         return patchModel;
+    }
+    
+    void updateObj1() {
     }
 }

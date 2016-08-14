@@ -18,88 +18,96 @@ import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 
 public class PatchController {
-    
+
     public PatchModel patchModel;
     public PatchView patchView;
     public PatchFrame patchFrame;
-    
+
     public PatchController() {
     }
-    
+
     public void setPatchModel(PatchModel patchModel) {
         this.patchModel = patchModel;
     }
-    
+
     public void setPatchView(PatchView patchView) {
         this.patchView = patchView;
     }
-    
+
     public void setPatchFrame(PatchFrame patchFrame) {
         this.patchFrame = patchFrame;
     }
-    
+
     QCmdProcessor GetQCmdProcessor() {
         if (patchFrame == null) {
             return null;
         }
         return patchFrame.qcmdprocessor;
     }
-    
+
     MainFrame GetMainFrame() {
         return MainFrame.mainframe;
     }
-    
+
     public PatchFrame getPatchFrame() {
         return patchFrame;
     }
-    
+
     void ShowDisconnect() {
         if (patchFrame != null) {
             patchFrame.ShowDisconnect();
         }
     }
-    
+
     void ShowConnect() {
         if (patchFrame != null) {
             patchFrame.ShowConnect();
         }
     }
     
+    public boolean canUndo() {
+        return !patchView.IsLocked() && patchModel.canUndo();
+    }
+    
+    public boolean canRedo() {
+        return !patchView.IsLocked() && patchModel.canRedo();
+    }
+
     public void undo() {
-        if (patchModel.canUndo()) {
+        if (canUndo()) {
             patchModel.currentState -= 1;
             patchModel.loadState();
             SetDirty(false);
             patchView.PostContructor();
         }
     }
-    
+
     public void redo() {
-        if (patchModel.canRedo()) {
+        if (canRedo()) {
             patchModel.currentState += 1;
             patchModel.loadState();
             SetDirty(false);
             patchView.PostContructor();
         }
     }
-    
+
     public void SetDirty(boolean shouldSaveState) {
         patchModel.SetDirty(shouldSaveState);
         patchFrame.updateUndoRedoEnabled();
     }
-    
+
     public void RecallPreset(int i) {
         GetQCmdProcessor().AppendToQueue(new QCmdRecallPreset(i));
     }
-    
+
     public void ShowPreset(int i) {
         patchModel.ShowPreset(i);
     }
-    
+
     public void Compile() {
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(patchModel));
     }
-    
+
     void UploadDependentFiles() {
         String sdpath = getSDCardPath();
         ArrayList<SDFileReference> files = patchModel.GetDependendSDFiles();
@@ -124,7 +132,7 @@ public class PatchController {
             }
         }
     }
-    
+
     public void UploadToSDCard(String sdfilename) {
         patchModel.WriteCode();
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
@@ -154,68 +162,94 @@ public class PatchController {
         }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(patchModel.getBinFile(), sdfilename, cal));
     }
-    
+
     public void UploadToSDCard() {
         UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
-    
+
     public NetView AddConnection(InletInstanceView il, OutletInstanceView ol) {
-        return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance()));
+        if (!patchView.IsLocked()) {
+            return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance()));
+        } else {
+            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked");
+        }
+        return null;
     }
-    
+
     public NetView AddConnection(InletInstanceView il, InletInstanceView ol) {
-        return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance()));
+        if (!patchView.IsLocked()) {
+            return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance()));
+        } else {
+            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't add connection: locked!");
+            return null;
+        }
     }
-    
+
     public void setFileNamePath(String FileNamePath) {
         patchModel.setFileNamePath(FileNamePath);
     }
-    
+
     public NetView disconnect(InletInstanceView io) {
-        return new NetView(patchModel.disconnect(io.getInletInstance()));
+        if (!patchView.IsLocked()) {
+            return new NetView(patchModel.disconnect(io.getInletInstance()));
+        } else {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            return null;
+        }
     }
-    
+
     public NetView disconnect(OutletInstanceView io) {
-        return new NetView(patchModel.disconnect(io.getOutletInstance()));
+        if (!patchView.IsLocked()) {
+            return new NetView(patchModel.disconnect(io.getOutletInstance()));
+        } else {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            return null;
+        }
     }
-    
+
     public Net delete(NetView n) {
-        return patchModel.delete(n.net);
+        if (!patchView.IsLocked()) {
+            return patchModel.delete(n.net);
+        }
+        else {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
+            return null;
+        }
     }
-    
+
     public void delete(AxoObjectInstanceAbstractView o) {
         patchModel.delete(o.getModel());
     }
-    
+
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
-        return patchModel.AddObjectInstance(obj, loc);
+        if (!patchView.IsLocked()) {
+            return patchModel.AddObjectInstance(obj, loc);
+        } else {
+            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");
+            return null;
+        }
     }
-    
+
     public void deleteSelectedAxoObjInstances() {
         patchView.deleteSelectedAxoObjInstances();
     }
-    
-    public boolean IsLocked() {
-        return patchModel.IsLocked();
-    }
-    
+
     public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {
         return patchModel.getObjectInstances();
     }
-    
+
     public String GetCurrentWorkingDirectory() {
         return patchModel.GetCurrentWorkingDirectory();
     }
-    
+
     public ArrayList<Net> getNets() {
         return patchModel.getNets();
     }
-    
+
     public void SetDirty() {
         patchModel.SetDirty();
     }
-    
-            
+
     public String getSDCardPath() {
         String FileNameNoPath = patchModel.getFileNamePath();
         String separator = System.getProperty("file.separator");
@@ -229,35 +263,23 @@ public class PatchController {
         }
         return FileNameNoExt;
     }
-    
+
     public void WriteCode() {
         patchModel.WriteCode();
     }
-    
-    public void Lock() {
-        patchModel.Lock();
-    }
-    
-    public void Unlock() {
-        patchModel.Unlock();
-    }
-    
+
     public void setPresetUpdatePending(boolean updatePending) {
         patchModel.presetUpdatePending = updatePending;
     }
-    
+
     public boolean isPresetUpdatePending() {
         return patchModel.presetUpdatePending;
     }
-    
+
     Dimension GetSize() {
         return patchView.GetSize();
     }
-    
-    public void Close() {
-        patchModel.Close();
-    }
-    
+
     public PatchSettings getSettings() {
         return patchModel.settings;
     }

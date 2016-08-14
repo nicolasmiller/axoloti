@@ -17,9 +17,11 @@
  */
 package axoloti.inlets;
 
+import axoloti.Net;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceAbstract;
 import org.simpleframework.xml.*;
 
 /**
@@ -28,7 +30,7 @@ import org.simpleframework.xml.*;
  */
 @Root(name = "dest")
 public class InletInstance<T extends Inlet> implements AtomInstance<T> {
-    
+
     @Attribute(name = "inlet", required = false)
     public String inletname;
     @Deprecated
@@ -39,14 +41,14 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
 
     private final T inlet;
 
-    private AxoObjectInstance axoObj;
+    protected AxoObjectInstanceAbstract axoObj;
 
     public String getInletname() {
         return inletname;
     }
 
     @Override
-    public AxoObjectInstance getObjectInstance() {
+    public AxoObjectInstanceAbstract getObjectInstance() {
         return this.axoObj;
     }
 
@@ -80,15 +82,39 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
     public Inlet getInlet() {
         return inlet;
     }
-    
+
     public void RefreshName() {
         name = axoObj.getInstanceName() + " " + inlet.name;
         objname = axoObj.getInstanceName();
         inletname = inlet.name;
         name = null;
     }
-    
+
     public String getObjname() {
         return this.objname;
     }
+
+    public boolean isConnected() {
+        if (axoObj == null) {
+            return false;
+        }
+        if (axoObj.getPatchModel() == null) {
+            return false;
+        }
+
+        return (axoObj.getPatchModel().GetNet(this) != null);
+    }
+
+    public void disconnect() {
+        axoObj.getPatchModel().disconnect(this);
+        axoObj.getPatchModel().SetDirty();
+    }
+
+    public void deleteNet() {
+        Net n = axoObj.getPatchModel().GetNet(this);
+        axoObj.getPatchModel().delete(n);
+        axoObj.getPatchModel().SetDirty();
+    }
+    
+    
 }

@@ -38,13 +38,13 @@ public class OutletInstancePopupMenu extends JPopupMenu {
         itemDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                OutletInstancePopupMenu.this.outletInstanceView.disconnect();
+                OutletInstancePopupMenu.this.outletInstanceView.getOutletInstance().disconnect();
             }
         });
         itemDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                OutletInstancePopupMenu.this.outletInstanceView.deleteNet();
+                OutletInstancePopupMenu.this.outletInstanceView.getOutletInstance().deleteNet();
             }
         });
         this.add(itemDisconnect);

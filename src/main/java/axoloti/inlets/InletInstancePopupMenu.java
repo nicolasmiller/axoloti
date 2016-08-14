@@ -38,13 +38,13 @@ public class InletInstancePopupMenu extends JPopupMenu {
         itemDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                InletInstancePopupMenu.this.inletInstanceView.disconnect();
+                InletInstancePopupMenu.this.inletInstanceView.getInletInstance().disconnect();
             }
         });
         itemDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                InletInstancePopupMenu.this.inletInstanceView.deleteNet();
+                InletInstancePopupMenu.this.inletInstanceView.getInletInstance().deleteNet();
             }
         });
         this.add(itemDisconnect);

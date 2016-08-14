@@ -7,10 +7,10 @@ package axoloti.object;
 
 import axoloti.MainFrame;
 import axoloti.Net;
-import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.Theme;
 import axoloti.attribute.AttributeInstance;
+import axoloti.attribute.AttributeInstanceView;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
@@ -23,6 +23,7 @@ import axoloti.parameters.ParameterInstance;
 import components.LabelComponent;
 import components.PopupIcon;
 import static java.awt.Component.LEFT_ALIGNMENT;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -37,13 +38,15 @@ import javax.swing.JPanel;
  *
  * @author nicolas
  */
-public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView {
+public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView implements ObjectModifiedListener {
     private AxoObjectInstance model;
     LabelComponent IndexLabel;
     public JPanel p_params;
     public JPanel p_displays;
     public JPanel p_inlets;
     public JPanel p_outlets;
+    boolean deferredObjTypeUpdate = false;
+
     
     public AxoObjectInstanceView(AxoObjectInstanceAbstract model) {
         super(model);
@@ -105,7 +108,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView {
         popm_edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                model.OpenEditor();
+                OpenEditor();
             }
         });
         popup.add(popm_edit);
@@ -352,6 +355,57 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView {
     public void refreshIndex() {
         if (getPatchView() != null) {
             IndexLabel.setText(" " + this.getPatchView().getObjectInstanceViews().indexOf(this));
+        }
+    }
+    
+    Rectangle editorBounds;
+    Integer editorActiveTabIndex;
+    
+    public void OpenEditor() {
+        getType().OpenEditor(editorBounds, editorActiveTabIndex);
+    }
+    
+    @Override
+    public void ObjectModified(Object src) {
+        if (getPatchView() != null) {
+            if (!getPatchView().IsLocked()) {
+                updateObj();
+            } else {
+                deferredObjTypeUpdate = true;
+            }
+        }
+
+        try {
+            AxoObject o = (AxoObject) src;
+            if (o.editor != null && o.editor.getBounds() != null) {
+                editorBounds = o.editor.getBounds();
+                editorActiveTabIndex = o.editor.getActiveTabIndex();
+                this.getType().editorBounds = editorBounds;
+                this.getType().editorActiveTabIndex = editorActiveTabIndex;
+            }
+        } catch (ClassCastException ex) {
+        }
+    }
+    
+    public ArrayList<AttributeInstanceView> attributeInstanceViews;
+    
+    @Override
+    public void Lock() {
+        super.Lock();
+        for (AttributeInstanceView a : attributeInstanceViews) {
+            a.Lock();
+        }
+    }
+
+    @Override
+    public void Unlock() {
+        super.Unlock();
+        for (AttributeInstanceView a : attributeInstanceViews) {
+            a.UnLock();
+        }
+        if (deferredObjTypeUpdate) {
+            updateObj();
+            deferredObjTypeUpdate = false;
         }
     }
 }

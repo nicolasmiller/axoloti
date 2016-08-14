@@ -1,18 +1,16 @@
 package axoloti.iolet;
 
 import axoloti.MainFrame;
-import axoloti.Net;
 import axoloti.NetDragging;
+import axoloti.NetView;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectInstanceAbstractView;
-import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
 import java.awt.Component;
 import java.awt.IllegalComponentStateException;
 import java.awt.Point;
-import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -35,8 +33,6 @@ public abstract class IoletAbstract extends JPanel {
     public JLabel lbl;
     public JComponent jack;
 
-    protected DropTarget dt;
-
     @Deprecated
     public String getName() {
         return name;
@@ -51,7 +47,7 @@ public abstract class IoletAbstract extends JPanel {
         }
     }
 
-    public AxoObjectInstanceAbstractView GetObjectInstance() {
+    public AxoObjectInstanceAbstractView getObjectInstanceView() {
         return axoObj;
     }
 
@@ -196,9 +192,11 @@ public abstract class IoletAbstract extends JPanel {
                             dragnet.SetDragPoint(jackLocation);
                         }
                     } else // floating
-                    if (dragnet != null) {
-                        dragnet.SetDragPoint(p);
-                        dragtarget = null;
+                    {
+                        if (dragnet != null) {
+                            dragnet.SetDragPoint(p);
+                            dragtarget = null;
+                        }
                     }
                 }
                 e.consume();
@@ -210,38 +208,16 @@ public abstract class IoletAbstract extends JPanel {
         });
     }
 
-    public boolean isConnected() {
-        if (axoObj == null) {
-            return false;
-        }
-        if (axoObj.getPatchModel() == null) {
-            return false;
-        }
-
-        return (axoObj.getPatchModel().GetNet(this) != null);
-    }
-
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)
                 && axoObj != null
-                && axoObj.getPatchModel() != null) {
-            Net n = axoObj.getPatchModel().GetNet(this);
-            if (n != null
-                    && n.getSelected() != highlighted) {
-                n.setSelected(highlighted);
+                && axoObj.getPatchView() != null) {
+            NetView netView = axoObj.getPatchView().GetNetView(this);
+            if (netView != null
+                    && netView.getSelected() != highlighted) {
+                netView.setSelected(highlighted);
             }
         }
-    }
-
-    public void disconnect() {
-        axoObj.getPatchModel().disconnect(this);
-        axoObj.getPatchModel().SetDirty();
-    }
-
-    public void deleteNet() {
-        Net n = axoObj.getPatchModel().GetNet(this);
-        axoObj.getPatchModel().delete(n);
-        axoObj.getPatchModel().SetDirty();
     }
 }

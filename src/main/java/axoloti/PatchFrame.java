@@ -225,7 +225,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     
     @Override
     public void ShowDisconnect() {
-        if (patchController.patchModel.IsLocked()) {
+        if (patchController.patchView.IsLocked()) {
             patchController.patchView.Unlock();
         }
         jCheckBoxLive.setSelected(false);
@@ -1006,11 +1006,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_redoItemActionPerformed
 
     private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
-        undoItem.setEnabled(patchController.patchModel.canUndo());
+        undoItem.setEnabled(patchController.canUndo());
     }//GEN-LAST:event_undoItemAncestorAdded
 
     private void redoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_redoItemAncestorAdded
-        redoItem.setEnabled(patchController.patchModel.canRedo());
+        redoItem.setEnabled(patchController.canRedo());
     }//GEN-LAST:event_redoItemAncestorAdded
 
     private boolean GoLive() {

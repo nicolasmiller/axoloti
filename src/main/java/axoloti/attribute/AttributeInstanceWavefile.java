@@ -19,11 +19,6 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.object.AxoObjectInstance;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -35,8 +30,6 @@ import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -48,9 +41,7 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
 
     @Attribute
     String waveFilename;
-    JTextField TFwaveFilename;
-    JLabel vlabel;
-    
+
     private AxoObjectInstance axoObj;
 
     public AttributeInstanceWavefile() {
@@ -62,43 +53,9 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        TFwaveFilename = new JTextField(waveFilename);
-        Dimension d = TFwaveFilename.getSize();
-        d.width = 128;
-        d.height = 22;
-        TFwaveFilename.setMaximumSize(d);
-        TFwaveFilename.setMinimumSize(d);
-        TFwaveFilename.setPreferredSize(d);
-        TFwaveFilename.setSize(d);
-        add(TFwaveFilename);
-        TFwaveFilename.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                repaint();
-            }
-        });
-        TFwaveFilename.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                waveFilename = TFwaveFilename.getText();
-            }
-        });
-    }
-
-    @Override
     public String CValue() {
         String s = " {";
-        File fp = new File(GetObjectInstance().getPatchModel().getFileNamePath());
+        File fp = new File(getObjectInstance().getPatchModel().getFileNamePath());
         File f = new File(fp.getParent() + "/" + waveFilename);
         System.out.println("waveFilename : " + fp.getParent() + "/" + waveFilename + "\n");
 
@@ -124,20 +81,6 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
         }
 
         return s;
-    }
-
-    @Override
-    public void Lock() {
-        if (TFwaveFilename != null) {
-            TFwaveFilename.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (TFwaveFilename != null) {
-            TFwaveFilename.setEnabled(true);
-        }
     }
 
     public String getWaveFilename() {

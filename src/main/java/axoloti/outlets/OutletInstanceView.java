@@ -5,6 +5,9 @@
  */
 package axoloti.outlets;
 
+import axoloti.MainFrame;
+import axoloti.Net;
+import axoloti.NetView;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import components.LabelComponent;
@@ -56,5 +59,19 @@ public class OutletInstanceView extends IoletAbstract {
 
     public OutletInstance getOutletInstance() {
         return this.outletInstance;
+    }
+    
+    @Override
+    public void setHighlighted(boolean highlighted) {
+        if ((getRootPane() == null
+                || getRootPane().getCursor() != MainFrame.transparentCursor)
+                && axoObj != null
+                && axoObj.getPatchView() != null) {
+            NetView netView = axoObj.getPatchView().GetNetView(this);
+            if (netView != null
+                    && netView.getSelected() != highlighted) {
+                netView.setSelected(highlighted);
+            }
+        }
     }
 }

@@ -101,7 +101,6 @@ public class PatchModel {
     ArrayList<DisplayInstance> DisplayInstances = new ArrayList<DisplayInstance>();
     private ArrayList<Modulator> Modulators = new ArrayList<Modulator>();
     public int presetNo = 0;
-    boolean locked = false;
     private boolean dirty = false;
     @Element(required = false)
     private String helpPatch;
@@ -222,9 +221,6 @@ public class PatchModel {
         return settings;
     }
 
-    public void ShowCompileFail() {
-        Unlock();
-    }
     public void setFileNamePath(String FileNamePath) {
         this.FileNamePath = FileNamePath;
     }
@@ -328,35 +324,30 @@ public class PatchModel {
     }
 
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
-        if (!IsLocked()) {
-            if (obj == null) {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "AddObjectInstance NULL");
-                return null;
-            }
-            int i = 1;
-            String n = obj.getDefaultInstanceName() + "_";
-            while (GetObjectInstance(n + i) != null) {
-                i++;
-            }
-            AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
-            SetDirty();
-
-            Modulator[] m = obj.getModulators();
-            if (m != null) {
-                if (Modulators == null) {
-                    Modulators = new ArrayList<Modulator>();
-                }
-                for (Modulator mm : m) {
-                    mm.objinst = objinst;
-                    Modulators.add(mm);
-                }
-            }
-
-            return objinst;
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't add instance: locked!");
+        if (obj == null) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "AddObjectInstance NULL");
+            return null;
         }
-        return null;
+        int i = 1;
+        String n = obj.getDefaultInstanceName() + "_";
+        while (GetObjectInstance(n + i) != null) {
+            i++;
+        }
+        AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
+        SetDirty();
+
+        Modulator[] m = obj.getModulators();
+        if (m != null) {
+            if (Modulators == null) {
+                Modulators = new ArrayList<Modulator>();
+            }
+            for (Modulator mm : m) {
+                mm.objinst = objinst;
+                Modulators.add(mm);
+            }
+        }
+
+        return objinst;
     }
 
     public Net GetNet(InletInstance io) {
@@ -369,8 +360,7 @@ public class PatchModel {
         }
         return null;
     }
-    
-    
+
     public Net GetNet(OutletInstance io) {
         for (Net net : nets) {
             for (OutletInstance d : net.source) {
@@ -390,7 +380,6 @@ public class PatchModel {
      return false;
      }*/
     public Net AddConnection(InletInstance il, OutletInstance ol) {
-        if (!IsLocked()) {
             if (il.getObjectInstance().getPatchModel() != this) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
@@ -443,14 +432,10 @@ public class PatchModel {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "connect: replace inlet with existing net");
                 return n2;
             }
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't add connection: locked");
-        }
         return null;
     }
 
     public Net AddConnection(InletInstance il, InletInstance ol) {
-        if (!IsLocked()) {
             if (il == ol) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: same inlet");
                 return null;
@@ -490,14 +475,10 @@ public class PatchModel {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: both inlets included in net");
                 return null;
             }
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't add connection: locked!");
-        }
         return null;
     }
-    
+
     public Net disconnect(InletInstance io) {
-        if (!IsLocked()) {
             Net n = GetNet(io);
             if (n != null) {
                 n.dest.remove(io);
@@ -506,14 +487,10 @@ public class PatchModel {
                 }
                 return n;
             }
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
-        }
         return null;
     }
-    
+
     public Net disconnect(OutletInstance io) {
-        if (!IsLocked()) {
             Net n = GetNet(io);
             if (n != null) {
                 n.source.remove((OutletInstance) io);
@@ -522,22 +499,14 @@ public class PatchModel {
                 }
                 return n;
             }
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
-        }
         return null;
     }
-    
+
     public Net delete(Net n) {
-        if (!IsLocked()) {
-            nets.remove(n);
-            return n;
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
-        }
-        return null;
+        nets.remove(n);
+        return n;
     }
-    
+
     public void delete(AxoObjectInstanceAbstract o) {
         if (o == null) {
             return;
@@ -617,7 +586,7 @@ public class PatchModel {
 
     public void cleanUpIntermediateChangeStates(int n) {
         int length = previousStates.size();
-        if(length >= n) {
+        if (length >= n) {
             previousStates.subList(length - n, length).clear();
             this.currentState -= n - 1;
             saveState();
@@ -2041,7 +2010,7 @@ public class PatchModel {
 
     public void ShowPreset(int i) {
         presetNo = i;
-        
+
         Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
         for (AxoObjectInstanceAbstract o : c) {
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -2200,25 +2169,6 @@ public class PatchModel {
         return pdata;
     }
 
-    public void Lock() {
-        locked = true;
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            o.Lock();
-        }
-    }
-
-    public void Unlock() {
-        locked = false;
-        ArrayList<AxoObjectInstanceAbstract> objInstsClone = (ArrayList<AxoObjectInstanceAbstract>) objectinstances.clone();
-        for (AxoObjectInstanceAbstract o : objInstsClone) {
-            o.Unlock();
-        }
-    }
-
-    public boolean IsLocked() {
-        return locked;
-    }
-
     public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         if (obj instanceof AxoObjectInstance) {
             String n = obj.getInstanceName();
@@ -2261,8 +2211,6 @@ public class PatchModel {
         }
         return obj1;
     }
-
-
 
     /**
      *
@@ -2359,45 +2307,37 @@ public class PatchModel {
 //            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());        
     }
 
-    public void Close() {
-        Unlock();
-        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>)objectinstances.clone();
-        for (AxoObjectInstanceAbstract o : c) {
-            o.Close();
-        }
-    }
-
     public boolean canUndo() {
-        return !this.IsLocked() && (currentState > 0);
+        return currentState > 0;
     }
 
     public boolean canRedo() {
-        return !this.IsLocked() && (currentState < previousStates.size() - 1);
+        return currentState < previousStates.size() - 1;
     }
 
     public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {
         return this.objectinstances;
     }
-    
+
     public ArrayList<Modulator> getModulators() {
         return Modulators;
     }
-    
+
     public void addModulator(Modulator m) {
         if (Modulators == null) {
             Modulators = new ArrayList<Modulator>();
         }
         Modulators.add(m);
     }
-        
+
     public void addObjectInstance(AxoObjectInstanceAbstract o) {
         this.objectinstances.add(o);
     }
-    
+
     public ArrayList<Net> getNets() {
         return nets;
     }
-    
+
     public void addNet(Net n) {
         nets.add(n);
     }

@@ -22,9 +22,6 @@ import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.PatchFrame;
 import axoloti.PatchView;
-import components.ButtonComponent;
-import components.ButtonComponent.ActListener;
-import java.awt.Component;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -38,8 +35,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Element(name = "subpatch")
     PatchController patchController;
 
-    private ButtonComponent BtnUpdate;
-
     public AxoObjectInstancePatcher() {
     }
 
@@ -50,11 +45,12 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Override
     public void updateObj1() {
         if (patchController == null) {
+            // this is fucked up I think
             patchModel = new PatchModel();
             patchController = new PatchController();
-            patchView = new PatchView(patchController);
-            patchController.setPatchModel(patchModel);
+            PatchView patchView = new PatchView(patchController);
             patchController.setPatchView(patchView);
+            patchController.setPatchModel(patchModel);
         }
         if (pf == null) {
             pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
@@ -72,42 +68,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
     }
 
-    @Override
-    public void updateObj() {
-        if (patchController != null) {
-            AxoObject ao = patchController.patchModel.GenerateAxoObj();
-            setType(ao);
-            PostConstructor();
-        }
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
-        doLayout();
-        invalidate();
-        validate();
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void Lock() {
-        super.Lock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(false);
-        }
-    }
-
     public void edit() {
         if (patchController == null) {
             patchModel = new PatchModel();
+            PatchView patchView = new PatchView(patchController);
             patchController = new PatchController();
-            patchView = new PatchView(patchController);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
         }
@@ -118,40 +83,5 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        //updateObj();
-        ButtonComponent BtnEdit = new ButtonComponent("edit");
-        BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
-        BtnEdit.setAlignmentY(TOP_ALIGNMENT);
-        BtnEdit.addActListener(new ActListener() {
-            @Override
-            public void OnPushed() {
-                edit();
-            }
-        });
-        add(BtnEdit);
-        BtnUpdate = new ButtonComponent("update");
-        BtnUpdate.setAlignmentX(LEFT_ALIGNMENT);
-        BtnUpdate.setAlignmentY(TOP_ALIGNMENT);
-        BtnUpdate.addActListener(new ActListener() {
-            @Override
-            public void OnPushed() {
-                updateObj();
-            }
-        });
-        add(BtnUpdate);
-        resizeToGrid();
-    }
-
-    @Override
-    public void Close() {
-        super.Close();
-        if (pf != null) {
-            pf.Close();
-        }
     }
 }

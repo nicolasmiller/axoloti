@@ -331,7 +331,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             jList1.setSelectedValue(o, true);
             if (jList1.getSelectedValue() != o) {
             }
-            AxoObjectInstanceAbstract inst = o.CreateInstance(null, "dummy", new Point(5, 5));
+            AxoObjectInstanceAbstractView inst = o.CreateInstance(null, "dummy", new Point(5, 5));
             jPanel1.removeAll();
             jPanel1.add(inst);
             inst.invalidate();

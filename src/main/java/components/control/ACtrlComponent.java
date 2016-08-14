@@ -18,6 +18,7 @@
 package components.control;
 
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
 import java.awt.Color;
 import java.awt.datatransfer.Clipboard;
@@ -49,7 +50,7 @@ import javax.swing.TransferHandler;
  */
 public abstract class ACtrlComponent extends JComponent {
 
-    protected AxoObjectInstance axoObj;
+    protected AxoObjectInstanceView axoObjectView;
     protected Color customBackgroundColor;
 
     public ACtrlComponent() {
@@ -191,8 +192,8 @@ public abstract class ACtrlComponent extends JComponent {
 
     }
 
-    public void setParentAxoObjectInstance(AxoObjectInstance axoObj) {
-        this.axoObj = axoObj;
+    public void setParentAxoObjectInstanceView(AxoObjectInstanceView axoObjectView) {
+        this.axoObjectView = axoObjectView;
     }
     
     public void robotMoveToCenter() {
