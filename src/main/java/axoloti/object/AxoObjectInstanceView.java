@@ -263,6 +263,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     n.connectInlet(inlin);
                 }
             }
+            // need a view here
             inletInstances.add(inlin);
             inlin.setAlignmentX(LEFT_ALIGNMENT);
             p_inlets.add(inlin);
@@ -286,6 +287,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     n.connectOutlet(oin);
                 }
             }
+            // need a view here
             outletInstances.add(oin);
             oin.setAlignmentX(RIGHT_ALIGNMENT);
             p_outlets.add(oin);
@@ -314,12 +316,13 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     attrp1 = attrp;
                 }
             }
-            AttributeInstance attri = p.CreateInstance(this.getObjectInstance(), attrp1);
+            AttributeInstance attributeInstance = p.CreateInstance(this.getObjectInstance(), attrp1);
+            AttributeInstanceView attributeInstanceView = attributeInstance.CreateView(this);
             // need to make a view here
-            attri.setAlignmentX(LEFT_ALIGNMENT);
-            add(attri);
-            attri.doLayout();
-            model.attributeInstances.add(attri);
+            attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
+            add(attributeInstanceView);
+            attributeInstanceView.doLayout();
+            model.attributeInstances.add(attributeInstance);
         }
 
         for (Parameter p : getType().params) {
@@ -329,6 +332,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     pin.CopyValueFrom(pinp);
                 }
             }
+            // need a view here
             pin.PostConstructor();
             pin.setAlignmentX(RIGHT_ALIGNMENT);
             pin.doLayout();
