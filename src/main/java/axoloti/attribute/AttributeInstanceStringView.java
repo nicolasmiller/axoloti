@@ -5,6 +5,8 @@
  */
 package axoloti.attribute;
 
+import axoloti.object.AxoObjectInstanceView;
+
 /**
  *
  * @author nicolas
@@ -12,8 +14,8 @@ package axoloti.attribute;
 public abstract class AttributeInstanceStringView extends AttributeInstanceView {
     AttributeInstanceString attributeInstance;
 
-    AttributeInstanceStringView(AttributeInstanceString attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceStringView(AttributeInstanceString attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
 
     }

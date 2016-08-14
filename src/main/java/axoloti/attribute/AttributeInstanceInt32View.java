@@ -5,6 +5,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.object.AxoObjectInstanceView;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -21,8 +22,8 @@ public class AttributeInstanceInt32View extends AttributeInstanceIntView {
     JSlider slider;
     JLabel vlabel;
 
-    AttributeInstanceInt32View(AttributeInstanceInt32 attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceInt32View(AttributeInstanceInt32 attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
 

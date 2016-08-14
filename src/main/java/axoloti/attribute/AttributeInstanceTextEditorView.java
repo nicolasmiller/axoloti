@@ -5,8 +5,8 @@
  */
 package axoloti.attribute;
 
-import axoloti.StringRef;
 import axoloti.TextEditor;
+import axoloti.object.AxoObjectInstanceView;
 import components.ButtonComponent;
 import javax.swing.JLabel;
 
@@ -21,11 +21,11 @@ public class AttributeInstanceTextEditorView extends AttributeInstanceStringView
     JLabel vlabel;
     TextEditor editor;
 
-    AttributeInstanceTextEditorView(AttributeInstanceTextEditor attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceTextEditorView(AttributeInstanceTextEditor attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
@@ -44,7 +44,7 @@ public class AttributeInstanceTextEditorView extends AttributeInstanceStringView
             }
         });
     }
-    
+
     @Override
     public void Lock() {
         if (bEdit != null) {
@@ -58,7 +58,7 @@ public class AttributeInstanceTextEditorView extends AttributeInstanceStringView
             bEdit.setEnabled(true);
         }
     }
-    
+
     @Override
     public String getString() {
         return attributeInstance.getString();

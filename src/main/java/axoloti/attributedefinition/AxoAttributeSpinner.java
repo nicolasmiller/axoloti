@@ -18,7 +18,8 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.object.AxoObjectInstance;
+import axoloti.attribute.AttributeInstanceSpinnerView;
+import axoloti.object.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -55,10 +56,11 @@ public class AxoAttributeSpinner extends AxoAttribute {
     public int getDefaultValue() {
         return DefaultValue;
     }
-
+    
     @Override
-    public AttributeInstanceSpinner InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceSpinner(this, o);
+    public AttributeInstanceSpinnerView InstanceFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceSpinnerView(
+                new AttributeInstanceSpinner(this, o.getObjectInstance()), o);
     }
 
     static public final String TypeName = "spinner";

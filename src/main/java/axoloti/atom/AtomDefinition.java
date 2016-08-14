@@ -29,7 +29,7 @@ import axoloti.object.AxoObjectInstanceView;
 public interface AtomDefinition {
     abstract public String getName();
     abstract public void setName(String name);
-    abstract public AtomInstance CreateInstance(AxoObjectInstanceView o);
+    abstract public AtomInstanceView CreateInstance(AxoObjectInstanceView o);
     abstract public String getDescription();
     abstract public void setDescription(String description);
 

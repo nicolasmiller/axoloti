@@ -314,7 +314,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     attrp1 = attrp;
                 }
             }
-            AttributeInstance attri = p.CreateInstance(this, attrp1);
+            AttributeInstanceView attri = p.CreateInstance(this, attrp1);
             attri.setAlignmentX(LEFT_ALIGNMENT);
             add(attri);
             attri.doLayout();
@@ -407,5 +407,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
             updateObj();
             deferredObjTypeUpdate = false;
         }
+    }
+    
+    public AxoObjectInstance getObjectInstance() {
+        return this.model;
     }
 }

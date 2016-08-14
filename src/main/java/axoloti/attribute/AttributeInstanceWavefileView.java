@@ -5,6 +5,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.object.AxoObjectInstanceView;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,8 +24,8 @@ public class AttributeInstanceWavefileView extends AttributeInstanceView {
     JTextField TFwaveFilename;
     JLabel vlabel;
 
-    AttributeInstanceWavefileView(AttributeInstanceWavefile attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceWavefileView(AttributeInstanceWavefile attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
 

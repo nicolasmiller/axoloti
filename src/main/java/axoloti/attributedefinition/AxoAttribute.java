@@ -23,6 +23,7 @@ package axoloti.attributedefinition;
  */
 import axoloti.atom.AtomDefinition;
 import axoloti.attribute.AttributeInstance;
+import axoloti.attribute.AttributeInstanceView;
 import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
@@ -68,15 +69,15 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public AttributeInstance CreateInstance(AxoObjectInstanceView o) {
-        AttributeInstance pi = InstanceFactory(o);
+    public AttributeInstanceView CreateInstance(AxoObjectInstanceView o) {
+        AttributeInstanceView pi = InstanceFactory(o);
         o.add(pi);
         pi.PostConstructor();
         return pi;
     }
 
-    public AttributeInstance CreateInstance(AxoObjectInstanceView o, AttributeInstance a) {
-        AttributeInstance pi = InstanceFactory(o);
+    public AttributeInstanceView CreateInstance(AxoObjectInstanceView o, AttributeInstance a) {
+        AttributeInstanceView pi = InstanceFactory(o);
         if (a != null) {
             pi.CopyValueFrom(a);
         }
@@ -85,7 +86,7 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
         return pi;
     }
 
-    public abstract AttributeInstance InstanceFactory(AxoObjectInstanceView o);
+    public abstract AttributeInstanceView InstanceFactory(AxoObjectInstanceView o);
 
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());

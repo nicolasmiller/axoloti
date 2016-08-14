@@ -5,6 +5,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.object.AxoObjectInstanceView;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import components.control.NumberBoxComponent;
@@ -18,8 +19,8 @@ public class AttributeInstanceSpinnerView extends AttributeInstanceIntView {
     AttributeInstanceSpinner attributeInstance;
     NumberBoxComponent spinner;
 
-    AttributeInstanceSpinnerView(AttributeInstanceSpinner attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceSpinnerView(AttributeInstanceSpinner attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
 
@@ -35,7 +36,7 @@ public class AttributeInstanceSpinnerView extends AttributeInstanceIntView {
             value = attributeInstance.attr.getMaxValue();
         }
         spinner = new NumberBoxComponent(value, attributeInstance.attr.getMinValue(), attributeInstance.attr.getMaxValue(), 1.0);
-        spinner.setParentAxoObjectInstanceView(axoObjectView);
+        spinner.setParentAxoObjectInstanceView(axoObjectInstanceView);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {
             @Override

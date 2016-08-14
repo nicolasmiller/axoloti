@@ -5,6 +5,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.ButtonComponent;
 import java.awt.Dimension;
@@ -30,8 +31,8 @@ public class AttributeInstanceSDFileView extends AttributeInstanceStringView {
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
 
-    AttributeInstanceSDFileView(AttributeInstanceSDFile attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceSDFileView(AttributeInstanceSDFile attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
 

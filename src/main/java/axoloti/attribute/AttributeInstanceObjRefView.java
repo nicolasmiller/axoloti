@@ -5,10 +5,8 @@
  */
 package axoloti.attribute;
 
-import axoloti.SubPatchMode;
-import axoloti.utils.CharEscape;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.Constants;
-import components.DropDownComponent;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,17 +22,18 @@ import javax.swing.JTextField;
  * @author nicolas
  */
 public class AttributeInstanceObjRefView extends AttributeInstanceStringView {
+
     AttributeInstanceObjRef attributeInstance;
-    
+
     JTextField TFObjName;
     JLabel vlabel;
 
-    AttributeInstanceObjRefView(AttributeInstanceObjRef attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceObjRefView(AttributeInstanceObjRef attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
-    
-        @Override
+
+    @Override
     public void PostConstructor() {
         super.PostConstructor();
         TFObjName = new JTextField(attributeInstance.objName);
@@ -80,8 +79,6 @@ public class AttributeInstanceObjRefView extends AttributeInstanceStringView {
             }
         });
     }
-
-
 
     @Override
     public void Lock() {

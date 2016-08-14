@@ -5,15 +5,18 @@
  */
 package axoloti.attribute;
 
+import axoloti.object.AxoObjectInstanceView;
+
 /**
  *
  * @author nicolas
  */
 public abstract class AttributeInstanceIntView extends AttributeInstanceView {
+
     AttributeInstanceInt attributeInstance;
 
-    AttributeInstanceIntView(AttributeInstanceInt attributeInstance) {
-        super(attributeInstance);
+    AttributeInstanceIntView(AttributeInstanceInt attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
 
     }

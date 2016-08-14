@@ -7,23 +7,24 @@ package axoloti.attribute;
 
 import axoloti.PatchView;
 import axoloti.Theme;
+import axoloti.atom.AtomInstanceView;
 import axoloti.object.AxoObjectInstanceView;
 import components.LabelComponent;
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 
 /**
  *
  * @author nicolas
  */
-public abstract class AttributeInstanceView extends JPanel {
-    AxoObjectInstanceView axoObjectView;
+public abstract class AttributeInstanceView extends AtomInstanceView {
+    AxoObjectInstanceView axoObjectInstanceView;
     PatchView patchView;
 
     AttributeInstance attributeInstance;
 
-    AttributeInstanceView(AttributeInstance attributeInstance) {
+    AttributeInstanceView(AttributeInstance attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
         this.attributeInstance = attributeInstance;
+        this.axoObjectInstanceView = axoObjectInstanceView;
 
     }
 
@@ -46,6 +47,8 @@ public abstract class AttributeInstanceView extends JPanel {
     }
     
     public PatchView getPatchView() {
-        return this.axoObjectView.getPatchView();
+        return axoObjectInstanceView.getPatchView();
     }
+    
+    public abstract void CopyValueFrom(AttributeInstance a1);
 }

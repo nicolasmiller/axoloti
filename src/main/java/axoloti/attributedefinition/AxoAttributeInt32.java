@@ -18,7 +18,8 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.object.AxoObjectInstance;
+import axoloti.attribute.AttributeInstanceInt32View;
+import axoloti.object.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -55,10 +56,12 @@ public class AxoAttributeInt32 extends AxoAttribute {
     public int getDefaultValue() {
         return DefaultValue;
     }
-
+    
     @Override
-    public AttributeInstanceInt32 InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceInt32(this, o);
+    public AttributeInstanceInt32View InstanceFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceInt32View(
+                new AttributeInstanceInt32(this, o.getObjectInstance())
+                , o);
     }
 
     static public final String TypeName = "int";

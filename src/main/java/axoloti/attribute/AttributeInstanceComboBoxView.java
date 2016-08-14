@@ -6,6 +6,7 @@
 package axoloti.attribute;
 
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.DropDownComponent;
 import java.util.logging.Level;
@@ -18,8 +19,8 @@ public class AttributeInstanceComboBoxView extends AttributeInstanceStringView {
     DropDownComponent comboBox;
     AttributeInstanceComboBox attributeInstance;
 
-    AttributeInstanceComboBoxView(AttributeInstanceComboBox attributeInstance) {
-        super(attributeInstance);
+    public AttributeInstanceComboBoxView(AttributeInstanceComboBox attributeInstance, AxoObjectInstanceView axoObjectView) {
+        super(attributeInstance, axoObjectView);
         this.attributeInstance = attributeInstance;
     }
         

@@ -18,7 +18,8 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.object.AxoObjectInstance;
+import axoloti.attribute.AttributeInstanceSDFileView;
+import axoloti.object.AxoObjectInstanceView;
 
 /**
  *
@@ -34,8 +35,9 @@ public class AxoAttributeSDFile extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstanceSDFile InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceSDFile(this, o);
+    public AttributeInstanceSDFileView InstanceFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceSDFileView(
+                new AttributeInstanceSDFile(this, o.getObjectInstance()), o);
     }
 
     static public final String TypeName = "file";

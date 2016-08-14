@@ -18,7 +18,8 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceWavefile;
-import axoloti.object.AxoObjectInstance;
+import axoloti.attribute.AttributeInstanceWavefileView;
+import axoloti.object.AxoObjectInstanceView;
 
 /**
  *
@@ -35,8 +36,9 @@ public class AxoAttributeWavefile extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstanceWavefile InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceWavefile(this, o);
+    public AttributeInstanceWavefileView InstanceFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceWavefileView(
+                new AttributeInstanceWavefile(this, o.getObjectInstance()), o);
     }
 
     static public final String TypeName = "unused!";
