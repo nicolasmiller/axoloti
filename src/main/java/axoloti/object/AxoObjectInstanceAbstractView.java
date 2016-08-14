@@ -413,4 +413,8 @@ public class AxoObjectInstanceAbstractView extends JPanel implements ObjectModif
     @Override
     public void ObjectModified(Object src) {
     }
+    
+    public AxoObjectInstanceAbstract getObjectInstance() {
+        return model;
+    }
 }

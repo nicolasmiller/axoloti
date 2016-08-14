@@ -18,8 +18,7 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceTextEditor;
-import axoloti.attribute.AttributeInstanceTextEditorView;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
@@ -35,9 +34,8 @@ public class AxoAttributeTextEditor extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstanceTextEditorView InstanceFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceTextEditorView(
-                new AttributeInstanceTextEditor(this, o.getObjectInstance()), o);
+    public AttributeInstanceTextEditor InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceTextEditor(this, o);
     }
 
     static public final String TypeName = "text";

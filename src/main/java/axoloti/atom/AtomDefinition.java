@@ -17,7 +17,7 @@
  */
 package axoloti.atom;
 
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
@@ -25,12 +25,18 @@ import axoloti.object.AxoObjectInstanceView;
  */
 /**
  * An Axoloti Object Definition is composed out of AtomDefinition
-**/
+*
+ */
 public interface AtomDefinition {
+
     abstract public String getName();
+
     abstract public void setName(String name);
-    abstract public AtomInstanceView CreateInstance(AxoObjectInstanceView o);
+
+    abstract public AtomInstance CreateInstance(AxoObjectInstance o);
+
     abstract public String getDescription();
+
     abstract public void setDescription(String description);
 
     abstract public String getTypeName();

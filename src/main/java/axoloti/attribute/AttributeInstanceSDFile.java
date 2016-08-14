@@ -20,6 +20,7 @@ package axoloti.attribute;
 import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -108,5 +109,10 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         } else {
             return f.getAbsolutePath();
         }
+    }
+    
+    @Override
+    public AttributeInstanceSDFileView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceSDFileView(this, o);
     }
 }

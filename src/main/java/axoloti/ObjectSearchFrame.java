@@ -297,15 +297,15 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
         setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
-        target_object = o;
+        target_object = o.getObjectInstance();
         if (o != null) {
-            AxoObjectAbstract oa = o.getType();
+            AxoObjectAbstract oa = o.getObjectInstance().getType();
             if (oa != null) {
                 Search(oa.id);
                 SetPreview(oa);
                 ExpandJTreeToEl(oa);
             }
-            jTextFieldObjName.setText(o.typeName);
+            jTextFieldObjName.setText(o.getObjectInstance().typeName);
         } else if (searchString != null) {
             Search(searchString);
             jTextFieldObjName.setText(searchString);
@@ -331,7 +331,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             jList1.setSelectedValue(o, true);
             if (jList1.getSelectedValue() != o) {
             }
-            AxoObjectInstanceAbstractView inst = o.CreateInstance(null, "dummy", new Point(5, 5));
+            AxoObjectInstanceAbstract inst = o.CreateInstance(null, "dummy", new Point(5, 5));
             jPanel1.removeAll();
             jPanel1.add(inst);
             inst.invalidate();
@@ -339,7 +339,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             inst.revalidate();
             jPanel1.revalidate();
             jPanel1.repaint();
-            AxoObjectAbstract t = inst.getType();
+            AxoObjectAbstract t = inst.getObjectInstance().getType();
             if (t != null) {
                 String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
                 String path = t.sPath == null ? o.sPath : t.sPath;

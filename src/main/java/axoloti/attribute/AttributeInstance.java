@@ -21,6 +21,7 @@ import axoloti.SDFileReference;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.util.ArrayList;
@@ -69,5 +70,14 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
+    }
+    
+    public abstract AttributeInstanceView ViewFactory(AxoObjectInstanceView o);
+    
+    public AttributeInstanceView CreateView(AxoObjectInstanceView o) {
+        AttributeInstanceView pi = ViewFactory(o);
+        o.add(pi);
+        pi.PostConstructor();
+        return pi;
     }
 }

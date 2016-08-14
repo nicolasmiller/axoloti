@@ -23,8 +23,7 @@ package axoloti.attributedefinition;
  */
 import axoloti.atom.AtomDefinition;
 import axoloti.attribute.AttributeInstance;
-import axoloti.attribute.AttributeInstanceView;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
@@ -69,24 +68,24 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public AttributeInstanceView CreateInstance(AxoObjectInstanceView o) {
-        AttributeInstanceView pi = InstanceFactory(o);
-        o.add(pi);
-        pi.PostConstructor();
+    public AttributeInstance CreateInstance(AxoObjectInstance o) {
+        AttributeInstance pi = InstanceFactory(o);
+//        o.add(pi);
+//        pi.PostConstructor();
         return pi;
     }
 
-    public AttributeInstanceView CreateInstance(AxoObjectInstanceView o, AttributeInstance a) {
-        AttributeInstanceView pi = InstanceFactory(o);
+    public AttributeInstance CreateInstance(AxoObjectInstance o, AttributeInstance a) {
+        AttributeInstance pi = InstanceFactory(o);
         if (a != null) {
             pi.CopyValueFrom(a);
         }
-        o.add(pi);
-        pi.PostConstructor();
+//        o.add(pi);
+//        pi.PostConstructor();
         return pi;
     }
 
-    public abstract AttributeInstanceView InstanceFactory(AxoObjectInstanceView o);
+    public abstract AttributeInstance InstanceFactory(AxoObjectInstance o);
 
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());

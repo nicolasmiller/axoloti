@@ -18,8 +18,7 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceObjRef;
-import axoloti.attribute.AttributeInstanceObjRefView;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
@@ -35,9 +34,8 @@ public class AxoAttributeObjRef extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstanceObjRefView InstanceFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceObjRefView(
-                new AttributeInstanceObjRef(this, o.getObjectInstance()), o);
+    public AttributeInstanceObjRef InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceObjRef(this, o);
     }
 
     static public final String TypeName = "objref";

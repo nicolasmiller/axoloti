@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeInt32;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 
 /**
  *
@@ -46,5 +47,10 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt
 
     public void setValue(int value) {
         this.value = value;
+    }
+    
+    @Override
+    public AttributeInstanceInt32View ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceInt32View(this, o);
     }
 }

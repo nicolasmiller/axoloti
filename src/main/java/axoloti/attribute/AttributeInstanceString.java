@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 
 /**
  *
@@ -43,5 +44,10 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
             AttributeInstanceString a1 = (AttributeInstanceString) a;
             setString(a1.getString());
         }
+    }
+    
+    @Override
+    public AttributeInstanceStringView ViewFactory(AxoObjectInstanceView o) {
+        throw new RuntimeException("Cannot instantiate AttributeInstanceStringView");
     }
 }

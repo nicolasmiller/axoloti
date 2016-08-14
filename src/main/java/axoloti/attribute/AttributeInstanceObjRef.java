@@ -20,6 +20,7 @@ package axoloti.attribute;
 import axoloti.SubPatchMode;
 import axoloti.attributedefinition.AxoAttributeObjRef;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.CharEscape;
 import org.simpleframework.xml.Attribute;
 
@@ -75,5 +76,10 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     @Override
     public void setString(String objName) {
         this.objName = objName;
+    }
+    
+    @Override
+    public AttributeInstanceObjRefView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceObjRefView(this, o);
     }
 }

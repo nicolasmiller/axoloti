@@ -19,7 +19,7 @@ package axoloti.parameters;
 
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;
 import java.io.ByteArrayInputStream;
@@ -91,7 +91,7 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     }
 
     @Override
-    public ParameterInstance CreateInstance(AxoObjectInstanceView o) {
+    public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
         pi.axoObj = o;
         pi.name = this.name;

@@ -27,7 +27,6 @@ public class AttributeInstanceComboBoxView extends AttributeInstanceStringView {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-//        final DefaultComboBoxModel model = new DefaultComboBoxModel(((AxoAttributeComboBox) attr).getMenuEntries().toArray());
         comboBox = new DropDownComponent(attributeInstance.getDefinition().getMenuEntries(), attributeInstance);
         comboBox.setFont(Constants.FONT);
         setString(attributeInstance.selection);
@@ -84,5 +83,8 @@ public class AttributeInstanceComboBoxView extends AttributeInstanceStringView {
         if (comboBox != null) {
             comboBox.setEnabled(true);
         }
-    }   
+    }
+
+    
+
 }

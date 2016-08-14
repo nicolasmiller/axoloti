@@ -18,8 +18,7 @@
 package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceTablename;
-import axoloti.attribute.AttributeInstanceTablenameView;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
@@ -35,9 +34,8 @@ public class AxoAttributeTablename extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstanceTablenameView InstanceFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceTablenameView(
-                new AttributeInstanceTablename(this, o.getObjectInstance()), o);
+    public AttributeInstanceTablename InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceTablename(this, o);
     }
 
     static public final String TypeName = "table";

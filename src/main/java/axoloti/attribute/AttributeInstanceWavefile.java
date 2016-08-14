@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -97,5 +98,10 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
             AttributeInstanceWavefile a1 = (AttributeInstanceWavefile) a;
             setWaveFilename(a1.getWaveFilename());
         }
+    }
+    
+    @Override
+    public AttributeInstanceWavefileView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceWavefileView(this, o);
     }
 }

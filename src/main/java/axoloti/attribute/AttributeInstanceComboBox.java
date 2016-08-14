@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -64,5 +65,10 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
+    }
+    
+    @Override
+    public AttributeInstanceComboBoxView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceComboBoxView(this, o);
     }
 }

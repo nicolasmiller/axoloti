@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 
 /**
  *
@@ -49,5 +50,9 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     public void setValue(int value) {
         this.value = value;
     }
-
+    
+    @Override
+    public AttributeInstanceSpinnerView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceSpinnerView(this, o);
+    }
 }

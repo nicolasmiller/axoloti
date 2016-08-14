@@ -294,37 +294,35 @@ public class AxoObject extends AxoObjectAbstract {
 
     ArrayList<ObjectModifiedListener> instances = new ArrayList<ObjectModifiedListener>();
     AxoObjectEditor editor;
-    
+
     Rectangle editorBounds;
     Integer editorActiveTabIndex;
-    
+
     private void setEditorBounds(Rectangle editorBounds) {
-        if(editorBounds != null) {
+        if (editorBounds != null) {
             editor.setBounds(editorBounds);
-        }
-        else if(this.editorBounds != null) {
+        } else if (this.editorBounds != null) {
             editor.setBounds(this.editorBounds);
         }
-        
+
     }
-    
+
     private void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
-        if(editorActiveTabIndex != null) {
+        if (editorActiveTabIndex != null) {
             editor.setActiveTabIndex(editorActiveTabIndex);
-        }
-        else if(this.editorActiveTabIndex != null) {
+        } else if (this.editorActiveTabIndex != null) {
             editor.setActiveTabIndex(this.editorActiveTabIndex);
         }
     }
-    
+
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
             editor = new AxoObjectEditor(this);
         }
-        
+
         setEditorBounds(editorBounds);
         setEditorActiveTabIndex(editorActiveTabIndex);
-        
+
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
     }
@@ -360,7 +358,8 @@ public class AxoObject extends AxoObjectAbstract {
         if (patchModel != null) {
             patchModel.getObjectInstances().add(o);
         }
-        o.PostConstructor();
+// do this in createView        
+//        o.PostConstructor();
         return o;
     }
 

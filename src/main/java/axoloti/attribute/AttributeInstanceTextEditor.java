@@ -20,6 +20,7 @@ package axoloti.attribute;
 import axoloti.StringRef;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import org.simpleframework.xml.Element;
 
 /**
@@ -66,5 +67,10 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
             sRef = new StringRef();
         }
         sRef.s = sText;
+    }
+    
+    @Override
+    public AttributeInstanceTextEditorView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceTextEditorView(this, o);
     }
 }

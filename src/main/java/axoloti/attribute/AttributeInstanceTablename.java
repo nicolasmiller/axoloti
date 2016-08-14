@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -53,5 +54,10 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
     @Override
     public void setString(String tableName) {
         this.tableName = tableName;
+    }
+
+    @Override
+    public AttributeInstanceTablenameView ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceTablenameView(this, o);
     }
 }

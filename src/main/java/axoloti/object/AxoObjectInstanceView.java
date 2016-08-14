@@ -314,7 +314,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     attrp1 = attrp;
                 }
             }
-            AttributeInstanceView attri = p.CreateInstance(this, attrp1);
+            AttributeInstance attri = p.CreateInstance(this.getObjectInstance(), attrp1);
+            // need to make a view here
             attri.setAlignmentX(LEFT_ALIGNMENT);
             add(attri);
             attri.doLayout();
