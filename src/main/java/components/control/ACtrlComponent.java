@@ -17,7 +17,6 @@
  */
 package components.control;
 
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
 import java.awt.Color;
@@ -195,11 +194,11 @@ public abstract class ACtrlComponent extends JComponent {
     public void setParentAxoObjectInstanceView(AxoObjectInstanceView axoObjectView) {
         this.axoObjectView = axoObjectView;
     }
-    
+
     public void robotMoveToCenter() {
-        
+
     }
-    
+
     public void setCustomBackgroundColor(Color c) {
         this.customBackgroundColor = c;
     }

@@ -19,6 +19,8 @@ package axoloti;
 
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceAbstractView;
+import axoloti.object.AxoObjectInstanceView;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
@@ -99,8 +101,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PatchModel p = patchController.patchView.GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) {
+                PatchView p = patchController.patchView.getSelectedObjects();
+                if (p.objectInstanceViews.isEmpty()) {
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
                     return;
                 }
@@ -112,7 +114,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     serializer.write(p, baos);
                     StringSelection s = new StringSelection(baos.toString());
                     clip.setContents(s, (ClipboardOwner) null);
-                    patchController.deleteSelectedAxoObjInstances();
+                    patchController.deleteSelectedAxoObjectInstanceViews();
                 } catch (Exception ex) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -126,8 +128,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PatchModel p = patchController.patchView.GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) {
+                PatchView p = patchController.patchView.getSelectedObjects();
+                if (p.objectInstanceViews.isEmpty()) {
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
                     return;
                 }
@@ -882,7 +884,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        patchController.deleteSelectedAxoObjInstances();
+        patchController.deleteSelectedAxoObjectInstanceViews();
     }//GEN-LAST:event_jMenuItemDeleteActionPerformed
 
     private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
@@ -894,19 +896,19 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        AxoObjectInstanceAbstract selObj = null;
-        ArrayList<AxoObjectInstanceAbstract> oi = patchController.patchModel.getObjectInstances();
+        AxoObjectInstanceAbstractView selObj = null;
+        ArrayList<AxoObjectInstanceAbstractView> oi = patchController.patchView.getObjectInstanceViews();
         if(oi != null) {
             // need a view here
-            for(AxoObjectInstanceAbstract i : oi) {
-                if(i.isSelected() && i instanceof AxoObjectInstance) {
+            for(AxoObjectInstanceAbstractView i : oi) {
+                if(i.isSelected() && i instanceof AxoObjectInstanceView) {
                     selObj = i;
                 }
             }
         }
         
         if(selObj!=null) {
-            ((AxoObjectInstance) selObj).OpenEditor();
+            ((AxoObjectInstanceView) selObj).OpenEditor();
         } else {
             if (patchController.patchModel.settings == null) {
                 patchController.patchModel.settings = new PatchSettings();

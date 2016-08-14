@@ -230,8 +230,8 @@ public class PatchController {
         }
     }
 
-    public void deleteSelectedAxoObjInstances() {
-        patchView.deleteSelectedAxoObjInstances();
+    public void deleteSelectedAxoObjectInstanceViews() {
+        patchView.deleteSelectedAxoObjectInstanceViews();
     }
 
     public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {

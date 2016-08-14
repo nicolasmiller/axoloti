@@ -190,8 +190,8 @@ public class PatchView {
 
             @Override
             public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-                PatchModel p = GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) {
+                PatchView p = getSelectedObjects();
+                if (p.objectInstanceViews.isEmpty()) {
                     clip.setContents(new StringSelection(""), null);
                     return;
                 }
@@ -206,7 +206,7 @@ public class PatchView {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (action == MOVE) {
-                    deleteSelectedAxoObjInstances();
+                    deleteSelectedAxoObjectInstanceViews();
                     cleanUpObjectLayer();
                 }
             }
@@ -332,7 +332,7 @@ public class PatchView {
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                    deleteSelectedAxoObjInstances();
+                    deleteSelectedAxoObjectInstanceViews();
                     cleanUpObjectLayer();
                     Layers.revalidate();
 
@@ -706,14 +706,14 @@ public class PatchView {
         UP, LEFT, DOWN, RIGHT
     }
 
-    PatchModel GetSelectedObjects() {
-        PatchView p = new PatchModel();
+    PatchView getSelectedObjects() {
+        PatchView p = new PatchView(patchController);
         for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
             if (o.isSelected()) {
-                p.objectinstances.add(o.getModel());
+                p.objectInstanceViews.add(o);
             }
         }
-        p.nets = new ArrayList<Net>();
+        p.netViews = new ArrayList<NetView>();
 
         // need to have net views here
         for (NetView n : netViews) {
@@ -729,7 +729,7 @@ public class PatchView {
                 }
             }
             if (sel > 0) {
-                p.nets.add(n);
+                p.netViews.add(n);
             }
         }
         p.PreSerialize();
@@ -1142,7 +1142,7 @@ public class PatchView {
         return new Dimension(mx, my);
     }
 
-    void deleteSelectedAxoObjInstances() {
+    void deleteSelectedAxoObjectInstanceViews() {
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
         if (!IsLocked()) {
             boolean cont = true;

@@ -21,6 +21,7 @@ import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
@@ -91,7 +92,7 @@ public abstract class Outlet implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public AtomInstance CreateInstance(AxoObjectInstanceView o) {
+    public AtomInstance CreateInstance(AxoObjectInstance o) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

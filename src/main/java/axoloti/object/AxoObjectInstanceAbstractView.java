@@ -367,6 +367,10 @@ public class AxoObjectInstanceAbstractView extends JPanel implements ObjectModif
         }
         this.selected = Selected;
     }
+    
+    public Boolean isSelected() {
+        return this.selected;
+    }
 
     public void SetLocation(int x1, int y1) {
         super.setLocation(x1, y1);

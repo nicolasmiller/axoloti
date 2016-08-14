@@ -49,6 +49,4 @@ public abstract class AttributeInstanceView extends AtomInstanceView {
     public PatchView getPatchView() {
         return axoObjectInstanceView.getPatchView();
     }
-    
-    public abstract void CopyValueFrom(AttributeInstance a1);
 }
