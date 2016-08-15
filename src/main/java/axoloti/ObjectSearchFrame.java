@@ -331,15 +331,16 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             jList1.setSelectedValue(o, true);
             if (jList1.getSelectedValue() != o) {
             }
-            AxoObjectInstanceAbstract inst = o.CreateInstance(null, "dummy", new Point(5, 5));
+            AxoObjectInstanceAbstract objectInstance = o.CreateInstance(null, "dummy", new Point(5, 5));
+            AxoObjectInstanceAbstractView objectInstanceView = objectInstance.CreateView();
             jPanel1.removeAll();
-            jPanel1.add(inst);
-            inst.invalidate();
-            inst.repaint();
-            inst.revalidate();
+            jPanel1.add(objectInstanceView);
+            objectInstanceView.invalidate();
+            objectInstanceView.repaint();
+            objectInstanceView.revalidate();
             jPanel1.revalidate();
             jPanel1.repaint();
-            AxoObjectAbstract t = inst.getObjectInstance().getType();
+            AxoObjectAbstract t = objectInstanceView.getObjectInstance().getType();
             if (t != null) {
                 String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
                 String path = t.sPath == null ? o.sPath : t.sPath;

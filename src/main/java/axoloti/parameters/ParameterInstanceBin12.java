@@ -18,7 +18,6 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.Value;
-import components.control.CheckboxComponent;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -57,8 +56,8 @@ public class ParameterInstanceBin12 extends ParameterInstanceInt32 {
         return "";
     }
 
-
     @Override
     public void setValue(Value value) {
         super.setValue(value);
+    }
 }

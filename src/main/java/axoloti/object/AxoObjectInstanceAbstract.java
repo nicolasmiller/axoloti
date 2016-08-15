@@ -328,9 +328,8 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     
     public abstract AxoObjectInstanceAbstractView ViewFactory();
     
-    public AxoObjectInstanceAbstractView CreateView(AxoObjectInstanceView o) {
+    public AxoObjectInstanceAbstractView CreateView() {
         AxoObjectInstanceAbstractView pi = ViewFactory();
-        o.add(pi);
         pi.PostConstructor();
         return pi;
     }

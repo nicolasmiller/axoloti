@@ -68,7 +68,7 @@ public class AttributeInstanceComboBoxView extends AttributeInstanceStringView {
                 return;
             }
         }
-        java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{GetObjectInstance().getInstanceName(), GetDefinition().getName(), selection});
+        java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{attributeInstance.getObjectInstance().getInstanceName(), attributeInstance.getDefinition().getName(), selection});
     }
 
     @Override

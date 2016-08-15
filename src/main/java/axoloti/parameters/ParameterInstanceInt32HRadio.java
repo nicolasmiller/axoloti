@@ -37,11 +37,6 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
-
-    @Override
     public String GenerateCodeInit(String vprefix, String StructAccces) {
         String s = /*"    " + variableName(vprefix) + " = " + (value.getInt()) + ";\n"
                  + "    " + valueName(vprefix) + " = " + (value.getInt()) + ";\n"
@@ -66,21 +61,5 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
         return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max-1));
     }
 
-    @Override
-    public HRadioComponent CreateControl() {
-        return new HRadioComponent(0, ((ParameterInt32HRadio) parameter).MaxValue.getInt());
-    }
 
-    @Override
-    public HRadioComponent getControlComponent() {
-        return (HRadioComponent) ctrl;
-    }
-
-    @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        new AssignMidiCCMenuItems(this, m1);
-        m.add(m1);
-    }
 }

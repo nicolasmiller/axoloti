@@ -56,7 +56,7 @@ public class AxoObjectInstanceHyperlinkView extends AxoObjectInstanceView {
                 if (getPatchView() != null) {
                     if (e.getClickCount() == 1) {
                         if (e.isShiftDown()) {
-                            SetSelected(!getSelected());
+                            SetSelected(!isSelected());
                         } else if (selected == false) {
                             getPatchView().SelectNone();
                             SetSelected(true);

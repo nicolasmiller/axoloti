@@ -37,14 +37,14 @@ public class AssignMidiCCComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    ParameterInstanceFrac32UMapView param;
+    ParameterInstanceFrac32UMapView parameterInstanceView;
 
     public AssignMidiCCComponent(ParameterInstanceFrac32UMapView param) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.param = param;
+        this.parameterInstanceView = param;
 
         addMouseListener(new MouseListener() {
 
@@ -74,21 +74,21 @@ public class AssignMidiCCComponent extends JComponent {
 
     void doPopup() {
         JPopupMenu sub1 = new JPopupMenu();
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(param, sub1);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstanceView, sub1);
         sub1.show(this, 0, getHeight() - 1);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (param.getMidiCC() >= 0) {
+        if (parameterInstanceView.getParameterInstance().getMidiCC() >= 0) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setFont(Constants.FONT);
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, getWidth(), getHeight());
-            if (param.getMidiCC() >= 0) {
+            if (parameterInstanceView.getParameterInstance().getMidiCC() >= 0) {
                 g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, getHeight());
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);

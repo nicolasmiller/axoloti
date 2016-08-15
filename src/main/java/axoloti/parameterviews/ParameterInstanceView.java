@@ -127,7 +127,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
         JMenu m_preset = new JMenu("Preset");
         // AssignPresetMenuItems, does stuff in ctor
-        AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(parameterInstance, m_preset);
+        AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
         m.add(m_preset);
     }
 

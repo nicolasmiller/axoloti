@@ -42,12 +42,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public AxoObjectInstanceHyperlink(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
-
-    @Override
-    public boolean IsLocked() {
-        return false;
-    }
-
+    
     void Launch() {
         String link = getInstanceName();
         if (link.startsWith("www.")

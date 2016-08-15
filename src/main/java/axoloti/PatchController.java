@@ -66,11 +66,11 @@ public class PatchController {
     }
     
     public boolean canUndo() {
-        return !patchView.IsLocked() && patchModel.canUndo();
+        return !patchView.isLocked() && patchModel.canUndo();
     }
     
     public boolean canRedo() {
-        return !patchView.IsLocked() && patchModel.canRedo();
+        return !patchView.isLocked() && patchModel.canRedo();
     }
 
     public void undo() {
@@ -168,7 +168,7 @@ public class PatchController {
     }
 
     public NetView AddConnection(InletInstanceView il, OutletInstanceView ol) {
-        if (!patchView.IsLocked()) {
+        if (!patchView.isLocked()) {
             return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance()));
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked");
@@ -177,7 +177,7 @@ public class PatchController {
     }
 
     public NetView AddConnection(InletInstanceView il, InletInstanceView ol) {
-        if (!patchView.IsLocked()) {
+        if (!patchView.isLocked()) {
             return new NetView(patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance()));
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't add connection: locked!");
@@ -190,7 +190,7 @@ public class PatchController {
     }
 
     public NetView disconnect(InletInstanceView io) {
-        if (!patchView.IsLocked()) {
+        if (!patchView.isLocked()) {
             return new NetView(patchModel.disconnect(io.getInletInstance()));
         } else {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
@@ -199,7 +199,7 @@ public class PatchController {
     }
 
     public NetView disconnect(OutletInstanceView io) {
-        if (!patchView.IsLocked()) {
+        if (!patchView.isLocked()) {
             return new NetView(patchModel.disconnect(io.getOutletInstance()));
         } else {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
@@ -208,7 +208,7 @@ public class PatchController {
     }
 
     public Net delete(NetView n) {
-        if (!patchView.IsLocked()) {
+        if (!patchView.isLocked()) {
             return patchModel.delete(n.net);
         }
         else {
@@ -222,7 +222,7 @@ public class PatchController {
     }
 
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
-        if (!patchView.IsLocked()) {
+        if (!patchView.isLocked()) {
             return patchModel.AddObjectInstance(obj, loc);
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");

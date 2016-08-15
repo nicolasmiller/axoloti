@@ -93,10 +93,12 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
-        pi.axoObj = o;
+        pi.axoObjectInstance = o;
         pi.name = this.name;
         pi.parameter = this;
         pi.applyDefaultValue();
+        
+        // need to add a view to p_params
         o.p_params.add(pi);
         return pi;
     }

@@ -118,7 +118,7 @@ public class ParameterInstanceFrac32UMapView extends ParameterInstanceFrac32UVie
         new AssignMidiCCMenuItems(this, m1);
         m.add(m1);
         JMenu m2 = new JMenu("Modulation");
-        new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>) parameterInstance, m2);
+        new AssignModulatorMenuItems(this, m2);
         m.add(m2);
     }
 

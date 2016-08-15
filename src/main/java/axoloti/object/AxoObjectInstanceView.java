@@ -256,7 +256,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
                     inlinp = inlin1;
                 }
             }
-            InletInstance inlin = new InletInstance(inl, this);
+            InletInstance inlin = new InletInstance(inl, this.getObjectInstance());
             if (inlinp != null) {
                 Net n = getPatchModel().GetNet(inlinp);
                 if (n != null) {
@@ -326,7 +326,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
         }
 
         for (Parameter p : getType().params) {
-            ParameterInstance pin = p.CreateInstance(this);
+            ParameterInstance pin = p.CreateInstance(this.getObjectInstance());
             for (ParameterInstance pinp : pParameterInstances) {
                 if (pinp.getName().equals(pin.getName())) {
                     pin.CopyValueFrom(pinp);
@@ -340,7 +340,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
         }
 
         for (Display p : getType().displays) {
-            DisplayInstance pin = p.CreateInstance(this);
+            DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
             pin.setAlignmentX(RIGHT_ALIGNMENT);
             pin.doLayout();
             model.displayInstances.add(pin);
@@ -373,7 +373,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
     @Override
     public void ObjectModified(Object src) {
         if (getPatchView() != null) {
-            if (!getPatchView().IsLocked()) {
+            if (!getPatchView().isLocked()) {
                 updateObj();
             } else {
                 deferredObjTypeUpdate = true;

@@ -99,7 +99,7 @@ public class AxoObjectInstanceAbstractView extends JPanel implements ObjectModif
                 if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
-                            SetSelected(!getSelected());
+                            SetSelected(!isSelected());
                             me.consume();
                         } else if (selected == false) {
                             getPatchView().SelectNone();
@@ -180,7 +180,7 @@ public class AxoObjectInstanceAbstractView extends JPanel implements ObjectModif
         if (getPatchModel() != null) {
             if (me.isPopupTrigger()) {
 
-            } else if (!patchView.IsLocked()) {
+            } else if (!patchView.isLocked()) {
                 dX = me.getXOnScreen() - getX();
                 dY = me.getYOnScreen() - getY();
                 dragging = true;
@@ -397,20 +397,12 @@ public class AxoObjectInstanceAbstractView extends JPanel implements ObjectModif
         setSize(d);
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public boolean getSelected() {
-        return selected;
-    }
-    
     public void Close() {
     }
     
     public void updateObj() {
         model.getType().addObjectModifiedListener(this);
-        getPatchModel().ChangeObjectInstanceType(this, this.getType());
+        getPatchModel().ChangeObjectInstanceType(this.getObjectInstance(), this.getObjectInstance().getType());
         getPatchModel().cleanUpIntermediateChangeStates(3);
     }
     

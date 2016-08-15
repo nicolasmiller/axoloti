@@ -219,7 +219,7 @@ public class PatchView {
             @Override
             public boolean importData(JComponent comp, Transferable t) {
                 try {
-                    if (!IsLocked()) {
+                    if (!isLocked()) {
                         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 
                             paste((String) t.getTransferData(DataFlavor.stringFlavor), comp.getMousePosition(), false);
@@ -659,7 +659,7 @@ public class PatchView {
     public ObjectSearchFrame osf;
 
     public void ShowClassSelector(Point p, AxoObjectInstanceAbstractView o, String searchString) {
-        if (IsLocked()) {
+        if (isLocked()) {
             return;
         }
         if (osf == null) {
@@ -737,7 +737,7 @@ public class PatchView {
     }
 
     void MoveSelectedAxoObjInstances(Direction dir, int xsteps, int ysteps) {
-        if (!IsLocked()) {
+        if (!isLocked()) {
             int xgrid = 1;
             int ygrid = 1;
             int xstep = 0;
@@ -1095,7 +1095,7 @@ public class PatchView {
     }
 
     void cleanUpObjectLayer() {
-        if (!IsLocked()) {
+        if (!isLocked()) {
             for (Component c : objectLayerPanel.getComponents()) {
                 if (!objectInstanceViews.contains((AxoObjectInstanceAbstractView) c)) {
                     this.objectLayerPanel.remove(c);
@@ -1144,7 +1144,7 @@ public class PatchView {
 
     void deleteSelectedAxoObjectInstanceViews() {
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
-        if (!IsLocked()) {
+        if (!isLocked()) {
             boolean cont = true;
             while (cont) {
                 cont = false;
@@ -1178,7 +1178,6 @@ public class PatchView {
     }
 
     public void Lock() {
-        patchController.Lock();
         patchController.getPatchFrame().SetLive(true);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
         locked = true;
@@ -1188,7 +1187,6 @@ public class PatchView {
     }
 
     public void Unlock() {
-        patchController.Unlock();
         patchController.getPatchFrame().SetLive(false);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         locked = false;
@@ -1198,7 +1196,7 @@ public class PatchView {
         }
     }
 
-    public boolean IsLocked() {
+    public boolean isLocked() {
         return locked;
     }
 

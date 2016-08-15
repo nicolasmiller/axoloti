@@ -63,7 +63,7 @@ public class JackInputComponent extends JComponent {
         g2.setStroke(stroke);
         g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(0, 0, sz, sz);
-        if (inletInstanceView.isConnected()) {
+        if (inletInstanceView.getInletInstance().isConnected()) {
             g2.setPaint(Theme.getCurrentTheme().Component_Primary);
             g2.drawOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
             g2.setPaint(getForeground());

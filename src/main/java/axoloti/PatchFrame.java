@@ -227,7 +227,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     
     @Override
     public void ShowDisconnect() {
-        if (patchController.patchView.IsLocked()) {
+        if (patchController.patchView.isLocked()) {
             patchController.patchView.Unlock();
         }
         jCheckBoxLive.setSelected(false);

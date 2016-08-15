@@ -888,8 +888,8 @@ public class USBBulkConnection extends Connection {
             @Override
             public void run() {
                 if (patchController != null) {
-                    if ((patchController.patchModel.GetIID() != PatchID) && patchController.patchModel.IsLocked()) {
-                        patchController.Unlock();
+                    if ((patchController.patchModel.GetIID() != PatchID) && patchController.patchView.isLocked()) {
+                        patchController.patchView.Unlock();
                     } else {
                         patchController.patchView.SetDSPLoad(DSPLoad);
                     }
@@ -909,7 +909,7 @@ public class USBBulkConnection extends Connection {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null {0} {1}", new Object[]{index, value});
                     return;
                 }
-                if (!patchController.patchModel.IsLocked()) {
+                if (!patchController.patchView.isLocked()) {
                     return;
 
                 }

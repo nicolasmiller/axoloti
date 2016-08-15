@@ -110,7 +110,7 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         return null;
     }
 
-    public AxoObjectInstance CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
+    public AxoObjectInstanceAbstract CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
         return null;
     }
 

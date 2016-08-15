@@ -52,8 +52,6 @@ public class AxoObjectPatcher extends AxoObject {
         if (patch != null) {
             patch.objectinstances.add(o);
         }
-        o.PostConstructor();
         return o;
     }
-    
 }

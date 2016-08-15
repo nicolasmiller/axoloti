@@ -51,13 +51,12 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
     }
 
     @Override
-    public AxoObjectInstanceAbstract CreateInstance(PatchModel patch, String InstanceName1, Point location) {
+    public AxoObjectInstance CreateInstance(PatchModel patch, String InstanceName1, Point location) {
         Load();
         AxoObjectInstance oi = new AxoObjectInstance(loadedObject, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(oi);
         }
-        oi.PostConstructor();
         return oi;
     }
 
@@ -65,5 +64,4 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
     public String GenerateUUID() {
         return "unloaded";
     }
-
 }

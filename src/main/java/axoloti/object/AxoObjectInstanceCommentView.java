@@ -43,7 +43,7 @@ public class AxoObjectInstanceCommentView extends AxoObjectInstanceView {
                 if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
-                            SetSelected(!getSelected());
+                            SetSelected(!isSelected());
                         } else if (selected == false) {
                             getPatchView().SelectNone();
                             SetSelected(true);
