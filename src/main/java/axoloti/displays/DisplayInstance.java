@@ -38,7 +38,7 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
     Boolean onParent;
     protected int index;
     public T display;
-    AxoObjectInstance axoObjView;
+    AxoObjectInstance axoObjectInstance;
     protected int offset;
 
     public DisplayInstance() {
@@ -46,7 +46,7 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
 
     @Override
     public AxoObjectInstanceAbstract getObjectInstance() {
-        return axoObjView;
+        return axoObjectInstance;
     }
 
     @Override

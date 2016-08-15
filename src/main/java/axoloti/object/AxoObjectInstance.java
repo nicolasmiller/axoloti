@@ -553,9 +553,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     void ConvertToPatchPatcher() {
-        if (IsLocked()) {
-            return;
-        }
         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
         assert (!ol.isEmpty());
         AxoObjectAbstract o = ol.get(0);
@@ -572,9 +569,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     void ConvertToEmbeddedObj() {
-        if (IsLocked()) {
-            return;
-        }
         try {
             ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
             assert (!ol.isEmpty());
@@ -597,7 +591,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
     
     @Override    
-    public AxoObjectInstanceView ViewFactory(AxoObjectInstanceView o) {
+    public AxoObjectInstanceView ViewFactory() {
         return new AxoObjectInstanceView(this);
     }
 }

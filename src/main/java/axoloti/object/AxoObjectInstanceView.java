@@ -60,6 +60,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
     public void PostConstructor() {
         super.PostConstructor();
         model.updateObj1();
+        // need views here
         ArrayList<ParameterInstance> pParameterInstances = model.parameterInstances;
         ArrayList<AttributeInstance> pAttributeInstances = model.attributeInstances;
         ArrayList<InletInstance> pInletInstances = model.inletInstances;
@@ -154,7 +155,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    model.ConvertToPatchPatcher();
+                    if(!getPatchView().isLocked()) {
+                        model.ConvertToPatchPatcher();
+                    }
                 }
             });
             popup.add(popm_embed);
@@ -163,7 +166,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    model.ConvertToEmbeddedObj();
+                    if(!getPatchView().isLocked()) {
+                        model.ConvertToEmbeddedObj();
+                    }
                 }
             });
             popup.add(popm_embed);
@@ -312,6 +317,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceAbstractView impleme
         for (AxoAttribute p : getType().attributes) {
             AttributeInstance attrp1 = null;
             for (AttributeInstance attrp : pAttributeInstances) {
+                
                 if (attrp.getName().equals(p.getName())) {
                     attrp1 = attrp;
                 }
