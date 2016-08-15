@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.parameters.ParameterInstanceFrac32UMap;
+import axoloti.parameterviews.ParameterInstanceFrac32UMapView;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -37,9 +37,9 @@ public class AssignMidiCCComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    ParameterInstanceFrac32UMap param;
+    ParameterInstanceFrac32UMapView param;
 
-    public AssignMidiCCComponent(ParameterInstanceFrac32UMap param) {
+    public AssignMidiCCComponent(ParameterInstanceFrac32UMapView param) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

@@ -18,7 +18,6 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.Value;
-import components.control.Checkbox4StatesComponent;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -32,11 +31,6 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
 
     public ParameterInstance4LevelX16(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public Checkbox4StatesComponent CreateControl() {
-        return new Checkbox4StatesComponent(0, 16);
     }
 
     @Override
@@ -63,22 +57,7 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
-
-    @Override
     public void setValue(Value value) {
         super.setValue(value);
-        updateV();
-    }
-
-    @Override
-    public Checkbox4StatesComponent getControlComponent() {
-        return (Checkbox4StatesComponent) ctrl;
     }
 }

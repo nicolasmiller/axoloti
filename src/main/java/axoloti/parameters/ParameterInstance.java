@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.Modulation;
 import axoloti.Preset;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
@@ -44,7 +45,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     @ElementList(required = false)
     ArrayList<Preset> presets;
     protected boolean needsTransmit = false;
-    AxoObjectInstance axoObjInstance;
+    AxoObjectInstance axoObjectInstance;
     NativeToReal convs[];
     int selectedConv = 0;
     @Attribute(required = false)
@@ -56,7 +57,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     public ParameterInstance(T param, AxoObjectInstance axoObjInstance) {
         super();
         parameter = param;
-        this.axoObjInstance = axoObjInstance;
+        this.axoObjectInstance = axoObjInstance;
         name = parameter.name;
     }
 
@@ -68,17 +69,19 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         if (p.onParent != null) {
             setOnParent(p.onParent);
         }
-        SetMidiCC(p.MidiCC);
+        setMidiCC(p.MidiCC);
     }
 
     public void applyDefaultValue() {
     }
 
-    public boolean GetNeedsTransmit() {
+    public boolean getNeedsTransmit() {
         return needsTransmit;
     }
-
-
+    
+    public void setNeedsTransmit(boolean needsTransmit) {
+        this.needsTransmit = needsTransmit;
+    }
 
     public byte[] TXData() {
         needsTransmit = false;
@@ -117,6 +120,10 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     public ArrayList<Preset> getPresets() {
         return presets;
     }
+    
+    public void setPresets(ArrayList<Preset> presets) {
+        this.presets = presets;
+    }
 
     public Preset AddPreset(int index, Value value) {
         Preset p = GetPreset(index);
@@ -142,9 +149,9 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     public abstract Value getValue();
 
     public void setValue(Value value) {
-        if (axoObjInstance != null) {
-            if (axoObjInstance.getPatchModel() != null) {
-                axoObjInstance.getPatchModel().SetDirty();
+        if (axoObjectInstance != null) {
+            if (axoObjectInstance.getPatchModel() != null) {
+                axoObjectInstance.getPatchModel().SetDirty();
             }
         }
     }
@@ -158,7 +165,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     }
 
     public String indexName() {
-        return "PARAM_INDEX_" + axoObjInstance.getLegalName() + "_" + getLegalName();
+        return "PARAM_INDEX_" + axoObjectInstance.getLegalName() + "_" + getLegalName();
     }
 
     public String getLegalName() {
@@ -166,7 +173,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     }
 
     public String KVPName(String vprefix) {
-        return "KVP_" + axoObjInstance.getCInstanceName() + "_" + getLegalName();
+        return "KVP_" + axoObjectInstance.getCInstanceName() + "_" + getLegalName();
     }
 
     public String PExName(String vprefix) {
@@ -178,10 +185,10 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     }
 
     public String ControlOnParentName() {
-        if (axoObjInstance.parameterInstances.size() == 1) {
-            return axoObjInstance.getInstanceName();
+        if (axoObjectInstance.parameterInstances.size() == 1) {
+            return axoObjectInstance.getInstanceName();
         } else {
-            return axoObjInstance.getInstanceName() + ":" + parameter.name;
+            return axoObjectInstance.getInstanceName() + ":" + parameter.name;
         }
     }
 
@@ -231,11 +238,11 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         Parameter pcopy = parameter.getClone();
         pcopy.name = ControlOnParentName();
         pcopy.noLabel = null;
-        pcopy.PropagateToChild = axoObjInstance.getLegalName() + "_" + getLegalName();
+        pcopy.PropagateToChild = axoObjectInstance.getLegalName() + "_" + getLegalName();
         return pcopy;
     }
 
-    void SetMidiCC(Integer cc) {
+    public void setMidiCC(Integer cc) {
         if ((cc != null) && (cc >= 0)) {
             MidiCC = cc;
         } else {
@@ -253,7 +260,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
 
     @Override
     public AxoObjectInstance getObjectInstance() {
-        return axoObjInstance;
+        return axoObjectInstance;
     }
 
     @Override
@@ -271,5 +278,29 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
 
     public void setOnParent(Boolean onParent) {
         this.onParent = onParent;
+    }
+    
+    public ArrayList<Modulation> getModulators() {
+        return null;
+    }
+    
+    public NativeToReal[] getConvs() {
+        return convs;
+    }
+    
+    public int getSelectedConv() {
+        return selectedConv;
+    }
+    
+    public void setSelectedConv(int selectedConv) {
+        this.selectedConv = selectedConv;
+    }
+    
+    public T getParameter() {
+        return this.parameter;
+    }
+    
+    public String getName() {
+        return this.name;
     }
 }

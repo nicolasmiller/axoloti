@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package axoloti.parameters;
+package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
+import axoloti.parameters.ParameterInstanceInt32;
 
 /**
  *
@@ -23,6 +24,7 @@ public abstract class ParameterInstanceInt32View extends ParameterInstanceView {
         this.parameterInstance = parameterInstance;
     }
 
+    @Override
     public void setValue(Value value) {
         parameterInstance.setValue(value);
         updateV();
@@ -38,11 +40,11 @@ public abstract class ParameterInstanceInt32View extends ParameterInstanceView {
                 getControlComponent().setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                getControlComponent().setValue(parameterInstance.value.getDouble());
+                getControlComponent().setValue(parameterInstance.getValue().getDouble());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            getControlComponent().setValue(parameterInstance.value.getDouble());
+            getControlComponent().setValue(parameterInstance.getValue().getDouble());
         }
     }
     
@@ -52,9 +54,9 @@ public abstract class ParameterInstanceInt32View extends ParameterInstanceView {
         if (p != null) {
             p.value = new ValueInt32((int) getControlComponent().getValue());
         } else {
-            if (parameterInstance.value.getInt() != (int) getControlComponent().getValue()) {
-                parameterInstance.value.setInt((int) getControlComponent().getValue());
-                parameterInstance.needsTransmit = true;
+            if (parameterInstance.getValue().getInt() != (int) getControlComponent().getValue()) {
+                parameterInstance.getValue().setInt((int) getControlComponent().getValue());
+                parameterInstance.setNeedsTransmit(true);
                 UpdateUnit();
             }
             else {
@@ -71,6 +73,13 @@ public abstract class ParameterInstanceInt32View extends ParameterInstanceView {
             setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
             setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
+        }
+    }
+    
+    @Override
+    public void CopyValueFrom(ParameterInstanceView p) {
+        if (p instanceof ParameterInstanceInt32View) {
+            parameterInstance.CopyValueFrom(((ParameterInstanceInt32View) p).parameterInstance);
         }
     }
 }

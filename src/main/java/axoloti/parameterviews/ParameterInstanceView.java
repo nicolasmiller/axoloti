@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package axoloti.parameters;
+package axoloti.parameterviews;
 
 import axoloti.Preset;
+import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstanceView;
+import axoloti.parameters.ParameterInstance;
 import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;
 import components.LabelComponent;
@@ -45,7 +47,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         JPanel lbls = null;
-        if ((((parameterInstance.parameter.noLabel == null) || (parameterInstance.parameter.noLabel == false))) && (parameterInstance.convs != null)) {
+        if ((((parameterInstance.getParameter().noLabel == null) || (parameterInstance.getParameter().noLabel == false))) && (parameterInstance.getConvs() != null)) {
             lbls = new JPanel();
             lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));
             this.add(lbls);
@@ -58,7 +60,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
                 add(new LabelComponent(parameterInstance.parameter.name));
             }
         }
-        if (parameterInstance.convs != null) {
+        if (parameterInstance.getConvs() != null) {
             if (lbls != null) {
                 lbls.add(valuelbl);
             } else {
@@ -72,9 +74,10 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             valuelbl.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    parameterInstance.selectedConv = parameterInstance.selectedConv + 1;
-                    if (parameterInstance.selectedConv >= parameterInstance.convs.length) {
-                        parameterInstance.selectedConv = 0;
+                    
+                    parameterInstance.setSelectedConv(parameterInstance.getSelectedConv() + 1);
+                    if (parameterInstance.getSelectedConv() >= parameterInstance.getConvs().length) {
+                        parameterInstance.setSelectedConv(0);
                     }
                     UpdateUnit();
                 }
@@ -102,7 +105,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             }
         });
         updateV();
-        SetMidiCC(parameterInstance.MidiCC);
+        parameterInstance.setMidiCC(parameterInstance.getMidiCC());
     }
 
     public void doPopup(MouseEvent e) {
@@ -113,7 +116,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     public void populatePopup(JPopupMenu m) {
         final JCheckBoxMenuItem m_onParent = new JCheckBoxMenuItem("parameter on parent");
-        m_onParent.setSelected(parameterInstance.getOnParent());
+        m_onParent.setSelected(parameterInstance.isOnParent());
         m.add(m_onParent);
         m_onParent.addActionListener(new ActionListener() {
             @Override
@@ -181,12 +184,12 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public String getName() {
-        return parameterInstance.name;
+        return parameterInstance.getName();
     }
 
     void UpdateUnit() {
-        if (parameterInstance.convs != null) {
-            valuelbl.setText(parameterInstance.convs[parameterInstance.selectedConv].ToReal(parameterInstance.getValue()));
+        if (parameterInstance.getConvs() != null) {
+            valuelbl.setText(parameterInstance.getConvs()[parameterInstance.getSelectedConv()].ToReal(parameterInstance.getValue()));
         }
     }
 
@@ -195,7 +198,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
     }
 
     void SetMidiCC(Integer cc) {
-        parameterInstance.SetMidiCC(cc);
+        parameterInstance.setMidiCC(cc);
         if ((cc != null) && (cc >= 0)) {
             if (midiAssign != null) {
                 midiAssign.setCC(cc);
@@ -204,19 +207,19 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             midiAssign.setCC(-1);
         }
     }
-    
+
     public void SetValueRaw(int v) {
         parameterInstance.SetValueRaw(v);
         updateV();
     }
-    
+
     public abstract void ShowPreset(int i);
-    
+
     public boolean isOnParent() {
-        if (parameterInstance.getOnParent() == null) {
+        if (parameterInstance.isOnParent() == null) {
             return false;
         } else {
-            return parameterInstance.getOnParent();
+            return parameterInstance.isOnParent();
         }
     }
 
@@ -233,21 +236,20 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             parameterInstance.setOnParent(null);
         }
     }
-    
+
     public int presetEditActive = 0;
 
-    
     public void IncludeInPreset() {
         if (presetEditActive > 0) {
             Preset p = parameterInstance.GetPreset(presetEditActive);
             if (p != null) {
                 return;
             }
-            if (parameterInstance.presets == null) {
-                parameterInstance.presets = new ArrayList<Preset>();
+            if (parameterInstance.getPresets() == null) {
+                parameterInstance.setPresets(new ArrayList<Preset>());
             }
             p = new Preset(presetEditActive, parameterInstance.getValue());
-            parameterInstance.presets.add(p);
+            parameterInstance.getPresets().add(p);
         }
         ShowPreset(presetEditActive);
     }
@@ -256,12 +258,33 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         if (presetEditActive > 0) {
             Preset p = parameterInstance.GetPreset(presetEditActive);
             if (p != null) {
-                parameterInstance.presets.remove(p);
-                if (parameterInstance.presets.isEmpty()) {
-                    parameterInstance.presets = null;
+                parameterInstance.getPresets().remove(p);
+                if (parameterInstance.getPresets().isEmpty()) {
+                    parameterInstance.setPresets(null);
                 }
             }
         }
         ShowPreset(presetEditActive);
+    }
+
+    public void CopyValueFrom(ParameterInstanceView p) {
+        parameterInstance.CopyValueFrom(p.parameterInstance);
+    }
+
+    public void setValue(Value value) {
+        parameterInstance.setValue(value);
+        updateV();
+    }
+
+    public ParameterInstance getParameterInstance() {
+        return parameterInstance;
+    }
+
+    public Preset AddPreset(int index, Value value) {
+        return parameterInstance.AddPreset(index, value);
+    }
+
+    public void RemovePreset(int index) {
+        parameterInstance.RemovePreset(index);
     }
 }

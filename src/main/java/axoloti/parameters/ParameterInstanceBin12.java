@@ -35,11 +35,6 @@ public class ParameterInstanceBin12 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public CheckboxComponent CreateControl() {
-        return new CheckboxComponent(0, 12);
-    }
-
-    @Override
     public String GenerateCodeInit(String vprefix, String StructAccces) {
         String s = /*"    " + variableName(vprefix) + " = " + (value.getInt()) + ";\n"
                  + "    " + valueName(vprefix) + " = " + (value.getInt()) + ";\n"
@@ -62,19 +57,8 @@ public class ParameterInstanceBin12 extends ParameterInstanceInt32 {
         return "";
     }
 
-    @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
 
     @Override
     public void setValue(Value value) {
         super.setValue(value);
-        updateV();
-    }
-
-    @Override
-    public CheckboxComponent getControlComponent() {
-        return (CheckboxComponent) ctrl;
-    }
 }

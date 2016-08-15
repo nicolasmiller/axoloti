@@ -37,7 +37,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
             }
             if (patchModel != null) {
                 for (ParameterInstance p : patchModel.getParameterInstances()) {
-                    if (p.GetNeedsTransmit()) {
+                    if (p.getNeedsTransmit()) {
                         processor.AppendToQueue(new QCmdSerialDialTX(p.TXData()));
                         //processor.println("tx dial " + p.getName());
                     }

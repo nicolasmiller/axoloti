@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.parameters.ParameterInstanceFrac32UMap;
+import axoloti.parameterviews.ParameterInstanceFrac32UMapView;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -37,9 +37,9 @@ public class AssignModulatorComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceFrac32UMap param;
+    final ParameterInstanceFrac32UMapView param;
 
-    public AssignModulatorComponent(ParameterInstanceFrac32UMap param) {
+    public AssignModulatorComponent(ParameterInstanceFrac32UMapView param) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
@@ -104,5 +104,4 @@ public class AssignModulatorComponent extends JComponent {
             g2.fillPolygon(xp, yp, 3);
         }
     }
-
 }

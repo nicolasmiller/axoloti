@@ -19,16 +19,11 @@ package axoloti.parameters;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.Preset;
 import axoloti.datatypes.Frac32;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.AxoObjectInstance;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 
@@ -55,26 +50,15 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         //value = new ValueFrac32();
     }
 
-    abstract double getMin();
+    public abstract double getMin();
 
-    abstract double getMax();
+    public abstract double getMax();
 
-    abstract double getTick();
+    public abstract double getTick();
 
     public ParameterInstanceFrac32(Tx param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
         //value = new ValueFrac32();
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        if (modulators != null) {
-            for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue().getDouble());
-                m.PostConstructor(this);
-            }
-        }
     }
 
     @Override
@@ -86,7 +70,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     public void setValue(Value value) {
         super.setValue(value);
         this.value.setDouble(value.getDouble());
-        updateV();
     }
 
     @Override
@@ -96,21 +79,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         }
     }
 
-    @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenuItem m_default = new JMenuItem("Reset to default value");
-        m_default.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                applyDefaultValue();
-                getControlComponent().setValue(value.getDouble());
-                handleAdjustment();
-            }
-        });
-        m.add(m_default);
-    }
-
     public void updateModulation(int index, double amount) {
         //System.out.println("updatemodulation1:" + index);
         if (amount != 0.0) {
@@ -118,7 +86,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             if (modulators == null) {
                 modulators = new ArrayList<Modulation>();
             }
-            Modulator modulator = axoObj.getPatchModel().getModulators().get(index);
+            Modulator modulator = axoObjectInstance.getPatchModel().getModulators().get(index);
             //System.out.println("updatemodulation2:" + modulator.name);
             Modulation n = null;
             for (Modulation m : modulators) {
@@ -144,10 +112,10 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             n.modName = modulator.name;
             n.getValue().setDouble(amount);
             n.destination = this;
-            axoObj.getPatchModel().updateModulation(n);
+            axoObjectInstance.getPatchModel().updateModulation(n);
         } else {
             // remove modulation target if exists
-            Modulator modulator = axoObj.getPatchModel().getModulators().get(index);
+            Modulator modulator = axoObjectInstance.getPatchModel().getModulators().get(index);
             if (modulator == null) {
                 return;
             }
@@ -162,15 +130,16 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
                 if (n.destination == this) {
                     modulators.remove(n);
                 }
-                axoObj.getPatchModel().updateModulation(n);
+                axoObjectInstance.getPatchModel().updateModulation(n);
             }
             if (modulators.isEmpty()) {
                 modulators = null;
             }
         }
-        axoObj.getPatchModel().SetDirty();
+        axoObjectInstance.getPatchModel().SetDirty();
     }
 
+    @Override
     public ArrayList<Modulation> getModulators() {
         return modulators;
     }
@@ -194,31 +163,12 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             modulators = p1.getModulators();
             presets = p1.presets;
             value.setRaw(p1.value.getRaw());
-            updateV();
         }
     }
 
-    @Override
-    public boolean handleAdjustment() {
-        Preset p = GetPreset(presetEditActive);
-        if (p != null) {
-            p.value = new ValueFrac32(getControlComponent().getValue());
-        } else {
-            if (value.getDouble() != getControlComponent().getValue()) {
-                value.setDouble(getControlComponent().getValue());
-                needsTransmit = true;
-                UpdateUnit();
-            } else {
-                return false;
-            }
 
-        }
-        return true;
-    }
-    
     @Override
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
-    }    
-    
+    }
 }

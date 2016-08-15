@@ -18,7 +18,6 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.Value;
-import components.control.PulseButtonComponent;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -64,23 +63,7 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
-
-    @Override
     public void setValue(Value value) {
         super.setValue(value);
-        updateV();
-    }
-
-    @Override
-    public PulseButtonComponent CreateControl() {
-        return new PulseButtonComponent();
-    }
-
-    @Override
-    public PulseButtonComponent getControlComponent() {
-        return (PulseButtonComponent) ctrl;
     }
 }

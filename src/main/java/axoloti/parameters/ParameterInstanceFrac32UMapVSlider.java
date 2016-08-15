@@ -17,9 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.Preset;
-import axoloti.Theme;
-import components.control.VSliderComponent;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -27,24 +24,12 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U<ParameterFrac32UMapVSlider> {
-    
+
     public ParameterInstanceFrac32UMapVSlider() {
     }
 
     public ParameterInstanceFrac32UMapVSlider(@Attribute(name = "value") double v) {
         super(v);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-    }
-
-    @Override
-    public void updateV() {
-        if (ctrl != null) {
-            ctrl.setValue(value.getDouble());
-        }
     }
 
     @Override
@@ -66,43 +51,5 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?data2<<20:0x07FFFFFF");
-    }
-
-    /*
-     *  Preset logic
-     */
-    @Override
-    public void ShowPreset(int i) {
-        this.presetEditActive = i;
-        if (i > 0) {
-            Preset p = GetPreset(presetEditActive);
-            if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
-            } else {
-                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(value.getDouble());
-            }
-        } else {
-            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(value.getDouble());
-        }
-        if ((presets != null) && (!presets.isEmpty())) {
-//            lblPreset.setVisible(true);
-        } else {
-//            lblPreset.setVisible(false);
-        }
-    }
-
-    @Override
-    public VSliderComponent CreateControl() {
-        VSliderComponent v = new VSliderComponent(0.0, 0.0, 64, 0.5);
-        v.setParentAxoObjectInstance(axoObj);
-        return v;
-    }
-
-    @Override
-    public VSliderComponent getControlComponent() {
-        return (VSliderComponent) ctrl;
     }
 }
