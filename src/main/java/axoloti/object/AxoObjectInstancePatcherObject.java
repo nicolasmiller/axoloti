@@ -17,13 +17,9 @@
  */
 package axoloti.object;
 
+import axoloti.objectviews.AxoObjectInstanceViewPatcherObject;
 import axoloti.PatchModel;
-import axoloti.objecteditor.AxoObjectEditor;
-import components.ButtonComponent;
-import components.ButtonComponent.ActListener;
-import java.awt.Component;
 import java.awt.Point;
-import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Element;
 
 /**
@@ -60,7 +56,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override    
-    public AxoObjectInstancePatcherObjectView ViewFactory() {
-        return new AxoObjectInstancePatcherObjectView(this);
+    public AxoObjectInstanceViewPatcherObject ViewFactory() {
+        return new AxoObjectInstanceViewPatcherObject(this);
     }
 }

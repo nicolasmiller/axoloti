@@ -6,7 +6,7 @@ import axoloti.NetView;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.inlets.InletInstanceView;
-import axoloti.object.AxoObjectInstanceAbstractView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.OutletInstanceView;
 import java.awt.Component;
 import java.awt.IllegalComponentStateException;
@@ -29,7 +29,7 @@ public abstract class IoletAbstract extends JPanel {
     @Attribute(name = "obj", required = false)
     public String objname;
 
-    public AxoObjectInstanceAbstractView axoObj;
+    public AxoObjectInstanceViewAbstract axoObj;
     public JLabel lbl;
     public JComponent jack;
 
@@ -47,7 +47,7 @@ public abstract class IoletAbstract extends JPanel {
         }
     }
 
-    public AxoObjectInstanceAbstractView getObjectInstanceView() {
+    public AxoObjectInstanceViewAbstract getObjectInstanceView() {
         return axoObj;
     }
 

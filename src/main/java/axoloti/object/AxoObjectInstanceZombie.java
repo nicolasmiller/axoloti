@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.objectviews.AxoObjectInstanceViewZombie;
 import axoloti.PatchModel;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
@@ -91,7 +92,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
     
     @Override    
-    public AxoObjectInstanceZombieView ViewFactory() {
-        return new AxoObjectInstanceZombieView(this);
+    public AxoObjectInstanceViewZombie ViewFactory() {
+        return new AxoObjectInstanceViewZombie(this);
     }
 }

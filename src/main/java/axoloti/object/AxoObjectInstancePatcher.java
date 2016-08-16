@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.objectviews.AxoObjectInstanceViewPatcher;
 import axoloti.MainFrame;
 import axoloti.PatchController;
 import axoloti.PatchModel;
@@ -86,7 +87,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
     
     @Override    
-    public AxoObjectInstancePatcherView ViewFactory() {
-        return new AxoObjectInstancePatcherView(this);
+    public AxoObjectInstanceViewPatcher ViewFactory() {
+        return new AxoObjectInstanceViewPatcher(this);
     }
 }

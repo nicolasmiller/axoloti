@@ -17,7 +17,6 @@
  */
 package axoloti.displays;
 
-import components.VGraphComponent;
 import java.nio.ByteBuffer;
 
 /**
@@ -32,20 +31,11 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         super();
     }
 
-    private VGraphComponent vgraph;
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        vgraph = new VGraphComponent(n, 128, 0, 128);
-        add(vgraph);
-    }
-
     @Override
     public String GenerateCodeInit(String vprefix) {
         String s = "   int _i;\n"
                 + "   for(_i=0;_i<" + n + ";_i++)\n"
-                + "   " + GetCName()+ "[_i] = 0;\n";
+                + "   " + GetCName() + "[_i] = 0;\n";
         return s;
     }
 
@@ -63,12 +53,6 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         for (int i = 0; i < n; i++) {
             idst[i] = dst[i];//&0xff;
         }
-        vgraph.setValue(idst);
-    }
-
-    @Override
-    public void updateV() {
-
     }
 
     @Override
@@ -76,4 +60,11 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         return n / 4;
     }
 
+    public int[] getIDst() {
+        return idst;
+    }
+
+    public int getN() {
+        return n;
+    }
 }

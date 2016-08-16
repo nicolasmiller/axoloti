@@ -3,7 +3,7 @@ package axoloti;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstanceAbstractView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.OutletInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -217,7 +217,7 @@ public class PatchController {
         }
     }
 
-    public void delete(AxoObjectInstanceAbstractView o) {
+    public void delete(AxoObjectInstanceViewAbstract o) {
         patchModel.delete(o.getModel());
     }
 

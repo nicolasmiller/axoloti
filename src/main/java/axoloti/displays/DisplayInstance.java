@@ -30,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance<T extends Display> extends JPanel implements AtomInstance<T> {
+public abstract class DisplayInstance<T extends Display> implements AtomInstance<T> {
 
     @Attribute
     String name;
@@ -70,17 +70,5 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
 
     public abstract String GenerateCodeInit(String vprefix);
 
-    public void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        if ((display.noLabel == null) || (display.noLabel == false)) {
-            add(new LabelComponent(display.name));
-        }
-        doLayout();
-        setSize(getPreferredSize());
-        doLayout();
-    }
-
     public abstract void ProcessByteBuffer(ByteBuffer bb);
-
-    public abstract void updateV();
 }

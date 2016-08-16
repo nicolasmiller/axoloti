@@ -17,7 +17,7 @@
  */
 package components.control;
 
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
 import java.awt.Color;
 import java.awt.datatransfer.Clipboard;

@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.parameterviews.ParameterInstanceFrac32UMapView;
+import axoloti.parameterviews.ParameterInstanceViewFrac32UMap;
 import axoloti.utils.Constants;
 import components.control.HSliderComponent;
 import java.awt.Dimension;
@@ -39,9 +39,9 @@ public class AssignPresetComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceFrac32UMapView parameterInstanceView;
+    final ParameterInstanceViewFrac32UMap parameterInstanceView;
 
-    public AssignPresetComponent(ParameterInstanceFrac32UMapView parameterInstanceView) {
+    public AssignPresetComponent(ParameterInstanceViewFrac32UMap parameterInstanceView) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

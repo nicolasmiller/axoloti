@@ -17,10 +17,6 @@
  */
 package axoloti.parameters;
 
-import components.AssignMidiCCMenuItems;
-import components.control.HRadioComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 
 /**

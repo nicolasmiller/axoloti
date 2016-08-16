@@ -17,9 +17,10 @@
  */
 package axoloti.attribute;
 
+import axoloti.attributeviews.AttributeInstanceViewComboBox;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -68,7 +69,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     }
     
     @Override
-    public AttributeInstanceComboBoxView ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceComboBoxView(this, o);
+    public AttributeInstanceViewComboBox ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceViewComboBox(this, o);
     }
 }

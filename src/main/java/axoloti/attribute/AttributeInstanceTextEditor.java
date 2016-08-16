@@ -17,10 +17,11 @@
  */
 package axoloti.attribute;
 
+import axoloti.attributeviews.AttributeInstanceViewTextEditor;
 import axoloti.StringRef;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.Element;
 
 /**
@@ -70,7 +71,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     }
     
     @Override
-    public AttributeInstanceTextEditorView ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceTextEditorView(this, o);
+    public AttributeInstanceViewTextEditor ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceViewTextEditor(this, o);
     }
 }

@@ -18,7 +18,6 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import java.awt.BasicStroke;
 import static java.awt.Component.CENTER_ALIGNMENT;

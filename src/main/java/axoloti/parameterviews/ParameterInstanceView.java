@@ -7,7 +7,7 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.datatypes.Value;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
 import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;

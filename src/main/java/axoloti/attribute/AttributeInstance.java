@@ -17,11 +17,12 @@
  */
 package axoloti.attribute;
 
+import axoloti.attributeviews.AttributeInstanceView;
 import axoloti.SDFileReference;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.util.ArrayList;

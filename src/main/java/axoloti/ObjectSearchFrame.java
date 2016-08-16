@@ -19,7 +19,7 @@ package axoloti;
 
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstanceAbstractView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.utils.Constants;
 import java.awt.GraphicsConfiguration;
@@ -279,7 +279,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         return patchLoc;
     }
 
-    void Launch(Point patchLoc, AxoObjectInstanceAbstractView o, String searchString) {
+    void Launch(Point patchLoc, AxoObjectInstanceViewAbstract o, String searchString) {
         if (this.objectTree != MainFrame.axoObjects.ObjectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
             this.objectTree = MainFrame.axoObjects.ObjectTree;
@@ -332,7 +332,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             if (jList1.getSelectedValue() != o) {
             }
             AxoObjectInstanceAbstract objectInstance = o.CreateInstance(null, "dummy", new Point(5, 5));
-            AxoObjectInstanceAbstractView objectInstanceView = objectInstance.CreateView();
+            AxoObjectInstanceViewAbstract objectInstanceView = objectInstance.CreateView();
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);
             objectInstanceView.invalidate();

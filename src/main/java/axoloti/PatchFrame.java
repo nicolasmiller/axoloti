@@ -17,10 +17,8 @@
  */
 package axoloti;
 
-import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstanceAbstractView;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
@@ -896,11 +894,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        AxoObjectInstanceAbstractView selObj = null;
-        ArrayList<AxoObjectInstanceAbstractView> oi = patchController.patchView.getObjectInstanceViews();
+        AxoObjectInstanceViewAbstract selObj = null;
+        ArrayList<AxoObjectInstanceViewAbstract> oi = patchController.patchView.getObjectInstanceViews();
         if(oi != null) {
             // need a view here
-            for(AxoObjectInstanceAbstractView i : oi) {
+            for(AxoObjectInstanceViewAbstract i : oi) {
                 if(i.isSelected() && i instanceof AxoObjectInstanceView) {
                     selObj = i;
                 }

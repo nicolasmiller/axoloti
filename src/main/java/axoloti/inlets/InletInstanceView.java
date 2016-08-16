@@ -5,8 +5,6 @@
  */
 package axoloti.inlets;
 
-import axoloti.MainFrame;
-import axoloti.NetView;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import components.JackInputComponent;

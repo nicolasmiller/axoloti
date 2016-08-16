@@ -25,8 +25,8 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstanceAbstractView;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
@@ -95,9 +95,9 @@ import qcmds.QCmdUploadPatch;
 @Root(name = "patch-1.0")
 public class PatchView {
 
-    ArrayList<AxoObjectInstanceAbstractView> objectInstanceViews = new ArrayList<AxoObjectInstanceAbstractView>();
+    ArrayList<AxoObjectInstanceViewAbstract> objectInstanceViews = new ArrayList<AxoObjectInstanceViewAbstract>();
 
-    public ArrayList<AxoObjectInstanceAbstractView> getObjectInstanceViews() {
+    public ArrayList<AxoObjectInstanceViewAbstract> getObjectInstanceViews() {
         return objectInstanceViews;
     }
 
@@ -290,7 +290,7 @@ public class PatchView {
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
-                    AxoObjectInstanceAbstractView ao = AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
+                    AxoObjectInstanceViewAbstract ao = AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ao.addInstanceNameEditor();
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
@@ -361,7 +361,7 @@ public class PatchView {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
-                    for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+                    for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
                         o.SetSelected(false);
                     }
                     if (me.getClickCount() == 2) {
@@ -396,7 +396,7 @@ public class PatchView {
             public void mouseReleased(MouseEvent me) {
                 if (selectionrectangle.isVisible() || me.getButton() == MouseEvent.BUTTON1) {
                     Rectangle r = selectionrectangle.getBounds();
-                    for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+                    for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
                         o.SetSelected(o.getBounds().intersects(r));
                     }
                     selectionrectangle.setVisible(false);
@@ -657,7 +657,7 @@ public class PatchView {
     }
     public ObjectSearchFrame osf;
 
-    public void ShowClassSelector(Point p, AxoObjectInstanceAbstractView o, String searchString) {
+    public void ShowClassSelector(Point p, AxoObjectInstanceViewAbstract o, String searchString) {
         if (isLocked()) {
             return;
         }
@@ -668,13 +668,13 @@ public class PatchView {
     }
 
     void SelectAll() {
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             o.SetSelected(true);
         }
     }
 
     public void SelectNone() {
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             o.SetSelected(false);
         }
     }
@@ -707,7 +707,7 @@ public class PatchView {
 
     PatchView getSelectedObjects() {
         PatchView p = new PatchView(patchController);
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             if (o.isSelected()) {
                 p.objectInstanceViews.add(o);
             }
@@ -760,7 +760,7 @@ public class PatchView {
                     break;
             }
             boolean isUpdate = false;
-            for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+            for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
                 if (o.isSelected()) {
                     isUpdate = true;
                     Point p = o.getLocation();
@@ -787,7 +787,7 @@ public class PatchView {
 
         objectLayerPanel.removeAll();
         netLayerPanel.removeAll();
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             objectLayerPanel.add(o);
         }
         for (NetView n : netViews) {
@@ -856,16 +856,16 @@ public class PatchView {
         return n;
     }
 
-    public void delete(AxoObjectInstanceAbstractView o) {
+    public void delete(AxoObjectInstanceViewAbstract o) {
         PatchView.this.patchController.delete(o);
         objectLayerPanel.remove(o);
         objectLayerPanel.validate();
         AdjustSize();
     }
 
-    public AxoObjectInstanceAbstractView AddObjectInstance(AxoObjectAbstract obj, Point loc) {
+    public AxoObjectInstanceViewAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         AxoObjectInstanceAbstract objinst = patchController.AddObjectInstance(obj, loc);
-        AxoObjectInstanceAbstractView objView = new AxoObjectInstanceView((AxoObjectInstance) objinst);
+        AxoObjectInstanceViewAbstract objView = new AxoObjectInstanceView((AxoObjectInstance) objinst);
         if (objinst != null) {
             SelectNone();
             objectLayerPanel.add(objView);
@@ -934,7 +934,7 @@ public class PatchView {
     Dimension GetInitialSize() {
         int mx = 100; // min size
         int my = 100;
-        for (AxoObjectInstanceAbstractView i : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract i : objectInstanceViews) {
 
             Dimension s = i.getPreferredSize();
 
@@ -1080,8 +1080,8 @@ public class PatchView {
 
     public void Close() {
         Unlock();
-        Collection<AxoObjectInstanceAbstractView> c = (Collection<AxoObjectInstanceAbstractView>) objectInstanceViews.clone();
-        for (AxoObjectInstanceAbstractView o : c) {
+        Collection<AxoObjectInstanceViewAbstract> c = (Collection<AxoObjectInstanceViewAbstract>) objectInstanceViews.clone();
+        for (AxoObjectInstanceViewAbstract o : c) {
             o.Close();
         }
         if (NotesFrame != null) {
@@ -1096,7 +1096,7 @@ public class PatchView {
     void cleanUpObjectLayer() {
         if (!isLocked()) {
             for (Component c : objectLayerPanel.getComponents()) {
-                if (!objectInstanceViews.contains((AxoObjectInstanceAbstractView) c)) {
+                if (!objectInstanceViews.contains((AxoObjectInstanceViewAbstract) c)) {
                     this.objectLayerPanel.remove(c);
                 }
             }
@@ -1108,7 +1108,7 @@ public class PatchView {
         int nx = 0;
         int ny = 0;
         // negative coordinates?
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             Point p = o.getLocation();
             if (p.x < nx) {
                 nx = p.x;
@@ -1118,7 +1118,7 @@ public class PatchView {
             }
         }
         if ((nx < 0) || (ny < 0)) { // move all to positive coordinates
-            for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+            for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
                 Point p = o.getLocation();
                 o.SetLocation(p.x - nx, p.y - ny);
             }
@@ -1126,7 +1126,7 @@ public class PatchView {
 
         int mx = 0;
         int my = 0;
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             Point p = o.getLocation();
             Dimension s = o.getSize();
             int px = p.x + s.width;
@@ -1147,7 +1147,7 @@ public class PatchView {
             boolean cont = true;
             while (cont) {
                 cont = false;
-                for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+                for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
                     if (o.isSelected()) {
                         patchController.delete(o);
                         cont = true;
@@ -1180,7 +1180,7 @@ public class PatchView {
         patchController.getPatchFrame().SetLive(true);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
         locked = true;
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             o.Lock();
         }
     }
@@ -1189,8 +1189,8 @@ public class PatchView {
         patchController.getPatchFrame().SetLive(false);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         locked = false;
-        ArrayList<AxoObjectInstanceAbstractView> objInstsClone = (ArrayList<AxoObjectInstanceAbstractView>) objectInstanceViews.clone();
-        for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
+        ArrayList<AxoObjectInstanceViewAbstract> objInstsClone = (ArrayList<AxoObjectInstanceViewAbstract>) objectInstanceViews.clone();
+        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
             o.Unlock();
         }
     }

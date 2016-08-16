@@ -54,7 +54,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
-import qcmds.QCmdCompilePatch;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
 

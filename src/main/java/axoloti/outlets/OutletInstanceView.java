@@ -6,7 +6,6 @@
 package axoloti.outlets;
 
 import axoloti.MainFrame;
-import axoloti.Net;
 import axoloti.NetView;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;

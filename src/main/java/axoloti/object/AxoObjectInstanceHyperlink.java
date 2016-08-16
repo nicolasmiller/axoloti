@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.objectviews.AxoObjectInstanceViewHyperlink;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import java.awt.Desktop;
@@ -73,7 +74,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     }
 
     @Override    
-    public AxoObjectInstanceHyperlinkView ViewFactory() {
-        return new AxoObjectInstanceHyperlinkView(this);
+    public AxoObjectInstanceViewHyperlink ViewFactory() {
+        return new AxoObjectInstanceViewHyperlink(this);
     }
 }

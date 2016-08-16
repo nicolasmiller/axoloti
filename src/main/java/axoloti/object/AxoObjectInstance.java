@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.PatchFrame;

@@ -17,9 +17,10 @@
  */
 package axoloti.attribute;
 
+import axoloti.attributeviews.AttributeInstanceViewInt;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -47,7 +48,7 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
     }
     
     @Override
-    public AttributeInstanceIntView ViewFactory(AxoObjectInstanceView o) {
+    public AttributeInstanceViewInt ViewFactory(AxoObjectInstanceView o) {
         throw new RuntimeException("Cannot instantiate AttributeInstanceIntView");
     }
 }

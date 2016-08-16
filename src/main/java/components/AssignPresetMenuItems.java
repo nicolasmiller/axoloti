@@ -17,7 +17,6 @@
  */
 package components;
 
-import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.ParameterInstanceView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

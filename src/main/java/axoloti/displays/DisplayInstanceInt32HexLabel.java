@@ -17,31 +17,13 @@
  */
 package axoloti.displays;
 
-import components.LabelComponent;
-
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayInt32HexLabel> {
 
-    private LabelComponent readout;
-
     public DisplayInstanceInt32HexLabel() {
         super();
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LabelComponent("0xxxxxxxxx");
-        add(readout);
-        readout.setSize(80, 18);
-    }
-
-    @Override
-    public void updateV() {
-        readout.setText(String.format("0x%08X", value.getInt()));
     }
 }

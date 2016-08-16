@@ -17,33 +17,13 @@
  */
 package axoloti.displays;
 
-import components.displays.LedstripComponent;
-
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
 
-    private LedstripComponent readout;
-
     public DisplayInstanceBool32() {
         super();
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LedstripComponent(0, 1);
-        add(readout);
-        readout.setSize(readout.getHeight(), 80);
-        setSize(getPreferredSize());
-        doLayout();
-    }
-
-    @Override
-    public void updateV() {
-        readout.setValue(value.getInt() > 0 ? 1 : 0);
     }
 }

@@ -17,27 +17,13 @@
  */
 package axoloti.displays;
 
-import components.displays.ScopeComponent;
-
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac32UChart extends DisplayInstanceFrac32<DisplayFrac32UChart> {
 
-    private ScopeComponent scope;
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        scope = new ScopeComponent(0.0, 64);
-        scope.setValue(64.0);
-        add(scope);
-    }
-
-    @Override
-    public void updateV() {
-        scope.setValue(value.getDouble());
+    public DisplayInstanceFrac32UChart() {
+        super();
     }
 }

@@ -17,35 +17,13 @@
  */
 package axoloti.displays;
 
-import components.displays.VLineComponentDB;
-
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac4UByteVBarDB extends DisplayInstanceFrac32<DisplayFrac4UByteVBarDB> {
 
-    private VLineComponentDB vbar[];
-
     public DisplayInstanceFrac4UByteVBarDB() {
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        vbar = new VLineComponentDB[4];
-        for (int i = 0; i < 4; i++) {
-            vbar[i] = new VLineComponentDB(0, -60, 10);
-            vbar[i].setValue(0);
-            add(vbar[i]);
-        }
-    }
-
-    @Override
-    public void updateV() {
-        vbar[0].setValue((byte) ((value.getRaw() & 0x000000FF)));
-        vbar[1].setValue((byte) ((value.getRaw() & 0x0000FF00) >> 8));
-        vbar[2].setValue((byte) ((value.getRaw() & 0x00FF0000) >> 16));
-        vbar[3].setValue((byte) ((value.getRaw() & 0xFF000000) >> 24));
+        super();
     }
 }

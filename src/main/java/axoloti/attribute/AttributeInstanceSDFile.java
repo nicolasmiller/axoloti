@@ -17,10 +17,11 @@
  */
 package axoloti.attribute;
 
+import axoloti.attributeviews.AttributeInstanceViewSDFile;
 import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceView;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -112,7 +113,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
     
     @Override
-    public AttributeInstanceSDFileView ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceSDFileView(this, o);
+    public AttributeInstanceViewSDFile ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceViewSDFile(this, o);
     }
 }

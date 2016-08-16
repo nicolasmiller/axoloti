@@ -32,15 +32,6 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
         super();
     }
 
-    private VGraphComponent vgraph;
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        vgraph = new VGraphComponent(n, 128, -64, 64);
-        add(vgraph);
-    }
-
     @Override
     public String GenerateCodeInit(String vprefix) {
         String s = "   int _i;\n"
@@ -63,17 +54,18 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
         for (int i = 0; i < n; i++) {
             idst[i] = dst[i];
         }
-        vgraph.setValue(idst);
-    }
-
-    @Override
-    public void updateV() {
-
     }
 
     @Override
     public int getLength() {
         return n / 4;
     }
-
+    
+    public int[] getIDst() {
+        return idst;
+    }
+    
+    public int getN() {
+        return n;
+    }
 }

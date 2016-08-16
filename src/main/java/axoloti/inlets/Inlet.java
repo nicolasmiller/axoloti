@@ -22,7 +22,6 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceView;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;

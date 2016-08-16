@@ -27,26 +27,14 @@ import components.LabelComponent;
  */
 public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteLabel> {
 
-    private LabelComponent readout;
     private final NativeToReal conv;
 
     public DisplayInstanceNoteLabel() {
         super();
         conv = new PitchToNote();
     }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LabelComponent("xxxxx");
-        add(readout);
-        readout.setSize(40, 18);
-    }
-
-    @Override
-    public void updateV() {
-        readout.setText(conv.ToReal(value));
+    
+    public NativeToReal getConv() {
+        return conv;
     }
 }
-

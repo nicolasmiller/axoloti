@@ -17,30 +17,13 @@
  */
 package axoloti.displays;
 
-import components.displays.VBarComponent;
-
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac32VBar extends DisplayInstanceFrac32<DisplayFrac32VBar> {
 
-    private VBarComponent vbar;
-
     public DisplayInstanceFrac32VBar() {
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        vbar = new VBarComponent(0, 0, 64);
-        vbar.setValue(0);
-        add(vbar);
-    }
-
-    @Override
-    public void updateV() {
-        vbar.setValue(value.getDouble());
+        super();
     }
 }

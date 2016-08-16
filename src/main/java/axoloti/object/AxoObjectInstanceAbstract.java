@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.MainFrame;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
@@ -325,10 +326,10 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     void updateObj1() {
     }
     
-    public abstract AxoObjectInstanceAbstractView ViewFactory();
+    public abstract AxoObjectInstanceViewAbstract ViewFactory();
     
-    public AxoObjectInstanceAbstractView CreateView() {
-        AxoObjectInstanceAbstractView pi = ViewFactory();
+    public AxoObjectInstanceViewAbstract CreateView() {
+        AxoObjectInstanceViewAbstract pi = ViewFactory();
         pi.PostConstructor();
         return pi;
     }
