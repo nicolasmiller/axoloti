@@ -895,7 +895,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
         AxoObjectInstanceViewAbstract selObj = null;
-        ArrayList<AxoObjectInstanceViewAbstract> oi = patchController.patchView.getObjectInstanceViews();
+        ArrayList<AxoObjectInstanceView> oi = patchController.patchView.getObjectInstanceViews();
         if(oi != null) {
             // need a view here
             for(AxoObjectInstanceViewAbstract i : oi) {
@@ -952,7 +952,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuItemUploadInternalFlashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadInternalFlashActionPerformed
         patchController.patchModel.WriteCode();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patchController.patchModel));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patchController));
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatch());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
     }//GEN-LAST:event_jMenuItemUploadInternalFlashActionPerformed

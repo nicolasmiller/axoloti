@@ -297,7 +297,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
         setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
+        if(o != null) {
         target_object = o.getObjectInstance();
+        }
+        else {
+            target_object = null;
+        }
         if (o != null) {
             AxoObjectAbstract oa = o.getObjectInstance().getType();
             if (oa != null) {

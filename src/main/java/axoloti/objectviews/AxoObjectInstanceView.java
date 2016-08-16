@@ -59,6 +59,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
     public AxoObjectInstanceView(AxoObjectInstanceAbstract model) {
         super(model);
+        this.model = (AxoObjectInstance) model;
     }
 
     public AxoObject getType() {
@@ -182,6 +183,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
                         model.ConvertToPatchPatcher();
+                        AxoObjectInstanceView.this.updateObj();
                     }
                 }
             });
@@ -193,6 +195,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
                         model.ConvertToEmbeddedObj();
+                        AxoObjectInstanceView.this.updateObj();
                     }
                 }
             });

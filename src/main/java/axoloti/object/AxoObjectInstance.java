@@ -564,7 +564,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         oi.pf = pf;
         oi.patchModel = pf.getPatchModel();
         oi.setInstanceName(iname);
-        oi.updateObj();
         getPatchModel().delete(this);
         getPatchModel().SetDirty();
     }
@@ -583,7 +582,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             oi.ao.upgradeSha = null;
             oi.ao.CloseEditor();
             oi.setInstanceName(iname);
-            oi.updateObj();
             getPatchModel().delete(this);
             getPatchModel().SetDirty();
         } catch (CloneNotSupportedException ex) {

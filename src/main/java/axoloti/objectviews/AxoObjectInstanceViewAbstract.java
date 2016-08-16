@@ -242,6 +242,14 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
 
     private PatchView patchView;
     private PatchModel patchModel;
+    
+    public void setPatchView(PatchView patchView) {
+        this.patchView = patchView;
+    }
+    
+    public void setPatchModel(PatchModel patchModel) {
+        this.patchModel = patchModel;
+    }
 
     public PatchView getPatchView() {
         return this.patchView;

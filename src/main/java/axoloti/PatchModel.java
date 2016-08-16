@@ -98,7 +98,6 @@ public class PatchModel {
     ArrayList<ParameterInstance> ParameterInstances = new ArrayList<ParameterInstance>();
     ArrayList<DisplayInstance> DisplayInstances = new ArrayList<DisplayInstance>();
     private ArrayList<Modulator> Modulators = new ArrayList<Modulator>();
-    public int presetNo = 0;
     private boolean dirty = false;
     @Element(required = false)
     private String helpPatch;
@@ -268,7 +267,6 @@ public class PatchModel {
             n.PostConstructor();
         }
         PromoteOverloading(true);
-        ShowPreset(0);
         if (settings == null) {
             settings = new PatchSettings();
         }
@@ -2004,17 +2002,6 @@ public class PatchModel {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
         }
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
-    }
-
-    public void ShowPreset(int i) {
-        presetNo = i;
-
-        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
-        for (AxoObjectInstanceAbstract o : c) {
-            for (ParameterInstance p : o.getParameterInstances()) {
-                p.ShowPreset(i);
-            }
-        }
     }
 
     /*

@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.PatchView;
+import axoloti.PatchController;
 
 /**
  *
@@ -25,10 +25,10 @@ import axoloti.PatchView;
  */
 public class QCmdShowCompileFail implements QCmdGUITask {
 
-    PatchView patchView;
+    PatchController patchController;
 
-    public QCmdShowCompileFail(PatchView patchView) {
-        this.patchView = patchView;
+    public QCmdShowCompileFail(PatchController patchController) {
+        this.patchController = patchController;
     }
 
     @Override
@@ -44,6 +44,6 @@ public class QCmdShowCompileFail implements QCmdGUITask {
     @Override
     public void DoGUI(QCmdProcessor processor) {
         processor.ClearQueue();
-        patchView.ShowCompileFail();
+        patchController.ShowCompileFail();
     }
 }

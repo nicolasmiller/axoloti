@@ -19,6 +19,7 @@ package axoloti.outlets;
 
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.objectviews.AxoObjectInstanceView;
 
 /**
  *
@@ -44,5 +45,18 @@ public class OutletInstanceZombie extends OutletInstance {
     public String GetLabel() {
         return outletname;
     }
+    
+    @Override
+    public OutletInstanceView ViewFactory() {
+        return new OutletInstanceZombieView(this);
+    }
 
+    @Override
+    public OutletInstanceView CreateView(AxoObjectInstanceView o) {
+        OutletInstanceView outletInstanceView = ViewFactory();
+        o.add(outletInstanceView);
+        o.resizeToGrid();
+        outletInstanceView.PostConstructor();
+        return outletInstanceView;
+    }
 }

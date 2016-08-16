@@ -20,7 +20,9 @@ package axoloti;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
+import axoloti.parameterviews.ParameterInstanceView;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -195,5 +197,9 @@ public class Net {
     public String CName() {
         int i = patchModel.nets.indexOf(this);
         return "net" + i;
+    }
+    
+    public NetView CreateView() {
+        return new NetView(this);
     }
 }

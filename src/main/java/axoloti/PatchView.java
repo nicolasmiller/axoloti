@@ -30,6 +30,7 @@ import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
+import axoloti.parameterviews.ParameterInstanceView;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import java.awt.Component;
@@ -95,9 +96,9 @@ import qcmds.QCmdUploadPatch;
 @Root(name = "patch-1.0")
 public class PatchView {
 
-    ArrayList<AxoObjectInstanceViewAbstract> objectInstanceViews = new ArrayList<AxoObjectInstanceViewAbstract>();
+    ArrayList<AxoObjectInstanceView> objectInstanceViews = new ArrayList<AxoObjectInstanceView>();
 
-    public ArrayList<AxoObjectInstanceViewAbstract> getObjectInstanceViews() {
+    public ArrayList<AxoObjectInstanceView> getObjectInstanceViews() {
         return objectInstanceViews;
     }
 
@@ -133,7 +134,6 @@ public class PatchView {
     private PatchController patchController;
 
     boolean locked = false;
-
 
     public PatchView(PatchController patchController) {
         super();
@@ -610,36 +610,35 @@ public class PatchView {
                 }
                 if (n.source.size() + n.dest.size() > 1) {
                     if ((connectedInlet == null) && (connectedOutlet == null)) {
-                        n.patchView = this;
-                        n.patchModel = PatchView.this.patchController.patchModel;
+                        n.patchModel = patchController.patchModel;
                         n.PostConstructor();
-                        PatchView.this.patchController.patchModel.addNet(n);
-                        netLayerPanel.add(n);
+                        patchController.patchModel.addNet(n);
+                        netLayerPanel.add(n.CreateView());
                     } else if (connectedInlet != null) {
                         for (InletInstance o : n.dest) {
                             InletInstance o2 = PatchView.this.patchController.patchModel.getInletByReference(o.getObjectInstance().getInstanceName(), o.getInletname());
                             if ((o2 != null) && (o2 != connectedInlet)) {
-                                patchControllerAddConnection(connectedInlet, o2);
+                                patchController.patchModel.AddConnection(connectedInlet, o2);
                             }
                         }
                         for (OutletInstance o : n.source) {
                             OutletInstance o2 = PatchView.this.patchController.patchModel.getOutletByReference(o.getObjname(), o.getOutletname());
                             if (o2 != null) {
-                                AddConnection(connectedInlet, o2);
+                                patchController.patchModel.AddConnection(connectedInlet, o2);
                             }
                         }
                     } else if (connectedOutlet != null) {
                         for (InletInstance o : n.dest) {
                             InletInstance o2 = PatchView.this.patchController.patchModel.getInletByReference(o.getObjectInstance().getInstanceName(), o.getInletname());
                             if (o2 != null) {
-                                AddConnection(o2, connectedOutlet);
+                                patchController.patchModel.AddConnection(o2, connectedOutlet);
                             }
                         }
                     }
                 }
             }
             AdjustSize();
-            PatchView.this.patchController.patchModel.SetDirty();
+            patchController.patchModel.SetDirty();
         } catch (javax.xml.stream.XMLStreamException ex) {
             // silence
         } catch (Exception ex) {
@@ -707,7 +706,7 @@ public class PatchView {
 
     PatchView getSelectedObjects() {
         PatchView p = new PatchView(patchController);
-        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
+        for (AxoObjectInstanceView o : objectInstanceViews) {
             if (o.isSelected()) {
                 p.objectInstanceViews.add(o);
             }
@@ -803,6 +802,8 @@ public class PatchView {
         for (NetView n : netViews) {
             n.updateBounds();
         }
+        
+        ShowPreset(0);
     }
 
     public void setFileNamePath(String FileNamePath) {
@@ -866,6 +867,8 @@ public class PatchView {
     public AxoObjectInstanceViewAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         AxoObjectInstanceAbstract objinst = patchController.AddObjectInstance(obj, loc);
         AxoObjectInstanceViewAbstract objView = new AxoObjectInstanceView((AxoObjectInstance) objinst);
+        objView.setPatchView(this);
+        objView.setPatchModel(this.getPatchController().patchModel);
         if (objinst != null) {
             SelectNone();
             objectLayerPanel.add(objView);
@@ -911,13 +914,11 @@ public class PatchView {
         patchController.WriteCode();
         patchController.setPresetUpdatePending(false);
         qCmdProcessor.setPatchController(null);
-        qCmdProcessor.AppendToQueue(new QCmdCompilePatch(patchController.patchModel));
+        qCmdProcessor.AppendToQueue(new QCmdCompilePatch(patchController));
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
         qCmdProcessor.AppendToQueue(new QCmdStart(patchController));
         qCmdProcessor.AppendToQueue(new QCmdLock(patchController));
     }
-
-
 
     void invalidate() {
         Layers.invalidate();
@@ -1189,8 +1190,8 @@ public class PatchView {
         patchController.getPatchFrame().SetLive(false);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         locked = false;
-        ArrayList<AxoObjectInstanceViewAbstract> objInstsClone = (ArrayList<AxoObjectInstanceViewAbstract>) objectInstanceViews.clone();
-        for (AxoObjectInstanceViewAbstract o : objectInstanceViews) {
+        ArrayList<AxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<AxoObjectInstanceView>) objectInstanceViews.clone();
+        for (AxoObjectInstanceView o : objectInstanceViewsClone) {
             o.Unlock();
         }
     }
@@ -1205,5 +1206,14 @@ public class PatchView {
 
     public PatchController getPatchController() {
         return this.patchController;
+    }
+
+    public void ShowPreset(int i) {
+        ArrayList<AxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<AxoObjectInstanceView>) objectInstanceViews.clone();
+        for (AxoObjectInstanceView o : objectInstanceViewsClone) {
+            for (ParameterInstanceView p : (ParameterInstanceView[]) o.p_parameterViews.getComponents()) {
+                p.ShowPreset(i);
+            }
+        }
     }
 }

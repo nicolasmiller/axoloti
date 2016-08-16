@@ -19,6 +19,9 @@ package axoloti.inlets;
 
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.outlets.OutletInstanceView;
+import axoloti.outlets.OutletInstanceZombieView;
 
 /**
  *
@@ -43,5 +46,19 @@ public class InletInstanceZombie extends InletInstance {
     @Override
     public String GetLabel() {
         return inletname;
+    }
+    
+    @Override
+    public InletInstanceView ViewFactory() {
+        return new InletInstanceZombieView(this);
+    }
+    
+    @Override
+    public InletInstanceView CreateView(AxoObjectInstanceView o) {
+        InletInstanceView inletInstanceView = ViewFactory();
+        o.add(inletInstanceView);
+        o.resizeToGrid();
+        inletInstanceView.PostConstructor();
+        return inletInstanceView;
     }
 }

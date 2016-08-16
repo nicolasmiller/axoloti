@@ -35,7 +35,7 @@ public class DisplayInstanceViewFrac4UByteVBar extends DisplayInstanceViewFrac32
     }
     
     public Value getValue() {
-        this.displayInstance.getValueRef();
+        return this.displayInstance.getValueRef();
     }
 
     @Override

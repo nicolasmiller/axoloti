@@ -59,9 +59,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
             }
         }
         InletInstance i = new InletInstanceZombie(this, n);
-        add(i);
         inletInstances.add(i);
-        resizeToGrid();
         return i;
     }
 
@@ -75,9 +73,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
             }
         }
         OutletInstance i = new OutletInstanceZombie(this, n);
-        add(i);
         outletInstances.add(i);
-        resizeToGrid();
         return i;
     }
 

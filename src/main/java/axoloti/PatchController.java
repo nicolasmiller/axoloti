@@ -101,11 +101,11 @@ public class PatchController {
     }
 
     public void ShowPreset(int i) {
-        patchModel.ShowPreset(i);
+        patchView.ShowPreset(i);
     }
 
     public void Compile() {
-        GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(patchModel));
+        GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
     }
 
     void UploadDependentFiles() {
@@ -138,7 +138,7 @@ public class PatchController {
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
         QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patchModel));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
         // create subdirs...
 
         for (int i = 1; i < sdfilename.length(); i++) {
@@ -153,8 +153,8 @@ public class PatchController {
             cal = Calendar.getInstance();
         } else {
             cal = Calendar.getInstance();
-            if (patchModel.getFileNamePath() != null && !patchModel.getFileNamePath().isEmpty()) {
-                File f = new File(patchModel.getFileNamePath());
+            if (getFileNamePath() != null && !getFileNamePath().isEmpty()) {
+                File f = new File(getFileNamePath());
                 if (f.exists()) {
                     cal.setTimeInMillis(f.lastModified());
                 }
@@ -249,9 +249,13 @@ public class PatchController {
     public void SetDirty() {
         patchModel.SetDirty();
     }
+    
+    public String getFileNamePath() {
+        return patchModel.getFileNamePath();
+    }
 
     public String getSDCardPath() {
-        String FileNameNoPath = patchModel.getFileNamePath();
+        String FileNameNoPath = getFileNamePath();
         String separator = System.getProperty("file.separator");
         int lastSeparatorIndex = FileNameNoPath.lastIndexOf(separator);
         if (lastSeparatorIndex > 0) {
@@ -282,5 +286,9 @@ public class PatchController {
 
     public PatchSettings getSettings() {
         return patchModel.settings;
+    }
+    
+    public void ShowCompileFail() {
+        patchView.ShowCompileFail();
     }
 }
