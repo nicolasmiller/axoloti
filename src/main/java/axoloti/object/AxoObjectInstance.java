@@ -533,7 +533,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             getPatchModel().ChangeObjectInstanceType(this, selected);
             getPatchModel().cleanUpIntermediateChangeStates(4);
         } else {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "no promotion for {0}", typeName);
+//            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "no promotion for {0}", typeName);
         }
     }
 
