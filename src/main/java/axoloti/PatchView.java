@@ -389,13 +389,12 @@ public class PatchView {
                     selectionrectangle.setVisible(false);
                     Layers.requestFocusInWindow();
                     me.consume();
-                } else {
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                if (selectionrectangle.isVisible() | me.getButton() == MouseEvent.BUTTON1) {
+                if (selectionrectangle.isVisible() || me.getButton() == MouseEvent.BUTTON1) {
                     Rectangle r = selectionrectangle.getBounds();
                     for (AxoObjectInstanceAbstractView o : objectInstanceViews) {
                         o.SetSelected(o.getBounds().intersects(r));
@@ -457,7 +456,7 @@ public class PatchView {
         Layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
-                if (selectionrectangle.isVisible() | ev.getButton() == MouseEvent.BUTTON1) {
+                if (selectionrectangle.isVisible() || ev.getButton() == MouseEvent.BUTTON1) {
                     int x1 = selectionRectStart.x;
                     int y1 = selectionRectStart.y;
                     int x2 = ev.getX();
