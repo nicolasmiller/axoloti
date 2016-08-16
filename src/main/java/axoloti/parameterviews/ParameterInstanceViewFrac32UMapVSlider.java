@@ -18,7 +18,7 @@ public class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceVie
 
     ParameterInstanceFrac32UMapVSlider parameterInstance;
 
-    ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance) {
+    public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

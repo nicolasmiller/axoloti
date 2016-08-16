@@ -16,7 +16,7 @@ import components.control.PulseButtonComponent;
 public class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewInt32 {
     ParameterInstanceBin1Momentary parameterInstance;
 
-    ParameterInstanceViewBin1Momentary(ParameterInstanceBin1Momentary parameterInstance) {
+    public ParameterInstanceViewBin1Momentary(ParameterInstanceBin1Momentary parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

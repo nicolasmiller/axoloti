@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewFrac32VBar;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceFrac32VBar extends DisplayInstanceFrac32<DisplayFrac
 
     public DisplayInstanceFrac32VBar() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewFrac32VBar ViewFactory() {
+        return new DisplayInstanceViewFrac32VBar(this);
     }
 }

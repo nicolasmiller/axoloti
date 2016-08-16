@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.ParameterInstanceViewFrac32SMap;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -77,5 +78,10 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
+    }
+
+    @Override
+    public ParameterInstanceViewFrac32SMap ViewFactory() {
+        return new ParameterInstanceViewFrac32SMap(this);
     }
 }

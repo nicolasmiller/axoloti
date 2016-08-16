@@ -18,12 +18,11 @@
 package axoloti.displays;
 
 import axoloti.atom.AtomInstance;
+import axoloti.displayviews.DisplayInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import components.LabelComponent;
+import axoloti.objectviews.AxoObjectInstanceView;
 import java.nio.ByteBuffer;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -52,8 +51,8 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
     @Override
     public T getDefinition() {
         return display;
-    }    
-    
+    }
+
     public String GetCName() {
         return display.GetCName();
     }
@@ -71,4 +70,13 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
     public abstract String GenerateCodeInit(String vprefix);
 
     public abstract void ProcessByteBuffer(ByteBuffer bb);
+
+    public abstract DisplayInstanceView ViewFactory();
+
+    public DisplayInstanceView CreateView(AxoObjectInstanceView o) {
+        DisplayInstanceView pi = ViewFactory();
+        pi.PostConstructor();
+        o.p_displayViews.add(pi);
+        return pi;
+    }
 }

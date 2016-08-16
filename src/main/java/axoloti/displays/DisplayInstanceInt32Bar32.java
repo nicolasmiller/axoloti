@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewInt32Bar32;
+
 /**
  *
  * @author Johannes Taelman
@@ -24,5 +26,10 @@ package axoloti.displays;
 public class DisplayInstanceInt32Bar32 extends DisplayInstanceInt32<DisplayInt32Bar32> {
     public DisplayInstanceInt32Bar32() {
         super();
+    }
+    
+    @Override
+    public DisplayInstanceViewInt32Bar32 ViewFactory() {
+        return new DisplayInstanceViewInt32Bar32(this);
     }
 }

@@ -17,12 +17,20 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewFrac32VBarDB;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac32VBarDB extends DisplayInstanceFrac32<DisplayFrac32VBarDB> {
+
     public DisplayInstanceFrac32VBarDB() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewFrac32VBarDB ViewFactory() {
+        return new DisplayInstanceViewFrac32VBarDB(this);
     }
 }

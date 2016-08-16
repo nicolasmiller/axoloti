@@ -31,7 +31,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance) {
+    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

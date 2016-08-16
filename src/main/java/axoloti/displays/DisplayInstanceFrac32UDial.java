@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewFrac32UDial;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceFrac32UDial extends DisplayInstanceFrac32<DisplayFra
 
     public DisplayInstanceFrac32UDial() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewFrac32UDial ViewFactory() {
+        return new DisplayInstanceViewFrac32UDial(this);
     }
 }

@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewBool32;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
 
     public DisplayInstanceBool32() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewBool32 ViewFactory() {
+        return new DisplayInstanceViewBool32(this);
     }
 }

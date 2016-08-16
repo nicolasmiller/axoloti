@@ -19,9 +19,11 @@ package axoloti.inlets;
 
 import axoloti.Net;
 import axoloti.atom.AtomInstance;
+import axoloti.attributeviews.AttributeInstanceView;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -116,5 +118,14 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
         axoObj.getPatchModel().SetDirty();
     }
     
+    public InletInstanceView ViewFactory() {
+        return new InletInstanceView(this);
+    }
     
+    public InletInstanceView CreateView(AxoObjectInstanceView o) {
+        InletInstanceView inletInstanceView = ViewFactory();
+        o.p_inletViews.add(inletInstanceView);
+        inletInstanceView.PostConstructor();
+        return inletInstanceView;
+    }
 }

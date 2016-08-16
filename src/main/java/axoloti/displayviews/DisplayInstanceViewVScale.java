@@ -8,7 +8,7 @@ public class DisplayInstanceViewVScale extends DisplayInstanceView {
     DisplayInstanceVScale displayInstance;
     private VValueLabelsComponent vlabels;
 
-    DisplayInstanceViewVScale(DisplayInstanceVScale displayInstance) {
+    public DisplayInstanceViewVScale(DisplayInstanceVScale displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

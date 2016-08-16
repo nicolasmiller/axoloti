@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.displays.VLineComponent;
+import axoloti.displayviews.DisplayInstanceViewFrac4UByteVBar;
 
 /**
  *
@@ -26,5 +26,10 @@ import components.displays.VLineComponent;
 public class DisplayInstanceFrac4UByteVBar extends DisplayInstanceFrac32<DisplayFrac4UByteVBar> {
     public DisplayInstanceFrac4UByteVBar() {
         super();
+    }
+    
+    @Override
+    public DisplayInstanceViewFrac4UByteVBar ViewFactory() {
+        return new DisplayInstanceViewFrac4UByteVBar(this);
     }
 }

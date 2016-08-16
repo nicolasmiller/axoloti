@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.ParameterInstanceViewInt32VRadio;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -55,5 +56,9 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
         // hmm this is only one possible behavior - could also map to full MIDI range...
         int max = ((ParameterInt32VRadio) parameter).MaxValue.getInt();
         return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
+    }
+
+    public ParameterInstanceViewInt32VRadio ViewFactory() {
+        return new ParameterInstanceViewInt32VRadio(this);
     }
 }

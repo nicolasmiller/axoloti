@@ -22,6 +22,7 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -32,7 +33,7 @@ import org.simpleframework.xml.*;
 public class OutletInstance<T extends Outlet> implements Comparable<OutletInstance>, AtomInstance<T> {
 
     @Attribute(name = "outlet", required = false)
-    public String outletname;    
+    public String outletname;
     @Deprecated
     @Attribute(required = false)
     public String name;
@@ -88,18 +89,18 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
     public Outlet getOutlet() {
         return outlet;
     }
-    
+
     public void RefreshName() {
         name = axoObj.getInstanceName() + " " + outlet.name;
         objname = axoObj.getInstanceName();
         outletname = outlet.name;
         name = null;
     }
-    
+
     public String getObjname() {
         return this.objname;
     }
-    
+
     public boolean isConnected() {
         if (axoObj == null) {
             return false;
@@ -110,7 +111,7 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
 
         return (axoObj.getPatchModel().GetNet(this) != null);
     }
-    
+
     public void disconnect() {
         axoObj.getPatchModel().disconnect(this);
         axoObj.getPatchModel().SetDirty();
@@ -121,5 +122,15 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
         axoObj.getPatchModel().delete(n);
         axoObj.getPatchModel().SetDirty();
     }
-   
+
+    public OutletInstanceView ViewFactory() {
+        return new OutletInstanceView(this);
+    }
+
+    public OutletInstanceView CreateView(AxoObjectInstanceView o) {
+        OutletInstanceView outletInstanceView = ViewFactory();
+        o.p_outletViews.add(outletInstanceView);
+        outletInstanceView.PostConstructor();
+        return outletInstanceView;
+    }
 }

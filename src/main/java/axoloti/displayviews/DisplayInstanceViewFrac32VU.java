@@ -7,7 +7,7 @@ public class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac32VU displayInstance;
 
-    DisplayInstanceViewFrac32VU(DisplayInstanceFrac32VU displayInstance) {
+    public DisplayInstanceViewFrac32VU(DisplayInstanceFrac32VU displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

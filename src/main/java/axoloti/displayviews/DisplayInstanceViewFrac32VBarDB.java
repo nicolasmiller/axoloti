@@ -7,7 +7,7 @@ public class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac32VBarDB displayInstance;
 
-    DisplayInstanceViewFrac32VBarDB(DisplayInstanceFrac32VBarDB displayInstance) {
+    public DisplayInstanceViewFrac32VBarDB(DisplayInstanceFrac32VBarDB displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

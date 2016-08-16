@@ -97,9 +97,6 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
         pi.name = this.name;
         pi.parameter = this;
         pi.applyDefaultValue();
-        
-        // need to add a view to p_params
-        o.p_params.add(pi);
         return pi;
     }
 

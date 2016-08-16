@@ -22,6 +22,8 @@ import axoloti.Preset;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.parameterviews.ParameterInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.util.ArrayList;
@@ -78,7 +80,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     public boolean getNeedsTransmit() {
         return needsTransmit;
     }
-    
+
     public void setNeedsTransmit(boolean needsTransmit) {
         this.needsTransmit = needsTransmit;
     }
@@ -120,7 +122,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     public ArrayList<Preset> getPresets() {
         return presets;
     }
-    
+
     public void setPresets(ArrayList<Preset> presets) {
         this.presets = presets;
     }
@@ -279,28 +281,37 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     public void setOnParent(Boolean onParent) {
         this.onParent = onParent;
     }
-    
+
     public ArrayList<Modulation> getModulators() {
         return null;
     }
-    
+
     public NativeToReal[] getConvs() {
         return convs;
     }
-    
+
     public int getSelectedConv() {
         return selectedConv;
     }
-    
+
     public void setSelectedConv(int selectedConv) {
         this.selectedConv = selectedConv;
     }
-    
+
     public T getParameter() {
         return this.parameter;
     }
-    
+
     public String getName() {
         return this.name;
+    }
+
+    public abstract ParameterInstanceView ViewFactory();
+
+    public ParameterInstanceView CreateView(AxoObjectInstanceView o) {
+        ParameterInstanceView pi = ViewFactory();
+        pi.PostConstructor();
+        o.p_parameterViews.add(pi);
+        return pi;
     }
 }

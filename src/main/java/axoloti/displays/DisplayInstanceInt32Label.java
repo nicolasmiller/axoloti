@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewInt32Label;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceInt32Label extends DisplayInstanceInt32<DisplayInt32
 
     public DisplayInstanceInt32Label() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewInt32Label ViewFactory() {
+        return new DisplayInstanceViewInt32Label(this);
     }
 }

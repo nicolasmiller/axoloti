@@ -14,7 +14,7 @@ import axoloti.parameters.ParameterInstanceFrac32SMap;
 public class ParameterInstanceViewFrac32SMap extends ParameterInstanceViewFrac32UMap {
     ParameterInstanceFrac32SMap parameterInstance;
 
-    ParameterInstanceViewFrac32SMap(ParameterInstanceFrac32SMap parameterInstance) {
+    public ParameterInstanceViewFrac32SMap(ParameterInstanceFrac32SMap parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

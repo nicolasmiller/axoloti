@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewInt32HexLabel;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayIn
 
     public DisplayInstanceInt32HexLabel() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewInt32HexLabel ViewFactory() {
+        return new DisplayInstanceViewInt32HexLabel(this);
     }
 }

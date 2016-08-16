@@ -16,7 +16,7 @@ public class DisplayInstanceViewInt32Label extends DisplayInstanceViewInt32 {
     private DisplayInstanceInt32Label displayInstance;
     private LabelComponent readout;
 
-    DisplayInstanceViewInt32Label(DisplayInstanceInt32Label displayInstance) {
+    public DisplayInstanceViewInt32Label(DisplayInstanceInt32Label displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

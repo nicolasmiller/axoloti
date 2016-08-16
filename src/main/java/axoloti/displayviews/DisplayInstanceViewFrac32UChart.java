@@ -8,7 +8,7 @@ public class DisplayInstanceViewFrac32UChart extends DisplayInstanceViewFrac32 {
     DisplayInstanceFrac32UChart displayInstance;
     private ScopeComponent scope;
 
-    DisplayInstanceViewFrac32UChart(DisplayInstanceFrac32UChart displayInstance) {
+    public DisplayInstanceViewFrac32UChart(DisplayInstanceFrac32UChart displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

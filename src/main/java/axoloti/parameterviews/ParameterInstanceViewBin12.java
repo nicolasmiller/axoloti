@@ -10,7 +10,7 @@ public class ParameterInstanceViewBin12 extends ParameterInstanceViewInt32 {
 
     ParameterInstanceBin12 parameterInstance;
 
-    ParameterInstanceViewBin12(ParameterInstanceBin12 parameterInstance) {
+    public ParameterInstanceViewBin12(ParameterInstanceBin12 parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

@@ -8,7 +8,7 @@ public class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
     private DisplayInstanceInt32HexLabel displayInstance;
     private LabelComponent readout;
 
-    DisplayInstanceViewInt32HexLabel(DisplayInstanceInt32HexLabel displayInstance) {
+    public DisplayInstanceViewInt32HexLabel(DisplayInstanceInt32HexLabel displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

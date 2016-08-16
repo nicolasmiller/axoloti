@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.VGraphComponent;
+import axoloti.displayviews.DisplayInstanceViewFrac8S128VBar;
 import java.nio.ByteBuffer;
 
 /**
@@ -60,12 +60,17 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
     public int getLength() {
         return n / 4;
     }
-    
+
     public int[] getIDst() {
         return idst;
     }
-    
+
     public int getN() {
         return n;
+    }
+
+    @Override
+    public DisplayInstanceViewFrac8S128VBar ViewFactory() {
+        return new DisplayInstanceViewFrac8S128VBar(this);
     }
 }

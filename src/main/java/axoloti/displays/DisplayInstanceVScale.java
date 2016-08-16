@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewVScale;
 import java.nio.ByteBuffer;
 
 /**
@@ -41,5 +42,10 @@ public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
+    }
+
+    @Override
+    public DisplayInstanceViewVScale ViewFactory() {
+        return new DisplayInstanceViewVScale(this);
     }
 }

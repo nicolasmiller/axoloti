@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.Value;
+import axoloti.parameterviews.ParameterInstanceViewBin12;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -59,5 +60,9 @@ public class ParameterInstanceBin12 extends ParameterInstanceInt32 {
     @Override
     public void setValue(Value value) {
         super.setValue(value);
+    }
+
+    public ParameterInstanceViewBin12 ViewFactory() {
+        return new ParameterInstanceViewBin12(this);
     }
 }

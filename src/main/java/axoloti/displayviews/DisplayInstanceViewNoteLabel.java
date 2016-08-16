@@ -7,7 +7,7 @@ public class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceNoteLabel displayInstance;
 
-    DisplayInstanceViewNoteLabel(DisplayInstanceNoteLabel displayInstance) {
+    public DisplayInstanceViewNoteLabel(DisplayInstanceNoteLabel displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

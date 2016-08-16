@@ -18,7 +18,7 @@ public class DisplayInstanceViewFrac32UDial extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac32UDial displayInstance;
 
-    DisplayInstanceViewFrac32UDial(DisplayInstanceFrac32UDial displayInstance) {
+    public DisplayInstanceViewFrac32UDial(DisplayInstanceFrac32UDial displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

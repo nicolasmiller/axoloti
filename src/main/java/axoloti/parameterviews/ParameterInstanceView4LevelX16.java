@@ -15,7 +15,7 @@ import components.control.Checkbox4StatesComponent;
 public class ParameterInstanceView4LevelX16 extends ParameterInstanceViewInt32 {
     ParameterInstance4LevelX16 parameterInstance;
 
-    ParameterInstanceView4LevelX16(ParameterInstance4LevelX16 parameterInstance) {
+    public ParameterInstanceView4LevelX16(ParameterInstance4LevelX16 parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }   

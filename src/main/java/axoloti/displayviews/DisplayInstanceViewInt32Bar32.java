@@ -8,7 +8,7 @@ public class DisplayInstanceViewInt32Bar32 extends DisplayInstanceViewInt32 {
     private LedstripComponent readout;
 
     
-    DisplayInstanceViewInt32Bar32(DisplayInstanceInt32Bar32 displayInstance) {
+    public DisplayInstanceViewInt32Bar32(DisplayInstanceInt32Bar32 displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

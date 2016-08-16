@@ -9,7 +9,7 @@ public class DisplayInstanceViewFrac4ByteVBar extends DisplayInstanceViewFrac32 
     DisplayInstanceFrac4ByteVBar displayInstance;
     private VLineComponent vbar[];
 
-    DisplayInstanceViewFrac4ByteVBar(DisplayInstanceFrac4ByteVBar displayInstance) {
+    public DisplayInstanceViewFrac4ByteVBar(DisplayInstanceFrac4ByteVBar displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

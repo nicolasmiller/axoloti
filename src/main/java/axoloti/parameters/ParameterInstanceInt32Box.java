@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.ParameterInstanceViewInt32Box;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -24,6 +25,7 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
+
     private int min = 0;
     private int max = 64;
 
@@ -33,19 +35,19 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     public ParameterInstanceInt32Box(@Attribute(name = "value") int v) {
         super(v);
     }
-    
+
     public int getMin() {
         return min;
     }
-    
+
     public void setMin(int min) {
         this.min = min;
     }
-    
+
     public int getMax() {
         return max;
     }
-    
+
     public void setMax(int max) {
         this.max = max;
     }
@@ -71,5 +73,9 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         return "";
+    }
+
+    public ParameterInstanceViewInt32Box ViewFactory() {
+        return new ParameterInstanceViewInt32Box(this);
     }
 }

@@ -16,7 +16,7 @@ public class ParameterInstanceViewInt32BoxSmall extends ParameterInstanceViewInt
 
     ParameterInstanceInt32BoxSmall parameterInstance;
 
-    ParameterInstanceViewInt32BoxSmall(ParameterInstanceInt32BoxSmall parameterInstance) {
+    public ParameterInstanceViewInt32BoxSmall(ParameterInstanceInt32BoxSmall parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

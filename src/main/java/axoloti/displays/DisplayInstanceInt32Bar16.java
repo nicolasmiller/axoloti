@@ -17,12 +17,20 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewInt32Bar16;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceInt32Bar16 extends DisplayInstanceInt32<DisplayInt32Bar16> {
+
     public DisplayInstanceInt32Bar16() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewInt32Bar16 ViewFactory() {
+        return new DisplayInstanceViewInt32Bar16(this);
     }
 }

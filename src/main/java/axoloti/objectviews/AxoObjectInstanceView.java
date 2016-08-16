@@ -14,8 +14,10 @@ import axoloti.attributeviews.AttributeInstanceView;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
+import axoloti.displayviews.DisplayInstanceView;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
@@ -23,8 +25,10 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceView;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameterviews.ParameterInstanceView;
 import components.LabelComponent;
 import components.PopupIcon;
 import static java.awt.Component.LEFT_ALIGNMENT;
@@ -47,10 +51,10 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
     private AxoObjectInstance model;
     LabelComponent IndexLabel;
-    public JPanel p_params;
-    public JPanel p_displays;
-    public JPanel p_inlets;
-    public JPanel p_outlets;
+    public JPanel p_parameterViews;
+    public JPanel p_displayViews;
+    public JPanel p_inletViews;
+    public JPanel p_outletViews;
     boolean deferredObjTypeUpdate = false;
 
     public AxoObjectInstanceView(AxoObjectInstanceAbstract model) {
@@ -65,11 +69,27 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     public void PostConstructor() {
         super.PostConstructor();
         model.updateObj1();
-        // need views here
-        ArrayList<ParameterInstance> pParameterInstances = model.parameterInstances;
-        ArrayList<AttributeInstance> pAttributeInstances = model.attributeInstances;
-        ArrayList<InletInstance> pInletInstances = model.inletInstances;
-        ArrayList<OutletInstance> pOutletInstances = model.outletInstances;
+
+        ArrayList<ParameterInstanceView> pParameterInstanceViews = new ArrayList<ParameterInstanceView>();
+        for (ParameterInstance parameterInstance : model.parameterInstances) {
+            pParameterInstanceViews.add(parameterInstance.CreateView(this));
+        }
+
+        ArrayList<AttributeInstanceView> pAttributeInstanceViews = new ArrayList<AttributeInstanceView>();
+        for (AttributeInstance attributeInstance : model.attributeInstances) {
+            pAttributeInstanceViews.add(attributeInstance.CreateView(this));
+        }
+
+        ArrayList<InletInstanceView> pInletInstanceViews = new ArrayList<InletInstanceView>();
+        for (InletInstance inletInstance : model.inletInstances) {
+            pInletInstanceViews.add(inletInstance.CreateView(this));
+        }
+
+        ArrayList<OutletInstanceView> pOutletInstanceViews = new ArrayList<OutletInstanceView>();
+        for (OutletInstance outletInstance : model.outletInstances) {
+            pOutletInstanceViews.add(outletInstance.CreateView(this));
+        }
+
         model.parameterInstances = new ArrayList<ParameterInstance>();
         model.attributeInstances = new ArrayList<AttributeInstance>();
         model.displayInstances = new ArrayList<DisplayInstance>();
@@ -229,82 +249,83 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
         p_iolets.setAlignmentX(LEFT_ALIGNMENT);
         p_iolets.setAlignmentY(TOP_ALIGNMENT);
-        p_inlets = new JPanel();
-        p_inlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_inletViews = new JPanel();
+        p_inletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
-        p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
-        p_inlets.setAlignmentX(LEFT_ALIGNMENT);
-        p_inlets.setAlignmentY(TOP_ALIGNMENT);
-        p_outlets = new JPanel();
-        p_outlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_inletViews.setLayout(new BoxLayout(p_inletViews, BoxLayout.PAGE_AXIS));
+        p_inletViews.setAlignmentX(LEFT_ALIGNMENT);
+        p_inletViews.setAlignmentY(TOP_ALIGNMENT);
+        p_outletViews = new JPanel();
+        p_outletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
-        p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
-        p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
-        p_outlets.setAlignmentY(TOP_ALIGNMENT);
-        p_params = new JPanel();
-        p_params.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_outletViews.setLayout(new BoxLayout(p_outletViews, BoxLayout.PAGE_AXIS));
+        p_outletViews.setAlignmentX(RIGHT_ALIGNMENT);
+        p_outletViews.setAlignmentY(TOP_ALIGNMENT);
+        p_parameterViews = new JPanel();
+        p_parameterViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         if (getType().getRotatedParams()) {
-            p_params.setLayout(new BoxLayout(p_params, BoxLayout.LINE_AXIS));
+            p_parameterViews.setLayout(new BoxLayout(p_parameterViews, BoxLayout.LINE_AXIS));
         } else {
-            p_params.setLayout(new BoxLayout(p_params, BoxLayout.PAGE_AXIS));
+            p_parameterViews.setLayout(new BoxLayout(p_parameterViews, BoxLayout.PAGE_AXIS));
         }
-        p_displays = new JPanel();
-        p_displays.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_displayViews = new JPanel();
+        p_displayViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
         if (getType().getRotatedParams()) {
-            p_displays.setLayout(new BoxLayout(p_displays, BoxLayout.LINE_AXIS));
+            p_displayViews.setLayout(new BoxLayout(p_displayViews, BoxLayout.LINE_AXIS));
         } else {
-            p_displays.setLayout(new BoxLayout(p_displays, BoxLayout.PAGE_AXIS));
+            p_displayViews.setLayout(new BoxLayout(p_displayViews, BoxLayout.PAGE_AXIS));
         }
-        p_displays.add(Box.createHorizontalGlue());
-        p_params.add(Box.createHorizontalGlue());
+        p_displayViews.add(Box.createHorizontalGlue());
+        p_parameterViews.add(Box.createHorizontalGlue());
 
-        for (Inlet inl : getType().inlets) {
-            InletInstance inlinp = null;
-            for (InletInstance inlin1 : pInletInstances) {
-                if (inlin1.GetLabel().equals(inl.getName())) {
-                    inlinp = inlin1;
+        for (Inlet inlet : getType().inlets) {
+            InletInstance inletInstanceP = null;
+            for (InletInstanceView inletInstanceView : pInletInstanceViews) {
+                if (inletInstanceView.getInletInstance().GetLabel().equals(inlet.getName())) {
+                    inletInstanceP = inletInstanceView.getInletInstance();
                 }
             }
-            InletInstance inlin = new InletInstance(inl, this.getObjectInstance());
-            if (inlinp != null) {
-                Net n = getPatchModel().GetNet(inlinp);
+            InletInstance inletInstance = new InletInstance(inlet, this.getObjectInstance());
+            if (inletInstanceP != null) {
+                Net n = getPatchModel().GetNet(inletInstanceP);
                 if (n != null) {
-                    n.connectInlet(inlin);
+                    n.connectInlet(inletInstance);
                 }
             }
-            // need a view here
-            inletInstances.add(inlin);
-            inlin.setAlignmentX(LEFT_ALIGNMENT);
-            p_inlets.add(inlin);
+            model.inletInstances.add(inletInstance);
+            InletInstanceView view = inletInstance.CreateView(this);
+            view.setAlignmentX(LEFT_ALIGNMENT);
+            p_inletViews.add(view);
         }
         // disconnect stale inlets from nets
-        for (InletInstance inlin1 : pInletInstances) {
-            getPatchModel().disconnect(inlin1);
+        for (InletInstanceView inletInstanceView : pInletInstanceViews) {
+            getPatchModel().disconnect(inletInstanceView.getInletInstance());
         }
 
         for (Outlet o : getType().outlets) {
-            OutletInstance oinp = null;
-            for (OutletInstance oinp1 : pOutletInstances) {
-                if (oinp1.GetLabel().equals(o.getName())) {
-                    oinp = oinp1;
+            OutletInstance outletInstanceP = null;
+            for (OutletInstanceView outletInstanceView : pOutletInstanceViews) {
+                if (outletInstanceView.getOutletInstance().GetLabel().equals(o.getName())) {
+                    outletInstanceP = outletInstanceView.getOutletInstance();
                 }
             }
-            OutletInstance oin = new OutletInstance(o, this);
-            if (oinp != null) {
-                Net n = getPatchModel().GetNet(oinp);
+            OutletInstance outletInstance = new OutletInstance(o, this.getObjectInstance());
+            if (outletInstanceP != null) {
+                Net n = getPatchModel().GetNet(outletInstanceP);
                 if (n != null) {
-                    n.connectOutlet(oin);
+                    n.connectOutlet(outletInstance);
                 }
             }
             // need a view here
-            outletInstances.add(oin);
-            oin.setAlignmentX(RIGHT_ALIGNMENT);
-            p_outlets.add(oin);
+            model.outletInstances.add(outletInstance);
+            OutletInstanceView view = outletInstance.CreateView(this);
+            view.setAlignmentX(RIGHT_ALIGNMENT);
+            p_outletViews.add(view);
         }
         // disconnect stale outlets from nets
-        for (OutletInstance oinp1 : pOutletInstances) {
-            getPatchModel().disconnect(oinp1);
+        for (OutletInstanceView outletInstanceView : pOutletInstanceViews) {
+            getPatchModel().disconnect(outletInstanceView.getOutletInstance());
         }
 
         /*
@@ -314,54 +335,54 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
          if (p_outlets.getComponents().length == 0){
          p_outlets.add(Box.createHorizontalGlue());
          }*/
-        p_iolets.add(p_inlets);
+        p_iolets.add(p_inletViews);
         p_iolets.add(Box.createHorizontalGlue());
-        p_iolets.add(p_outlets);
+        p_iolets.add(p_outletViews);
         add(p_iolets);
 
         for (AxoAttribute p : getType().attributes) {
-            AttributeInstance attrp1 = null;
-            for (AttributeInstance attrp : pAttributeInstances) {
+            AttributeInstance attributeInstance = null;
+            for (AttributeInstanceView attributeInstanceView : pAttributeInstanceViews) {
 
-                if (attrp.getName().equals(p.getName())) {
-                    attrp1 = attrp;
+                if (attributeInstanceView.getName().equals(p.getName())) {
+                    attributeInstance = attributeInstanceView.getAttributeInstance();
                 }
             }
-            AttributeInstance attributeInstance = p.CreateInstance(this.getObjectInstance(), attrp1);
-            AttributeInstanceView attributeInstanceView = attributeInstance.CreateView(this);
-            // need to make a view here
+            AttributeInstance attributeInstance1 = p.CreateInstance(this.getObjectInstance(), attributeInstance);
+            AttributeInstanceView attributeInstanceView = attributeInstance1.CreateView(this);
             attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
             add(attributeInstanceView);
             attributeInstanceView.doLayout();
-            model.attributeInstances.add(attributeInstance);
+            model.attributeInstances.add(attributeInstance1);
         }
 
         for (Parameter p : getType().params) {
             ParameterInstance pin = p.CreateInstance(this.getObjectInstance());
-            for (ParameterInstance pinp : pParameterInstances) {
+            for (ParameterInstanceView pinp : pParameterInstanceViews) {
                 if (pinp.getName().equals(pin.getName())) {
-                    pin.CopyValueFrom(pinp);
+                    pin.CopyValueFrom(pinp.getParameterInstance());
                 }
             }
-            // need a view here
-            pin.PostConstructor();
-            pin.setAlignmentX(RIGHT_ALIGNMENT);
-            pin.doLayout();
+            ParameterInstanceView view = pin.CreateView(this);
+            view.PostConstructor();
+            view.setAlignmentX(RIGHT_ALIGNMENT);
+            view.doLayout();
             model.parameterInstances.add(pin);
         }
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
-            pin.setAlignmentX(RIGHT_ALIGNMENT);
-            pin.doLayout();
+            DisplayInstanceView view = pin.CreateView(this);
+            view.setAlignmentX(RIGHT_ALIGNMENT);
+            view.doLayout();
             model.displayInstances.add(pin);
         }
 //        p_displays.add(Box.createHorizontalGlue());
 //        p_params.add(Box.createHorizontalGlue());
-        add(p_params);
-        add(p_displays);
-        p_params.setAlignmentX(LEFT_ALIGNMENT);
-        p_displays.setAlignmentX(LEFT_ALIGNMENT);
+        add(p_parameterViews);
+        add(p_displayViews);
+        p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
+        p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
 
         model.getType().addObjectModifiedListener(this);
 

@@ -16,7 +16,7 @@ public class DisplayInstanceViewFrac32VBar extends DisplayInstanceViewFrac32 {
     DisplayInstanceFrac32VBar displayInstance;
     private VBarComponent vbar;
 
-    DisplayInstanceViewFrac32VBar(DisplayInstanceFrac32VBar displayInstance) {
+    public DisplayInstanceViewFrac32VBar(DisplayInstanceFrac32VBar displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

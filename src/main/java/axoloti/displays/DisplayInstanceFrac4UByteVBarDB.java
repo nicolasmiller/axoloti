@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewFrac4UByteVBarDB;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceFrac4UByteVBarDB extends DisplayInstanceFrac32<Displ
 
     public DisplayInstanceFrac4UByteVBarDB() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewFrac4UByteVBarDB ViewFactory() {
+        return new DisplayInstanceViewFrac4UByteVBarDB(this);
     }
 }

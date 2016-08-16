@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package axoloti.inlets;
 
 import axoloti.Theme;
@@ -15,10 +10,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
 
-/**
- *
- * @author nicolas
- */
 public class InletInstanceView extends IoletAbstract {
     InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
 

@@ -82,10 +82,6 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
         pi.axoObjectInstance = o;
         pi.name = this.name;
         pi.display = this;
-        
-        // need a view here
-        o.p_displays.add(pi);
-        pi.PostConstructor();
         return pi;
     }
 

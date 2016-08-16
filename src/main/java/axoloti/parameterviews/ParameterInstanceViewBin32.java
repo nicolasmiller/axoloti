@@ -16,7 +16,7 @@ import components.control.CheckboxComponent;
 public class ParameterInstanceViewBin32 extends ParameterInstanceViewInt32 {
     ParameterInstanceBin32 parameterInstance;
 
-    ParameterInstanceViewBin32(ParameterInstanceBin32 parameterInstance) {
+    public ParameterInstanceViewBin32(ParameterInstanceBin32 parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }

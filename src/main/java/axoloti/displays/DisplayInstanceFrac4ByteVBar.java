@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewFrac4ByteVBar;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceFrac4ByteVBar extends DisplayInstanceFrac32<DisplayF
 
     public DisplayInstanceFrac4ByteVBar() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewFrac4ByteVBar ViewFactory() {
+        return new DisplayInstanceViewFrac4ByteVBar(this);
     }
 }

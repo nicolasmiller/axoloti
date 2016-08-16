@@ -17,7 +17,7 @@ public class DisplayInstanceViewFrac4UByteVBar extends DisplayInstanceViewFrac32
 
     DisplayInstanceFrac4UByteVBar displayInstance;
 
-    DisplayInstanceViewFrac4UByteVBar(DisplayInstanceFrac4UByteVBar displayInstance) {
+    public DisplayInstanceViewFrac4UByteVBar(DisplayInstanceFrac4UByteVBar displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }

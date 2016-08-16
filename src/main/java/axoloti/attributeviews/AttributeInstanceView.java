@@ -50,4 +50,8 @@ public abstract class AttributeInstanceView extends AtomInstanceView {
     public PatchView getPatchView() {
         return axoObjectInstanceView.getPatchView();
     }
+    
+    public AttributeInstance getAttributeInstance() {
+        return this.attributeInstance;
+    }
 }

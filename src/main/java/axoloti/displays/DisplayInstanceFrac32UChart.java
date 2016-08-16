@@ -17,6 +17,8 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewFrac32UChart;
+
 /**
  *
  * @author Johannes Taelman
@@ -25,5 +27,10 @@ public class DisplayInstanceFrac32UChart extends DisplayInstanceFrac32<DisplayFr
 
     public DisplayInstanceFrac32UChart() {
         super();
+    }
+
+    @Override
+    public DisplayInstanceViewFrac32UChart ViewFactory() {
+        return new DisplayInstanceViewFrac32UChart(this);
     }
 }

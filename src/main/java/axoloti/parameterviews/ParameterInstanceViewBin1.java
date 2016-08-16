@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 public class ParameterInstanceViewBin1 extends ParameterInstanceViewInt32 {
     ParameterInstanceBin1 parameterInstance;
 
-    ParameterInstanceViewBin1(ParameterInstanceBin1 parameterInstance) {
+    public ParameterInstanceViewBin1(ParameterInstanceBin1 parameterInstance) {
         super(parameterInstance);
         this.parameterInstance = parameterInstance;
     }   

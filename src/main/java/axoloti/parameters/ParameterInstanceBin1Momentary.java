@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.Value;
+import axoloti.parameterviews.ParameterInstanceViewBin1Momentary;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -65,5 +66,9 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
     @Override
     public void setValue(Value value) {
         super.setValue(value);
+    }
+    
+    public ParameterInstanceViewBin1Momentary ViewFactory() {
+        return new ParameterInstanceViewBin1Momentary(this);
     }
 }

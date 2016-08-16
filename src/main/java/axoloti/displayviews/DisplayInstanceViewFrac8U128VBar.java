@@ -18,7 +18,7 @@ public class DisplayInstanceViewFrac8U128VBar extends DisplayInstanceView {
     DisplayInstanceFrac8U128VBar displayInstance;
     private VGraphComponent vgraph;
 
-    DisplayInstanceViewFrac8U128VBar(DisplayInstanceFrac8U128VBar displayInstance) {
+    public DisplayInstanceViewFrac8U128VBar(DisplayInstanceFrac8U128VBar displayInstance) {
         super(displayInstance);
         this.displayInstance = displayInstance;
     }
