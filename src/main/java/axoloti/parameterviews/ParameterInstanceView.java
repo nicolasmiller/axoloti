@@ -39,6 +39,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
     AxoObjectInstanceView axoObjInstanceView;
 
     ParameterInstanceView(ParameterInstance parameterInstance) {
+        super();
         this.parameterInstance = parameterInstance;
     }
 
@@ -184,7 +185,12 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public String getName() {
-        return parameterInstance.getName();
+        if(parameterInstance != null) {
+            return parameterInstance.getName();
+        }
+        else {
+            return super.getName();
+        }
     }
 
     void UpdateUnit() {

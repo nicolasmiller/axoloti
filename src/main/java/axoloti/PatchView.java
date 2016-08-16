@@ -456,6 +456,7 @@ public class PatchView {
         Layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
+                System.out.println("dragged");
                 if (selectionrectangle.isVisible() || ev.getButton() == MouseEvent.BUTTON1) {
                     int x1 = selectionRectStart.x;
                     int y1 = selectionRectStart.y;
@@ -808,7 +809,7 @@ public class PatchView {
 
     public void setFileNamePath(String FileNamePath) {
         patchController.setFileNamePath(FileNamePath);
-        patchController.getPatchFrame().setTitle(FileNamePath);
+//        patchController.getPatchFrame().setTitle(FileNamePath);
     }
 
     public NetView AddConnection(InletInstanceView il, OutletInstanceView ol) {
@@ -866,7 +867,8 @@ public class PatchView {
 
     public AxoObjectInstanceViewAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         AxoObjectInstanceAbstract objinst = patchController.AddObjectInstance(obj, loc);
-        AxoObjectInstanceViewAbstract objView = new AxoObjectInstanceView((AxoObjectInstance) objinst);
+        AxoObjectInstanceView objView = new AxoObjectInstanceView((AxoObjectInstance) objinst);
+        this.objectInstanceViews.add(objView);
         objView.setPatchView(this);
         objView.setPatchModel(this.getPatchController().patchModel);
         if (objinst != null) {

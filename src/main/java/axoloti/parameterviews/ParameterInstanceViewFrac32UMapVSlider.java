@@ -16,11 +16,8 @@ import components.control.VSliderComponent;
  */
 public class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32U {
 
-    ParameterInstanceFrac32UMapVSlider parameterInstance;
-
     public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance) {
         super(parameterInstance);
-        this.parameterInstance = parameterInstance;
     }
 
     @Override

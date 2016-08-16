@@ -17,11 +17,8 @@ import axoloti.parameters.ParameterInstanceInt32;
  */
 public abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
-    ParameterInstanceInt32 parameterInstance;
-
     ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance) {
         super(parameterInstance);
-        this.parameterInstance = parameterInstance;
     }
 
     @Override

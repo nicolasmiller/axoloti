@@ -12,10 +12,7 @@ import axoloti.parameters.ParameterInstanceFrac32U;
  * @author nicolas
  */
 public abstract class ParameterInstanceViewFrac32U extends ParameterInstanceViewFrac32 {
-    ParameterInstanceFrac32U parameterInstance;
-
     ParameterInstanceViewFrac32U(ParameterInstanceFrac32U parameterInstance) {
         super(parameterInstance);
-        this.parameterInstance = parameterInstance;
     }
 }

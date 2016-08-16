@@ -18,11 +18,8 @@ import javax.swing.JPopupMenu;
  */
 public class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
-    ParameterInstanceInt32HRadio parameterInstance;
-
     public ParameterInstanceViewInt32HRadio(ParameterInstanceInt32HRadio parameterInstance) {
         super(parameterInstance);
-        this.parameterInstance = parameterInstance;
     }
 
     @Override

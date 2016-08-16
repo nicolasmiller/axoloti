@@ -20,21 +20,23 @@ import javax.swing.JPopupMenu;
  * @author nicolas
  */
 public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
-    ParameterInstanceFrac32 parameterInstance;
-
     ParameterInstanceViewFrac32(ParameterInstanceFrac32 parameterInstance) {
         super(parameterInstance);
-        this.parameterInstance = parameterInstance;
+    }
+    
+    @Override
+    public ParameterInstanceFrac32 getParameterInstance() {
+        return (ParameterInstanceFrac32) this.parameterInstance;
     }
     
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        if (parameterInstance.getModulators() != null) {
-            List<Modulation> modulators = parameterInstance.getModulators();
+        if (getParameterInstance().getModulators() != null) {
+            List<Modulation> modulators = getParameterInstance().getModulators();
             for (Modulation m : modulators) {
                 System.out.println("mod amount " + m.getValue().getDouble());
-                m.PostConstructor(parameterInstance);
+                m.PostConstructor(getParameterInstance());
             }
         }
     }
@@ -46,8 +48,8 @@ public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView 
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parameterInstance.applyDefaultValue();
-                getControlComponent().setValue(parameterInstance.getValue().getDouble());
+                getParameterInstance().applyDefaultValue();
+                getControlComponent().setValue(getParameterInstance().getValue().getDouble());
                 handleAdjustment();
             }
         });
@@ -56,13 +58,13 @@ public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView 
     
     @Override
     public boolean handleAdjustment() {
-        Preset p = parameterInstance.GetPreset(presetEditActive);
+        Preset p = getParameterInstance().GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
         } else {
-            if (parameterInstance.getValue().getDouble() != getControlComponent().getValue()) {
-                parameterInstance.getValue().setDouble(getControlComponent().getValue());
-                parameterInstance.setNeedsTransmit(true);
+            if (getParameterInstance().getValue().getDouble() != getControlComponent().getValue()) {
+                getParameterInstance().getValue().setDouble(getControlComponent().getValue());
+                getParameterInstance().setNeedsTransmit(true);
                 UpdateUnit();
             } else {
                 return false;
@@ -74,11 +76,11 @@ public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView 
     @Override
     public void CopyValueFrom(ParameterInstanceView p) {
         if (p instanceof ParameterInstanceViewFrac32) {
-            parameterInstance.CopyValueFrom(((ParameterInstanceViewFrac32) p).parameterInstance);
+            getParameterInstance().CopyValueFrom(((ParameterInstanceViewFrac32) p).parameterInstance);
         }
     }
     
     public void updateModulation(int index, double amount) {
-        parameterInstance.updateModulation(index, amount);
+        getParameterInstance().updateModulation(index, amount);
     }
 }
