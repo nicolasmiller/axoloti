@@ -298,7 +298,7 @@ public class AxoObject extends AxoObjectAbstract {
     Rectangle editorBounds;
     Integer editorActiveTabIndex;
 
-    private void setEditorBounds(Rectangle editorBounds) {
+    public void setEditorBounds(Rectangle editorBounds) {
         if (editorBounds != null) {
             editor.setBounds(editorBounds);
         } else if (this.editorBounds != null) {
@@ -307,7 +307,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     }
 
-    private void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
+    public void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
         if (editorActiveTabIndex != null) {
             editor.setActiveTabIndex(editorActiveTabIndex);
         } else if (this.editorActiveTabIndex != null) {
@@ -636,5 +636,9 @@ public class AxoObject extends AxoObjectAbstract {
         sAuthor = o.sAuthor;
         sLicense = o.sLicense;
         sDescription = o.sDescription;
+    }
+    
+    public AxoObjectEditor getEditor() {
+        return editor;
     }
 }

@@ -33,7 +33,7 @@ public class AttributeInstanceViewWavefile extends AttributeInstanceView {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFwaveFilename = new JTextField(attributeInstance.waveFilename);
+        TFwaveFilename = new JTextField(attributeInstance.getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
         d.width = 128;
         d.height = 22;
@@ -59,7 +59,7 @@ public class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                attributeInstance.waveFilename = TFwaveFilename.getText();
+                attributeInstance.setWaveFilename(TFwaveFilename.getText());
             }
         });
     }

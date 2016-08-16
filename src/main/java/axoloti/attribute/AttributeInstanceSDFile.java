@@ -93,7 +93,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         return resolvedPath.toFile();
     }
 
-    String toRelative(File f) {
+    public String toRelative(File f) {
         if (f == null) {
             return "";
         }

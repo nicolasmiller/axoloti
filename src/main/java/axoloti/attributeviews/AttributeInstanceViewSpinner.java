@@ -31,13 +31,13 @@ public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         super.PostConstructor();
         int value = attributeInstance.getValue();
 
-        if (value < attributeInstance.attr.getMinValue()) {
-            attributeInstance.setValue(attributeInstance.attr.getMinValue());
+        if (value < attributeInstance.getDefinition().getMinValue()) {
+            attributeInstance.setValue(attributeInstance.getDefinition().getMinValue());
         }
-        if (value > attributeInstance.attr.getMaxValue()) {
-            value = attributeInstance.attr.getMaxValue();
+        if (value > attributeInstance.getDefinition().getMaxValue()) {
+            value = attributeInstance.getDefinition().getMaxValue();
         }
-        spinner = new NumberBoxComponent(value, attributeInstance.attr.getMinValue(), attributeInstance.attr.getMaxValue(), 1.0);
+        spinner = new NumberBoxComponent(value, attributeInstance.getDefinition().getMinValue(), attributeInstance.getDefinition().getMaxValue(), 1.0);
         spinner.setParentAxoObjectInstanceView(axoObjectInstanceView);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {

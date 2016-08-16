@@ -90,4 +90,12 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     public AxoObjectInstanceViewPatcher ViewFactory() {
         return new AxoObjectInstanceViewPatcher(this);
     }
+    
+    public PatchController getPatchController() {
+        return patchController;
+    }
+    
+    public PatchFrame getPatchFrame() {
+        return pf;
+    }
 }

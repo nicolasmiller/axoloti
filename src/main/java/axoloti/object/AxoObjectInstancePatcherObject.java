@@ -59,4 +59,12 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public AxoObjectInstanceViewPatcherObject ViewFactory() {
         return new AxoObjectInstanceViewPatcherObject(this);
     }
+    
+    public AxoObject getAxoObject() {
+        return ao;
+    }
+    
+    public void setAxoObject(AxoObject axoObject) {
+        this.ao = axoObject;
+    }
 }

@@ -89,7 +89,7 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = attributeInstance.toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);
-                    attributeInstance.fileName = f;
+                    attributeInstance.setString(f);
                 }
             }
         });

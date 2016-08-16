@@ -30,11 +30,11 @@ public class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
         super.PostConstructor();
         comboBox = new DropDownComponent(attributeInstance.getDefinition().getMenuEntries(), attributeInstance);
         comboBox.setFont(Constants.FONT);
-        setString(attributeInstance.selection);
+        setString(attributeInstance.getString());
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
             @Override
             public void SelectionChanged() {
-                attributeInstance.selection = (String) comboBox.getSelectedItem();
+                attributeInstance.setString(comboBox.getSelectedItem());
             }
         });
         this.add(comboBox);
@@ -56,16 +56,16 @@ public class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
             return;
         }
         if (selection == null) {
-            attributeInstance.selection = (String) comboBox.getItemAt(0);
+            attributeInstance.setString(comboBox.getItemAt(0));
         }
-        comboBox.setSelectedItem(attributeInstance.selection);
+        comboBox.setSelectedItem(attributeInstance.getString());
         attributeInstance.setSelectedIndex(comboBox.getSelectedIndex());
-        if (attributeInstance.selection.equals((String) comboBox.getSelectedItem())) {
+        if (attributeInstance.getString().equals(comboBox.getSelectedItem())) {
             return;
         }
         for (int i = 0; i < comboBox.getItemCount(); i++) {
-            if (attributeInstance.selection.equals(comboBox.getItemAt(i))) {
-                attributeInstance.selection = comboBox.getItemAt(i);
+            if (attributeInstance.getString().equals(comboBox.getItemAt(i))) {
+                attributeInstance.setString(comboBox.getItemAt(i));
                 return;
             }
         }
@@ -85,7 +85,4 @@ public class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
             comboBox.setEnabled(true);
         }
     }
-
-    
-
 }

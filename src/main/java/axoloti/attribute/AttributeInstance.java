@@ -81,4 +81,8 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
         pi.PostConstructor();
         return pi;
     }
+    
+    public String getAttributeName() {
+        return attributeName;
+    }
 }

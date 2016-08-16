@@ -78,7 +78,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         //setMaximumSize(new Dimension(Short.MAX_VALUE,
         //        Short.MAX_VALUE));
 
-        this.setLocation(model.x, model.y);
+        this.setLocation(model.getX(), model.getY());
 //        setFocusable(true);
         Titlebar = new TitleBarPanel(this);
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
@@ -145,11 +145,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
                     if (dragging) {
                         for (AxoObjectInstanceViewAbstract o : getPatchView().getObjectInstanceViews()) {
                             if (o.dragging) {
-                                model.x = me.getLocationOnScreen().x - o.dX;
-                                model.y = me.getLocationOnScreen().y - o.dY;
+                                model.setX(me.getLocationOnScreen().x - o.dX);
+                                model.setY(me.getLocationOnScreen().y - o.dY);
                                 o.dX = me.getLocationOnScreen().x - o.getX();
                                 o.dY = me.getLocationOnScreen().y - o.getY();
-                                o.setLocation(model.x, model.y);
+                                o.setLocation(model.getX(), model.getY());
                             }
                         }
                     }
@@ -222,12 +222,12 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
                         maxZIndex = getPatchView().objectLayerPanel.getComponentZOrder(o);
                     }
                     o.dragging = false;
-                    int original_x = model.x;
-                    int original_y = model.y;
-                    model.x = ((model.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
-                    model.y = ((model.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
-                    o.setLocation(model.x, model.y);
-                    if (model.x != original_x || model.y != original_y) {
+                    int original_x = model.getX();
+                    int original_y = model.getY();
+                    model.setX(((model.getX() + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID);
+                    model.setY(((model.getY() + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID);
+                    o.setLocation(model.getX(), model.getY());
+                    if (model.getX() != original_x || model.getY() != original_y) {
                         setDirty = true;
                     }
                 }
@@ -263,9 +263,8 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     public void setLocation(int x, int y) {
         super.setLocation(x, y);
 
-        // set on model
-        model.x = x;
-        model.y = y;
+        model.setX(x);
+        model.setY(y);
         if (getPatchView() != null) {
             repaint();
             for (InletInstanceView i : getInletInstanceViews()) {

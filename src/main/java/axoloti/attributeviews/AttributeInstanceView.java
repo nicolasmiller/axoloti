@@ -44,7 +44,7 @@ public abstract class AttributeInstanceView extends AtomInstanceView {
 
     @Override
     public String getName() {
-        return attributeInstance.attributeName;
+        return attributeInstance.getAttributeName();
     }
     
     public PatchView getPatchView() {

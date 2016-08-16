@@ -28,8 +28,8 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     @Override
     public void updateObj() {
-        if (model.patchController != null) {
-            AxoObject ao = model.patchController.patchModel.GenerateAxoObj();
+        if (model.getPatchController() != null) {
+            AxoObject ao = model.getPatchController().patchModel.GenerateAxoObj();
             model.setType(ao);
             PostConstructor();
         }
@@ -71,8 +71,8 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
     @Override
     public void Close() {
         super.Close();
-        if (model.pf != null) {
-            model.pf.Close();
+        if (model.getPatchFrame() != null) {
+            model.getPatchFrame().Close();
         }
     }
     

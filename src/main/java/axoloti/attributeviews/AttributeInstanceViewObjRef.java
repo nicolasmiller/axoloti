@@ -37,7 +37,7 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFObjName = new JTextField(attributeInstance.objName);
+        TFObjName = new JTextField(attributeInstance.getString());
         Dimension d = TFObjName.getSize();
         d.width = 92;
         d.height = 22;
@@ -64,8 +64,8 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                attributeInstance.objName = TFObjName.getText();
-                System.out.println("objref change " + attributeInstance.objName);
+                attributeInstance.setString(TFObjName.getText());
+                System.out.println("objref change " + attributeInstance.getString());
             }
         });
         TFObjName.addFocusListener(new FocusListener() {
@@ -75,8 +75,8 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
             @Override
             public void focusLost(FocusEvent e) {
-                attributeInstance.objName = TFObjName.getText();
-                System.out.println("objref change " + attributeInstance.objName);
+                attributeInstance.setString(TFObjName.getText());
+                System.out.println("objref change " + attributeInstance.getString());
             }
         });
     }

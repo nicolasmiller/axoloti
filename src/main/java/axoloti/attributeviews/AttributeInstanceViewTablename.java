@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package axoloti.attributeviews;
 
 import axoloti.attribute.AttributeInstanceTablename;
@@ -19,10 +14,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-/**
- *
- * @author nicolas
- */
 public class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
     AttributeInstanceTablename attributeInstance;
@@ -37,7 +28,7 @@ public class AttributeInstanceViewTablename extends AttributeInstanceViewString 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFtableName = new JTextField(attributeInstance.tableName);
+        TFtableName = new JTextField(attributeInstance.getString());
         Dimension d = TFtableName.getSize();
         d.width = 128;
         d.height = 22;
@@ -64,8 +55,8 @@ public class AttributeInstanceViewTablename extends AttributeInstanceViewString 
         TFtableName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                attributeInstance.tableName = TFtableName.getText();
-                System.out.println("tablename change " + attributeInstance.tableName);
+                attributeInstance.setString(TFtableName.getText());
+                System.out.println("tablename change " + attributeInstance.getString());
             }
         });
         TFtableName.addFocusListener(new FocusListener() {
@@ -75,8 +66,8 @@ public class AttributeInstanceViewTablename extends AttributeInstanceViewString 
 
             @Override
             public void focusLost(FocusEvent e) {
-                attributeInstance.tableName = TFtableName.getText();
-                System.out.println("tablename change " + attributeInstance.tableName);
+                attributeInstance.setString(TFtableName.getText());
+                System.out.println("tablename change " + attributeInstance.getString());
             }
         });
     }
@@ -97,7 +88,7 @@ public class AttributeInstanceViewTablename extends AttributeInstanceViewString 
 
     @Override
     public String getString() {
-        return attributeInstance.tableName;
+        return attributeInstance.getString();
     }
 
     @Override

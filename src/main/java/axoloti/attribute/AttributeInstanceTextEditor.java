@@ -74,4 +74,8 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     public AttributeInstanceViewTextEditor ViewFactory(AxoObjectInstanceView o) {
         return new AttributeInstanceViewTextEditor(this, o);
     }
+    
+    public StringRef getStringRef() {
+        return sRef;
+    }
 }

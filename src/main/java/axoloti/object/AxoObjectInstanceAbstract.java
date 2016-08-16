@@ -167,6 +167,14 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     public int getY() {
         return y;
     }
+    
+    public void setX(int x) {
+        this.x = x;
+    }
+    
+    public void setY(int y) {
+        this.y = y;
+    }
 
 
     /*
@@ -323,7 +331,7 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
         return patchModel;
     }
     
-    void updateObj1() {
+    public void updateObj1() {
     }
     
     public abstract AxoObjectInstanceViewAbstract ViewFactory();

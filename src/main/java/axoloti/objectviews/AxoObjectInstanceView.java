@@ -44,6 +44,7 @@ import javax.swing.JPanel;
  * @author nicolas
  */
 public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements ObjectModifiedListener {
+
     private AxoObjectInstance model;
     LabelComponent IndexLabel;
     public JPanel p_params;
@@ -52,15 +53,14 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     public JPanel p_outlets;
     boolean deferredObjTypeUpdate = false;
 
-    
     public AxoObjectInstanceView(AxoObjectInstanceAbstract model) {
         super(model);
     }
-    
+
     public AxoObject getType() {
         return model.getType();
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
@@ -155,12 +155,12 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popup.add(popm_adapt);
         }
 
-        if (model.type instanceof AxoObjectFromPatch) {
+        if (model.getType() instanceof AxoObjectFromPatch) {
             JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    if(!getPatchView().isLocked()) {
+                    if (!getPatchView().isLocked()) {
                         model.ConvertToPatchPatcher();
                     }
                 }
@@ -171,7 +171,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    if(!getPatchView().isLocked()) {
+                    if (!getPatchView().isLocked()) {
                         model.ConvertToEmbeddedObj();
                     }
                 }
@@ -322,7 +322,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         for (AxoAttribute p : getType().attributes) {
             AttributeInstance attrp1 = null;
             for (AttributeInstance attrp : pAttributeInstances) {
-                
+
                 if (attrp.getName().equals(p.getName())) {
                     attrp1 = attrp;
                 }
@@ -367,20 +367,20 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         resizeToGrid();
     }
-    
+
     public void refreshIndex() {
         if (getPatchView() != null) {
             IndexLabel.setText(" " + this.getPatchView().getObjectInstanceViews().indexOf(this));
         }
     }
-    
+
     Rectangle editorBounds;
     Integer editorActiveTabIndex;
-    
+
     public void OpenEditor() {
         getType().OpenEditor(editorBounds, editorActiveTabIndex);
     }
-    
+
     @Override
     public void ObjectModified(Object src) {
         if (getPatchView() != null) {
@@ -393,18 +393,18 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         try {
             AxoObject o = (AxoObject) src;
-            if (o.editor != null && o.editor.getBounds() != null) {
-                editorBounds = o.editor.getBounds();
-                editorActiveTabIndex = o.editor.getActiveTabIndex();
-                this.getType().editorBounds = editorBounds;
-                this.getType().editorActiveTabIndex = editorActiveTabIndex;
+            if (o.getEditor() != null && o.getEditor().getBounds() != null) {
+                editorBounds = o.getEditor().getBounds();
+                editorActiveTabIndex = o.getEditor().getActiveTabIndex();
+                this.getType().setEditorBounds(editorBounds);
+                this.getType().setEditorActiveTabIndex(editorActiveTabIndex);
             }
         } catch (ClassCastException ex) {
         }
     }
-    
+
     public ArrayList<AttributeInstanceView> attributeInstanceViews;
-    
+
     @Override
     public void Lock() {
         super.Lock();
@@ -424,7 +424,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             deferredObjTypeUpdate = false;
         }
     }
-    
+
     @Override
     public AxoObjectInstance getObjectInstance() {
         return this.model;

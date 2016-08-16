@@ -51,9 +51,9 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
     @Override
     public void updateObj() {
-        if (model.ao != null) {
-            model.ao.id = "patch/object";
-            model.setType(model.ao);
+        if (model.getAxoObject() != null) {
+            model.getAxoObject().id = "patch/object";
+            model.setType(model.getAxoObject());
             PostConstructor();
         }
         for (Component cmp : getComponents()) {
@@ -70,13 +70,13 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     }
 
     public void edit() {
-        if (model.ao == null) {
-            model.ao = new AxoObject();
+        if (model.getAxoObject() == null) {
+            model.setAxoObject(new AxoObject());
 //            ao.id = "id";
-            model.ao.sDescription = "";
+            model.getAxoObject().sDescription = "";
         }
         if (aoe == null) {
-            aoe = new AxoObjectEditor(model.ao);
+            aoe = new AxoObjectEditor(model.getAxoObject());
         } else {
             aoe.updateReferenceXML();
         }

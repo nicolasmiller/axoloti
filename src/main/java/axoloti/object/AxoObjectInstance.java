@@ -553,7 +553,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return files;
     }
 
-    void ConvertToPatchPatcher() {
+    public void ConvertToPatchPatcher() {
         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
         assert (!ol.isEmpty());
         AxoObjectAbstract o = ol.get(0);
@@ -569,7 +569,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         getPatchModel().SetDirty();
     }
 
-    void ConvertToEmbeddedObj() {
+    public void ConvertToEmbeddedObj() {
         try {
             ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
             assert (!ol.isEmpty());

@@ -37,8 +37,8 @@ public class AttributeInstanceViewTextEditor extends AttributeInstanceViewString
             @Override
             public void OnPushed() {
                 if (editor == null) {
-                    editor = new TextEditor(attributeInstance.sRef, getPatchView().getPatchController().getPatchFrame());
-                    editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.attr.getName());
+                    editor = new TextEditor(attributeInstance.getStringRef(), getPatchView().getPatchController().getPatchFrame());
+                    editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getDefinition().getName());
                 }
                 editor.setState(java.awt.Frame.NORMAL);
                 editor.setVisible(true);

@@ -44,7 +44,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
         super(type, patch1, InstanceName1, location);
     }
     
-    void Launch() {
+    public void Launch() {
         String link = getInstanceName();
         if (link.startsWith("www.")
                 || link.startsWith("http://")
