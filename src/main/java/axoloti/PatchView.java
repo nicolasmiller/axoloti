@@ -76,6 +76,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
+import static javax.swing.TransferHandler.COPY_OR_MOVE;
+import static javax.swing.TransferHandler.MOVE;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
@@ -153,6 +155,7 @@ public class PatchView {
             c.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
             c.setLocation(0, 0);
             c.setOpaque(false);
+            c.validate();
         }
 
         Layers.add(objectLayer, new Integer(1));
@@ -182,8 +185,6 @@ public class PatchView {
         Layers.setOpaque(true);
         Layers.revalidate();
 
-//        Layers.doLayout();
-
         TransferHandler TH = new TransferHandler() {
             @Override
             public int getSourceActions(JComponent c) {
@@ -208,8 +209,7 @@ public class PatchView {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (action == MOVE) {
-                    deleteSelectedAxoObjectInstanceViews();
-                    cleanUpObjectLayer();
+                    deleteSelectedAxoObjInstances();
                 }
             }
 
@@ -335,9 +335,6 @@ public class PatchView {
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
                     deleteSelectedAxoObjectInstanceViews();
-                    cleanUpObjectLayer();
-                    Layers.revalidate();
-
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
                     MoveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
@@ -566,6 +563,7 @@ public class PatchView {
                 objectView.setLocation(newposx, newposy);
                 objectView.SetSelected(true);
             }
+            objectLayerPanel.validate();
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
@@ -801,7 +799,7 @@ public class PatchView {
 
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
-        Layers.revalidate();
+        Layers.validate();
 
         for (NetView n : netViews) {
             n.updateBounds();
@@ -820,6 +818,7 @@ public class PatchView {
         if (n != null) {
             netLayerPanel.add(n);
             netViews.add(n);
+            n.updateBounds();
         }
         return n;
     }
@@ -829,6 +828,7 @@ public class PatchView {
         if (n != null) {
             netLayerPanel.add(n);
             netViews.add(n);
+            n.updateBounds();
         }
         return n;
     }
@@ -864,6 +864,7 @@ public class PatchView {
     public void delete(AxoObjectInstanceViewAbstract o) {
         PatchView.this.patchController.delete(o);
         objectLayerPanel.remove(o);
+        objectLayerPanel.repaint(o.getBounds());
         objectLayerPanel.validate();
         AdjustSize();
     }
@@ -930,8 +931,13 @@ public class PatchView {
         Layers.invalidate();
     }
 
+        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+    }
+
     public void repaint() {
-        Layers.repaint();
+        if (Layers != null) {
+            Layers.repaint();
+        }
     }
 
     void SetDSPLoad(int pct) {
@@ -1098,17 +1104,6 @@ public class PatchView {
                 && (patchController.getSettings().editor != null)) {
             patchController.getSettings().editor.dispose();
         }
-    }
-
-    void cleanUpObjectLayer() {
-        if (!isLocked()) {
-            for (Component c : objectLayerPanel.getComponents()) {
-                if (!objectInstanceViews.contains((AxoObjectInstanceViewAbstract) c)) {
-                    this.objectLayerPanel.remove(c);
-                }
-            }
-        }
-        repaint();
     }
 
     Dimension GetSize() {

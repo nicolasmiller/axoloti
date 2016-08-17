@@ -213,7 +213,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
         Titlebar.setAlignmentX(LEFT_ALIGNMENT);
         add(Titlebar);
-        Titlebar.doLayout();
         InstanceLabel = new LabelComponent(model.getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {

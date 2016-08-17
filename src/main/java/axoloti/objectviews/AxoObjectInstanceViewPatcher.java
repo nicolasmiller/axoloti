@@ -33,11 +33,6 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
             model.setType(ao);
             PostConstructor();
         }
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
-        doLayout();
-        invalidate();
         validate();
     }
 
@@ -75,7 +70,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
             model.getPatchFrame().Close();
         }
     }
-    
+
     @Override
     public void Unlock() {
         super.Unlock();

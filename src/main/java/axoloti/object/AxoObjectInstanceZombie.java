@@ -86,8 +86,8 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     public ArrayList<OutletInstance> GetOutletInstances() {
         return outletInstances;
     }
-    
-    @Override    
+
+    @Override
     public AxoObjectInstanceViewZombie ViewFactory() {
         return new AxoObjectInstanceViewZombie(this);
     }

@@ -66,12 +66,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     public void setCommentText(String commentText) {
         this.commentText = commentText;
     }
-    
+
     @Override
     public AxoObjectInstanceViewComment ViewFactory() {
         return new AxoObjectInstanceViewComment(this);
     }
-    
+
     @Override
     public AxoObjectInstanceViewAbstract CreateView() {
         AxoObjectInstanceViewComment pi = ViewFactory();

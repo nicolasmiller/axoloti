@@ -85,16 +85,16 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
     }
-    
-    @Override    
+
+    @Override
     public AxoObjectInstanceViewPatcher ViewFactory() {
         return new AxoObjectInstanceViewPatcher(this);
     }
-    
+
     public PatchController getPatchController() {
         return patchController;
     }
-    
+
     public PatchFrame getPatchFrame() {
         return pf;
     }

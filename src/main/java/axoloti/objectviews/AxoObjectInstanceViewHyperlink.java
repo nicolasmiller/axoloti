@@ -87,10 +87,11 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceView {
         });
         InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
+        setLocation(x, y);
 
         resizeToGrid();
     }
-    
+
     @Override
     public void setInstanceName(String s) {
         super.setInstanceName(s);

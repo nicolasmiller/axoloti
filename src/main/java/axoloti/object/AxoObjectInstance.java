@@ -525,7 +525,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
 
         if (selected == null) {
-            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);            
+            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
             return;
         }
         if (selected != getType()) {
@@ -589,12 +589,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    @Override    
+
+    @Override
     public AxoObjectInstanceView ViewFactory() {
         return new AxoObjectInstanceView(this);
     }
-    
+
     @Override
     public AxoObjectInstanceViewAbstract CreateView() {
         AxoObjectInstanceView pi = ViewFactory();

@@ -25,7 +25,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceView {
         super(model);
         this.model = model;
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
@@ -99,10 +99,11 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceView {
             }
         });
         add(InstanceLabel);
+        setLocation(x, y);
 
         resizeToGrid();
     }
-    
+
     @Override
     public void setInstanceName(String s) {
         super.setInstanceName(s);

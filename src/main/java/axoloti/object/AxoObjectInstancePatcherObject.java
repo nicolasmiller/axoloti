@@ -55,15 +55,15 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
          */
     }
 
-    @Override    
+    @Override
     public AxoObjectInstanceViewPatcherObject ViewFactory() {
         return new AxoObjectInstanceViewPatcherObject(this);
     }
-    
+
     public AxoObject getAxoObject() {
         return ao;
     }
-    
+
     public void setAxoObject(AxoObject axoObject) {
         this.ao = axoObject;
     }

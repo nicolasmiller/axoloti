@@ -74,6 +74,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceView {
         });
         InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
+        setLocation(x, y);
 
         resizeToGrid();
     }
@@ -136,7 +137,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceView {
         if (InstanceLabel != null) {
             InstanceLabel.setText(model.getCommentText());
         }
-        doLayout();
+        revalidate();
         if (getParent() != null) {
             getParent().repaint();
         }

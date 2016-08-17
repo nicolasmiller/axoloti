@@ -51,6 +51,22 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
         attributeName = attr.getName();
     }
 
+    public void PostConstructor() {
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        add(new LabelComponent(GetDefinition().getName()));
+        setSize(getPreferredSize());
+    }
+
+    @Override
+    public String getName() {
+        return attributeName;
+    }
+
+    public abstract void Lock();
+
+    public abstract void UnLock();
+
     public abstract String CValue();
 
     public abstract void CopyValueFrom(AttributeInstance a1);
@@ -72,16 +88,16 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
-    
+
     public abstract AttributeInstanceView ViewFactory(AxoObjectInstanceView o);
-    
+
     public AttributeInstanceView CreateView(AxoObjectInstanceView o) {
         AttributeInstanceView pi = ViewFactory(o);
         o.add(pi);
         pi.PostConstructor();
         return pi;
     }
-    
+
     public String getAttributeName() {
         return attributeName;
     }

@@ -45,7 +45,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public AxoObjectInstanceHyperlink(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
-    
+
     public void Launch() {
         String link = getInstanceName();
         if (link.startsWith("www.")
@@ -75,11 +75,11 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
         return "";
     }
 
-    @Override    
+    @Override
     public AxoObjectInstanceViewHyperlink ViewFactory() {
         return new AxoObjectInstanceViewHyperlink(this);
     }
-    
+
     @Override
     public AxoObjectInstanceViewAbstract CreateView() {
         AxoObjectInstanceViewHyperlink pi = ViewFactory();

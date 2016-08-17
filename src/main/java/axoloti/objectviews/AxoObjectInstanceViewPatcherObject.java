@@ -43,9 +43,6 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
             }
         });
         add(BtnEdit);
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
         resizeToGrid();
     }
 
@@ -56,11 +53,6 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
             model.setType(model.getAxoObject());
             PostConstructor();
         }
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
-        doLayout();
-        invalidate();
         validate();
     }
 
