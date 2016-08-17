@@ -59,7 +59,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     public AxoObjectInstanceAbstract getModel() {
         return model;
     }
-    
+
     public void Lock() {
         Locked = true;
     }
@@ -78,7 +78,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         //setMaximumSize(new Dimension(Short.MAX_VALUE,
         //        Short.MAX_VALUE));
 
-        this.setLocation(model.getX(), model.getY());
 //        setFocusable(true);
         Titlebar = new TitleBarPanel(this);
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
@@ -86,6 +85,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         Titlebar.setMinimumSize(TitleBarMinimumSize);
         Titlebar.setMaximumSize(TitleBarMaximumSize);
         setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
+        setBorder(borderUnselected);
         setOpaque(true);
         model.resolveType();
 
@@ -242,11 +242,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
 
     private PatchView patchView;
     private PatchModel patchModel;
-    
+
     public void setPatchView(PatchView patchView) {
         this.patchView = patchView;
     }
-    
+
     public void setPatchModel(PatchModel patchModel) {
         this.patchModel = patchModel;
     }
@@ -258,7 +258,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     public PatchModel getPatchModel() {
         return this.patchModel;
     }
-    
+
     public ArrayList<InletInstanceView> getInletInstanceViews() {
         return new ArrayList<InletInstanceView>();
     }
@@ -353,7 +353,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
 //            AxoObjectInstanceAbstract o1 = getPatchModel().GetObjectInstance(InstanceName);
 //            if ((o1 != null) && (o1 != this)) {
 //                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
-//                doLayout();
 //                repaint();
 //                return;
 //            }
@@ -362,21 +361,24 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         if (InstanceLabel != null) {
             InstanceLabel.setText(InstanceName);
         }
-        doLayout();
     }
+
+    static Border borderSelected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
+    static Border borderUnselected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
+ +
 
     public void SetSelected(boolean Selected) {
         if (this.selected != Selected) {
             if (Selected) {
-                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected));
+                setBorder(borderSelected);
             } else {
-                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
+                setBorder(borderUnselected);
             }
             repaint();
         }
         this.selected = Selected;
     }
-    
+
     public Boolean isSelected() {
         return this.selected;
     }
@@ -384,7 +386,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     public void SetLocation(int x1, int y1) {
         super.setLocation(x1, y1);
 
-// set on model?        
+// set on model?
 //        x = x1;
 //        y = y1;
         if (getPatchView() != null) {
@@ -399,7 +401,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     }
 
     public void resizeToGrid() {
-        doLayout();
+        validate();
         Dimension d = getPreferredSize();
         d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
@@ -408,17 +410,17 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
 
     public void Close() {
     }
-    
+
     public void updateObj() {
         model.getType().addObjectModifiedListener(this);
         getPatchModel().ChangeObjectInstanceType(this.getObjectInstance(), this.getObjectInstance().getType());
         getPatchModel().cleanUpIntermediateChangeStates(3);
     }
-    
+
     @Override
     public void ObjectModified(Object src) {
     }
-    
+
     public AxoObjectInstanceAbstract getObjectInstance() {
         return model;
     }

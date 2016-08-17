@@ -167,11 +167,11 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     public int getY() {
         return y;
     }
-    
+
     public void setX(int x) {
         this.x = x;
     }
-    
+
     public void setY(int y) {
         this.y = y;
     }
@@ -317,8 +317,6 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
         return false;
     }
 
-
-
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
@@ -326,16 +324,16 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     public boolean isTypeWasAmbiguous() {
         return typeWasAmbiguous;
     }
-    
+
     public PatchModel getPatchModel() {
         return patchModel;
     }
-    
+
     public void updateObj1() {
     }
-    
+
     public abstract AxoObjectInstanceViewAbstract ViewFactory();
-    
+
     public AxoObjectInstanceViewAbstract CreateView() {
         AxoObjectInstanceViewAbstract pi = ViewFactory();
         pi.PostConstructor();
