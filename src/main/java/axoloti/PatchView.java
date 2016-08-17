@@ -27,6 +27,8 @@ import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
@@ -490,17 +492,30 @@ public class PatchView {
             // is this supposed to be a view?
             PatchModel p = serializer.read(PatchModel.class, v);
             HashMap<String, String> dict = new HashMap<String, String>();
-            for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
+            ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) p.objectinstances.clone();
+            for (AxoObjectInstanceAbstract o : obj2) {
                 o.patchModel = this.patchController.patchModel;
                 AxoObjectAbstract obj = o.resolveType();
-                Modulator[] m = obj.getModulators();
-                if (m != null) {
-                    for (Modulator mm : m) {
-                        mm.objinst = o;
-                        PatchView.this.patchController.patchModel.addModulator(mm);
+                if (obj != null) {
+                    Modulator[] m = obj.getModulators();
+                    if (m != null) {
+                        if (Modulators == null) {
+                            Modulators = new ArrayList<Modulator>();
+                        }
+                        for (Modulator mm : m) {
+                            mm.objinst = o;
+                            Modulators.add(mm);
+                        }
                     }
+                } else {
+                    //o.patch = this;
+                    p.objectinstances.remove(o);
+                    AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(new AxoObjectZombie(), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
+                    zombie.patch = this;
+                    zombie.typeName = o.typeName;
+                    zombie.PostConstructor();
+                    p.objectinstances.add(zombie);
                 }
-
             }
             int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
             for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {

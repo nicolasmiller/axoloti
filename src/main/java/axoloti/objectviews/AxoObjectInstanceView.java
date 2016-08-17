@@ -207,8 +207,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
          h.add(Box.createHorizontalGlue());
          h.add(new JSeparator(SwingConstants.VERTICAL));*/
 //        IndexLabel.setSize(IndexLabel.getMinimumSize());
-        IndexLabel = new LabelComponent("");
-        model.refreshIndex();
+//        IndexLabel = new LabelComponent("");
+        //        model.refreshIndex();
         //h.add(IndexLabel);
         //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
         Titlebar.setAlignmentX(LEFT_ALIGNMENT);
@@ -354,7 +354,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             AttributeInstanceView attributeInstanceView = attributeInstance1.CreateView(this);
             attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
             add(attributeInstanceView);
-            attributeInstanceView.doLayout();
             model.attributeInstances.add(attributeInstance1);
         }
 
@@ -368,7 +367,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             ParameterInstanceView view = pin.CreateView(this);
             view.PostConstructor();
             view.setAlignmentX(RIGHT_ALIGNMENT);
-            view.doLayout();
             model.parameterInstances.add(pin);
         }
 
@@ -376,7 +374,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
             DisplayInstanceView view = pin.CreateView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
-            view.doLayout();
             model.displayInstances.add(pin);
         }
 //        p_displays.add(Box.createHorizontalGlue());
@@ -392,7 +389,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     }
 
     public void refreshIndex() {
-        if (getPatchView() != null) {
+        if (getPatchView() != null && IndexLabel != null) {
             IndexLabel.setText(" " + this.getPatchView().getObjectInstanceViews().indexOf(this));
         }
     }

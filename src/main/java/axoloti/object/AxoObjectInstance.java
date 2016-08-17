@@ -78,7 +78,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public ArrayList<AttributeInstance> attributeInstances;
     public ArrayList<DisplayInstance> displayInstances;
 
-
     @Override
     public ArrayList<ParameterInstance> getParameterInstances() {
         return parameterInstances;
