@@ -485,9 +485,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             setVisible(false);
-            
-            patchController.patchView.Layers.revalidate();
-            patchController.patchView.Layers.repaint();
+            patchController.patchView.repaint();
         }
     }
 

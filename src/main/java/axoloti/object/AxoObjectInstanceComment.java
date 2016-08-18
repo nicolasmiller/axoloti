@@ -19,6 +19,8 @@ package axoloti.object;
 
 import axoloti.objectviews.AxoObjectInstanceViewComment;
 import axoloti.PatchModel;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import java.awt.Point;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -68,5 +70,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     @Override
     public AxoObjectInstanceViewComment ViewFactory() {
         return new AxoObjectInstanceViewComment(this);
+    }
+    
+    @Override
+    public AxoObjectInstanceViewAbstract CreateView() {
+        AxoObjectInstanceViewComment pi = ViewFactory();
+        pi.PostConstructor();
+        return pi;
     }
 }

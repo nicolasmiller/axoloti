@@ -279,7 +279,7 @@ public class FileMenu extends JMenu {
         patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);
         PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
-        patchView.PostContructor();
+        patchView.PostConstructor();
         patchView.setFileNamePath("untitled");
         pf.setVisible(true);
     }

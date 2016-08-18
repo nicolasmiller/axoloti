@@ -53,7 +53,7 @@ public class AxoObjectFromPatch extends AxoObject {
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
             patchView.setFileNamePath(f.getAbsolutePath());
-            patchView.PostContructor();
+            patchView.PostConstructor();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -102,7 +102,7 @@ public class AxoObjectFromPatch extends AxoObject {
                 patchController.setPatchView(patchView);
                 pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
                 patchView.setFileNamePath(f.getPath());
-                patchView.PostContructor();
+                patchView.PostConstructor();
                 patchView.ObjEditor = this;
             } catch (Exception ex) {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,7 +115,7 @@ public class AxoObjectFromPatch extends AxoObject {
             patchController.setPatchView(patchView);
             pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
             patchView.setFileNamePath(id);
-            patchView.PostContructor();
+            patchView.PostConstructor();
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);

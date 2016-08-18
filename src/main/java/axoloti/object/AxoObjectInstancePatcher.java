@@ -56,7 +56,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pf == null) {
             pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
             patchController.patchView.setFileNamePath(getInstanceName());
-            patchController.patchView.PostContructor();
+            patchController.patchView.PostConstructor();
         }
         if (patchController != null) {
             AxoObject ao = patchController.patchModel.GenerateAxoObj();
@@ -80,7 +80,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pf == null) {
             pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
             patchController.patchView.setFileNamePath(getInstanceName());
-            patchController.patchView.PostContructor();
+            patchController.patchView.PostConstructor();
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);

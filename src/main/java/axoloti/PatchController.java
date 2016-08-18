@@ -78,7 +78,7 @@ public class PatchController {
             patchModel.currentState -= 1;
             patchModel.loadState();
             SetDirty(false);
-            patchView.PostContructor();
+            patchView.PostConstructor();
         }
     }
 
@@ -87,7 +87,7 @@ public class PatchController {
             patchModel.currentState += 1;
             patchModel.loadState();
             SetDirty(false);
-            patchView.PostContructor();
+            patchView.PostConstructor();
         }
     }
 

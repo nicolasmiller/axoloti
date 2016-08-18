@@ -31,6 +31,7 @@ import axoloti.datatypes.Frac32buffer;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
 import java.awt.Point;
@@ -592,5 +593,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override    
     public AxoObjectInstanceView ViewFactory() {
         return new AxoObjectInstanceView(this);
+    }
+    
+    @Override
+    public AxoObjectInstanceViewAbstract CreateView() {
+        AxoObjectInstanceView pi = ViewFactory();
+        pi.PostConstructor();
+        return pi;
     }
 }

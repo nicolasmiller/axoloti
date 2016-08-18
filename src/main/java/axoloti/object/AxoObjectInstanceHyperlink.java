@@ -20,6 +20,8 @@ package axoloti.object;
 import axoloti.objectviews.AxoObjectInstanceViewHyperlink;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.AxoObjectInstanceViewComment;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.io.File;
@@ -76,5 +78,12 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     @Override    
     public AxoObjectInstanceViewHyperlink ViewFactory() {
         return new AxoObjectInstanceViewHyperlink(this);
+    }
+    
+    @Override
+    public AxoObjectInstanceViewAbstract CreateView() {
+        AxoObjectInstanceViewHyperlink pi = ViewFactory();
+        pi.PostConstructor();
+        return pi;
     }
 }

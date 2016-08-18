@@ -33,6 +33,7 @@ import axoloti.outlets.OutletInstanceView;
 import axoloti.parameterviews.ParameterInstanceView;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -180,6 +181,7 @@ public class PatchView {
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         Layers.setOpaque(true);
         Layers.revalidate();
+
 //        Layers.doLayout();
 
         TransferHandler TH = new TransferHandler() {
@@ -781,7 +783,7 @@ public class PatchView {
         }
     }
 
-    public void PostContructor() {
+    public void PostConstructor() {
         // get rid of this
         patchController.patchModel.PostContructor();
 
@@ -876,6 +878,7 @@ public class PatchView {
             objectLayerPanel.add(objView);
             objView.SetSelected(true);
             objView.moveToFront();
+            objView.setVisible(true);
             objView.revalidate();
             AdjustSize();
         }
@@ -1002,7 +1005,7 @@ public class PatchView {
             patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
             patchView.setFileNamePath(name);
-            patchView.PostContructor();
+            patchView.PostConstructor();
             pf.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1031,7 +1034,7 @@ public class PatchView {
             patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
             patchView.setFileNamePath(f.getAbsolutePath());
-            patchView.PostContructor();
+            patchView.PostConstructor();
             patchView.setFileNamePath(f.getPath());
             return pf;
         } catch (java.lang.reflect.InvocationTargetException ite) {

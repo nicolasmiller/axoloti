@@ -769,7 +769,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
             patchView.setFileNamePath(f.getPath());
-            patchView.PostContructor();            
+            patchView.PostConstructor();            
             patchModel.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
@@ -839,7 +839,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             patchController.setPatchView(patchView);
             PatchFrame patchFrame = new PatchFrame(patchController, qcmdprocessor);
             patchView.setFileNamePath(f.getPath());
-            patchView.PostContructor();
+            patchView.PostConstructor();
             status = patchModel.save(f);
             if (status == false) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: {0}", f.getPath());
@@ -937,7 +937,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);
         PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
-        patchView.PostContructor();
+        patchView.PostConstructor();
         patchView.setFileNamePath("untitled");
         pf.setVisible(true);
     }
