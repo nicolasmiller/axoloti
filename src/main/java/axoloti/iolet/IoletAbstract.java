@@ -5,7 +5,7 @@ import axoloti.Net;
 import axoloti.NetDragging;
 import axoloti.NetView;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.inlets.InletInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.OutletInstanceView;
@@ -68,7 +68,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     public Point getJackLocInCanvas() {
         try {
-            PatchView p = getPatchView();
+            PatchViewSwing p = getPatchView();
             if (p != null) {
                 return SwingUtilities.convertPoint(jack, 5, 5, getPatchView().Layers);
             } else {
@@ -83,7 +83,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     abstract public JPopupMenu getPopup();
 
-    public PatchView getPatchView() {
+    public PatchViewSwing getPatchView() {
         return axoObj.getPatchView();
     }
 

@@ -2,7 +2,7 @@ package axoloti.objectviews;
 
 import axoloti.MainFrame;
 import axoloti.Net;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attributedefinition.AxoAttribute;
@@ -54,7 +54,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     private ArrayList<OutletInstanceView> outletInstanceViews = new ArrayList<OutletInstanceView>();
     private ArrayList<ParameterInstanceView> parameterInstanceViews = new ArrayList<ParameterInstanceView>();
 
-    public AxoObjectInstanceView(AxoObjectInstanceAbstract model, PatchView patchView) {
+    public AxoObjectInstanceView(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = (AxoObjectInstance) model;
         init1();
@@ -358,7 +358,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    PatchView.OpenPatch(getType().GetHelpPatchFile());
+                    PatchViewSwing.OpenPatch(getType().GetHelpPatchFile());
                 }
             });
             popup.add(popm_help);

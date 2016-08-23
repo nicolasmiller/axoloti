@@ -198,7 +198,7 @@ public class Net {
         return "net" + i;
     }
     
-    public NetView CreateView(PatchView patchView) {
+    public NetView CreateView(PatchViewSwing patchView) {
         NetView n =  new NetView(this, patchView);
         n.PostConstructor();
         return n;

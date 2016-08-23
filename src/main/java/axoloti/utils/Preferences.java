@@ -18,6 +18,9 @@
 package axoloti.utils;
 
 import axoloti.Axoloti;
+import axoloti.PatchController;
+import axoloti.PatchView;
+import axoloti.PatchViewSlick2D;
 import axoloti.Version;
 import java.io.File;
 import java.io.IOException;
@@ -467,5 +470,10 @@ public class Preferences {
     public void setThemePath(String themePath) {
         this.themePath = themePath;
         SavePrefs();
+    }
+    
+    public PatchView getPatchView(PatchController patchController) {
+        return new PatchViewSlick2D(patchController);
+//        return new PatchViewSwing(patchController);
     }
 }
