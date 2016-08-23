@@ -114,13 +114,13 @@
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/slick.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/lwjgl.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/lwjgl_util.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/jinput.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/natives-windows.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/natives-mac.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lib/natives-linux.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/slick.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lwjgl.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/lwjgl_util.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/jinput.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/natives-windows.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/natives-mac.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slick2d/natives-linux.jar"/>
 
       <!-- include source files -->
       <fileset dir="src">
@@ -275,13 +275,13 @@
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
-             <include name="slick2d/lib/slick.jar"/>
-             <include name="slick2d/lib/lwjgl.jar"/>
-             <include name="slick2d/lib/lwjgl_util.jar"/>
-             <include name="slick2d/lib/jinput.jar"/>
-             <include name="slick2d/lib/natives-windows.jar"/>
-             <include name="slick2d/lib/natives-mac.jar"/>
-             <include name="slick2d/lib/natives-linux.jar"/>
+             <include name="slick2d/slick.jar"/>
+             <include name="slick2d/lwjgl.jar"/>
+             <include name="slick2d/lwjgl_util.jar"/>
+             <include name="slick2d/jinput.jar"/>
+             <include name="slick2d/natives-windows.jar"/>
+             <include name="slick2d/natives-mac.jar"/>
+             <include name="slick2d/natives-linux.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir=".">
 			 <include name="doc/*"/>
