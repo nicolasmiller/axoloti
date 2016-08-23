@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFrac32UMapVSlider;
 import org.simpleframework.xml.Attribute;
 
@@ -54,7 +55,8 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?data2<<20:0x07FFFFFF");
     }
 
-    public ParameterInstanceViewFrac32UMapVSlider ViewFactory() {
+    @Override
+    public IParameterInstanceView getViewInstance() {
         return new ParameterInstanceViewFrac32UMapVSlider(this);
     }
 }

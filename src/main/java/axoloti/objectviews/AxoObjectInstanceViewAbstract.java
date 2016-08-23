@@ -1,15 +1,17 @@
 package axoloti.objectviews;
 
-import axoloti.NetView;
+import axoloti.INetView;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
-import axoloti.inlets.InletInstanceView;
+import axoloti.attributeviews.IAttributeInstanceView;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectModifiedListener;
-import axoloti.outlets.OutletInstanceView;
-import axoloti.parameterviews.ParameterInstanceView;
+import axoloti.outlets.IOutletInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.utils.Constants;
 import components.LabelComponent;
 import components.TextFieldComponent;
@@ -31,10 +33,9 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModifiedListener, MouseListener, MouseMotionListener {
+public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModifiedListener, MouseListener, MouseMotionListener, IAxoObjectInstanceView {
 
     protected AxoObjectInstanceAbstract model;
     protected MouseListener ml;
@@ -49,7 +50,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     LabelComponent InstanceLabel;
     private boolean Locked = false;
 
-    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchView patchView) {
+    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
         this.model = model;
         this.patchView = patchView;
     }
@@ -58,22 +59,25 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         return model;
     }
 
+    @Override
     public void Lock() {
         Locked = true;
     }
 
+    @Override
     public void Unlock() {
         Locked = false;
     }
 
+    @Override
     public boolean isLocked() {
         return Locked;
     }
 
     JPopupMenu popup;
 
-    private final Dimension TitleBarMinimumSize = new Dimension(40, 12);
-    private final Dimension TitleBarMaximumSize = new Dimension(32768, 12);
+    private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
+    private static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
 
     public void PostConstructor() {
         removeAll();
@@ -85,8 +89,8 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         Titlebar.removeAll();
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
         Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
-        Titlebar.setMinimumSize(TitleBarMinimumSize);
-        Titlebar.setMaximumSize(TitleBarMaximumSize);
+        Titlebar.setMinimumSize(TITLEBAR_MINIMUM_SIZE);
+        Titlebar.setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
 
         setBorder(borderUnselected);
         model.resolveType();
@@ -191,11 +195,12 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
                 draggingObjects.add(this);
                 dragLocation = getLocation();
                 if (isSelected()) {
-                    for (AxoObjectInstanceViewAbstract o : getPatchView().getObjectInstanceViews()) {
+                    for (IAxoObjectInstanceView o : getPatchView().getObjectInstanceViews()) {
                         if (o.isSelected()) {
-                            moveToDraggedLayer(o);
-                            draggingObjects.add(o);
-                            o.dragLocation = o.getLocation();
+                            AxoObjectInstanceViewAbstract oa = (AxoObjectInstanceViewAbstract) o;
+                            moveToDraggedLayer(oa);
+                            draggingObjects.add(oa);
+                            oa.dragLocation = oa.getLocation();
                         }
                     }
                 }
@@ -243,26 +248,31 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         }
     }
 
-    private PatchView patchView;
+    private final PatchViewSwing patchView;
 
-    public PatchView getPatchView() {
-        return this.patchView;
+    @Override
+    public PatchViewSwing getPatchView() {
+        return patchView;
     }
 
+    @Override
     public PatchModel getPatchModel() {
-        return this.patchView.getPatchController().patchModel;
+        return patchView.getPatchController().patchModel;
     }
 
-    public ArrayList<InletInstanceView> getInletInstanceViews() {
-        return new ArrayList<InletInstanceView>();
+    @Override
+    public ArrayList<IInletInstanceView> getInletInstanceViews() {
+        return new ArrayList<>();
     }
 
-    public ArrayList<OutletInstanceView> getOutletInstanceViews() {
-        return new ArrayList<OutletInstanceView>();
+    @Override
+    public ArrayList<IOutletInstanceView> getOutletInstanceViews() {
+        return new ArrayList<>();
     }
 
-    public ArrayList<ParameterInstanceView> getParameterInstanceViews() {
-        return new ArrayList<ParameterInstanceView>();
+    @Override
+    public ArrayList<IParameterInstanceView> getParameterInstanceViews() {
+        return new ArrayList<>();
     }
 
     @Override
@@ -274,15 +284,15 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         model.setY(y);
         if (getPatchView() != null) {
             repaint();
-            for (InletInstanceView i : getInletInstanceViews()) {
-                NetView n = getPatchView().GetNetView(i);
+            for (IInletInstanceView i : getInletInstanceViews()) {
+                INetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
                 }
             }
-            for (OutletInstanceView i : getOutletInstanceViews()) {
-                NetView n = getPatchView().GetNetView(i);
+            for (IOutletInstanceView i : getOutletInstanceViews()) {
+                INetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
@@ -362,10 +372,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         doLayout();
     }
 
-    public boolean IsSelected() {
-        return selected;
-    }
-
     static Border borderSelected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
     static Border borderUnselected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
 
@@ -389,12 +395,13 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         super.setLocation(x1, y1);
         model.setLocation(x1, y1);
         if (getPatchView() != null) {
-            for (NetView n : getPatchView().getNetViews()) {
+            for (INetView n : getPatchView().getNetViews()) {
                 n.updateBounds();
             }
         }
     }
 
+    @Override
     public void moveToFront() {
         getPatchView().objectLayerPanel.setComponentZOrder(this, 0);
     }
@@ -423,8 +430,33 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     @Override
     public void ObjectModified(Object src) {
     }
+    
 
     public AxoObjectInstanceAbstract getObjectInstance() {
         return model;
     }
+    
+    @Override
+    public void addParameterInstanceView(IParameterInstanceView view) {
+    }
+    
+    @Override
+    public void addAttributeInstanceView(IAttributeInstanceView view) {
+        
+    }
+    
+    @Override
+    public void addDisplayInstanceView(IDisplayInstanceView view) {
+        
+    }
+    
+    @Override
+    public void addOutletInstanceView(IOutletInstanceView view) {
+        
+    }
+    
+    @Override
+    public void addInletInstanceView(IInletInstanceView view) {
+        
+    }  
 }

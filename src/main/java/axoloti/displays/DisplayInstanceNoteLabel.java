@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewNoteLabel;
+import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.PitchToNote;
 
@@ -39,7 +40,7 @@ public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteL
     }
 
     @Override
-    public DisplayInstanceViewNoteLabel ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewNoteLabel(this);
     }
 }

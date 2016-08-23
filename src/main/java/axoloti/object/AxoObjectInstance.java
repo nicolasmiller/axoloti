@@ -22,6 +22,8 @@ import axoloti.Net;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewProcessing;
+import axoloti.PatchViewSwing;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
@@ -30,10 +32,11 @@ import axoloti.datatypes.Frac32buffer;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
+import axoloti.pobjectviews.PAxoObjectInstanceView;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -553,7 +556,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         String iname = getInstanceName();
         AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().ChangeObjectInstanceType1(this, o);
         AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
-        PatchFrame pf = PatchView.OpenPatch(ao.f);
+        PatchFrame pf = PatchViewSwing.OpenPatch(ao.f);
         oi.pf = pf;
         oi.patchModel = pf.getPatchModel();
         oi.setInstanceName(iname);
@@ -594,13 +597,18 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public AxoObjectInstanceView ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceView(this, patchView);
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if(patchView instanceof PatchViewSwing) {
+            return new AxoObjectInstanceView(this, (PatchViewSwing) patchView);
+        }
+        else {
+            return new PAxoObjectInstanceView(this, (PatchViewProcessing) patchView);
+        }
     }
 
     @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceView pi = ViewFactory(patchView);
+    public IAxoObjectInstanceView createView(PatchView patchView) {
+        IAxoObjectInstanceView pi = getViewInstance(patchView);
         pi.PostConstructor();
         return pi;
     }

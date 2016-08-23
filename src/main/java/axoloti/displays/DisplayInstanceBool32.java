@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewBool32;
+import axoloti.displayviews.IDisplayInstanceView;
 
 /**
  *
@@ -30,7 +31,7 @@ public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
     }
 
     @Override
-    public DisplayInstanceViewBool32 ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewBool32(this);
     }
 }

@@ -1,13 +1,15 @@
 package axoloti.iolet;
 
+import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.NetDragging;
-import axoloti.NetView;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstanceView;
 import java.awt.Component;
 import java.awt.IllegalComponentStateException;
@@ -22,7 +24,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Attribute;
 
-public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener {
+public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener, IIoletAbstract {
 
     @Deprecated
     @Attribute(required = false)
@@ -68,7 +70,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     public Point getJackLocInCanvas() {
         try {
-            PatchView p = getPatchView();
+            PatchViewSwing p = getPatchView();
             if (p != null) {
                 return SwingUtilities.convertPoint(jack, 5, 5, getPatchView().Layers);
             } else {
@@ -83,7 +85,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     abstract public JPopupMenu getPopup();
 
-    public PatchView getPatchView() {
+    public PatchViewSwing getPatchView() {
         return axoObj.getPatchView();
     }
 
@@ -110,9 +112,9 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                     dragnet = new NetDragging(getPatchView());
                     dragtarget = null;
                     if (this instanceof InletInstanceView) {
-                        dragnet.connectInlet((InletInstanceView) this);
+                        dragnet.connectInlet((IInletInstanceView) this);
                     } else {
-                        dragnet.connectOutlet((OutletInstanceView) this);
+                        dragnet.connectOutlet((IOutletInstanceView) this);
                     }
                 }
                 dragnet.setVisible(true);
@@ -218,7 +220,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                 || getRootPane().getCursor() != MainFrame.transparentCursor)
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
-            NetView netView = axoObj.getPatchView().GetNetView(this);
+            INetView netView = axoObj.getPatchView().GetNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);

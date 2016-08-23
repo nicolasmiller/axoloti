@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewInt32Label;
+import axoloti.displayviews.IDisplayInstanceView;
 
 /**
  *
@@ -30,7 +31,7 @@ public class DisplayInstanceInt32Label extends DisplayInstanceInt32<DisplayInt32
     }
 
     @Override
-    public DisplayInstanceViewInt32Label ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewInt32Label(this);
     }
 }

@@ -19,8 +19,10 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributeviews.AttributeInstanceViewSpinner;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 
 /**
  *
@@ -53,7 +55,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     }
 
     @Override
-    public AttributeInstanceViewSpinner ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceViewSpinner(this, o);
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        return new AttributeInstanceViewSpinner(this, (AxoObjectInstanceView) o);
     }
 }

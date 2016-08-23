@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewFrac32SChart;
+import axoloti.displayviews.IDisplayInstanceView;
 
 /**
  *
@@ -29,7 +30,7 @@ public class DisplayInstanceFrac32SChart extends DisplayInstanceFrac32<DisplayFr
     }
 
     @Override
-    public DisplayInstanceViewFrac32SChart ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewFrac32SChart(this);
     }
 }

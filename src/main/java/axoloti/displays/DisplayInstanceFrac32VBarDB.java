@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewFrac32VBarDB;
+import axoloti.displayviews.IDisplayInstanceView;
 
 /**
  *
@@ -30,7 +31,7 @@ public class DisplayInstanceFrac32VBarDB extends DisplayInstanceFrac32<DisplayFr
     }
 
     @Override
-    public DisplayInstanceViewFrac32VBarDB ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewFrac32VBarDB(this);
     }
 }
