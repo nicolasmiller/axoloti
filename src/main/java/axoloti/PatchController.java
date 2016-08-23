@@ -1,10 +1,10 @@
 package axoloti;
 
-import axoloti.inlets.InletInstanceView;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.outlets.OutletInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.outlets.IOutletInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -48,11 +48,11 @@ public class PatchController {
     public PatchFrame getPatchFrame() {
         return patchFrame;
     }
-    
+
     public boolean canUndo() {
         return !patchView.isLocked() && patchModel.canUndo();
     }
-    
+
     public boolean canRedo() {
         return !patchView.isLocked() && patchModel.canRedo();
     }
@@ -127,8 +127,8 @@ public class PatchController {
     public void UploadToSDCard() {
         UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
-    
-    public Net disconnect(InletInstanceView ii) {
+
+    public Net disconnect(IInletInstanceView ii) {
         if (!patchView.isLocked()) {
             return ii.getInletInstance().disconnect();
         } else {
@@ -136,8 +136,8 @@ public class PatchController {
             return null;
         }
     }
-    
-    public Net disconnect(OutletInstanceView oi) {
+
+    public Net disconnect(IOutletInstanceView oi) {
         if (!patchView.isLocked()) {
             return oi.getOutletInstance().disconnect();
         } else {
@@ -146,7 +146,7 @@ public class PatchController {
         }
     }
 
-    public Net AddConnection(InletInstanceView il, OutletInstanceView ol) {
+    public Net AddConnection(IInletInstanceView il, IOutletInstanceView ol) {
         if (!patchView.isLocked()) {
             return patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance());
         } else {
@@ -155,7 +155,7 @@ public class PatchController {
         }
     }
 
-    public Net AddConnection(InletInstanceView il, InletInstanceView ol) {
+    public Net AddConnection(IInletInstanceView il, IInletInstanceView ol) {
         if (!patchView.isLocked()) {
             return patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance());
         } else {
@@ -163,34 +163,32 @@ public class PatchController {
             return null;
         }
     }
-    
-    public void deleteNet(InletInstanceView ii) {
+
+    public void deleteNet(IInletInstanceView ii) {
         if (!patchView.isLocked()) {
             ii.getInletInstance().deleteNet();
-        }
-        else {
+        } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
     }
-    
-    public void deleteNet(OutletInstanceView oi) {
+
+    public void deleteNet(IOutletInstanceView oi) {
         if (!patchView.isLocked()) {
             oi.getOutletInstance().deleteNet();
-        }
-        else {
+        } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
     }
 
     public void setFileNamePath(String FileNamePath) {
         patchModel.setFileNamePath(FileNamePath);
-        if(getPatchFrame() != null) {
+        if (getPatchFrame() != null) {
             getPatchFrame().setTitle(FileNamePath);
         }
     }
 
-    public void delete(AxoObjectInstanceViewAbstract o) {
-        patchModel.delete(o.getModel());
+    public void delete(IAxoObjectInstanceView o) {
+        patchModel.delete((AxoObjectInstanceAbstract) o.getModel());
         o.Close();
     }
 
@@ -210,7 +208,7 @@ public class PatchController {
     public void SetDirty() {
         patchModel.SetDirty();
     }
-    
+
     public String getFileNamePath() {
         return patchModel.getFileNamePath();
     }
@@ -248,49 +246,49 @@ public class PatchController {
     public PatchSettings getSettings() {
         return patchModel.settings;
     }
-    
+
     public void ShowCompileFail() {
         patchView.ShowCompileFail();
     }
-    
+
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         patchModel.paste(v, pos, restoreConnectionsToExternalOutlets);
     }
-    
+
     public void undo() {
         patchModel.undo();
         this.patchFrame.updateUndoRedoEnabled();
     }
-    
+
     public void redo() {
         patchModel.redo();
         this.patchFrame.updateUndoRedoEnabled();
     }
-    
+
     public void repaintPatchView() {
         patchView.repaint();
     }
-    
+
     public Point getViewLocationOnScreen() {
-        return patchView.objectLayerPanel.getLocationOnScreen();
+        return patchView.getLocationOnScreen();
     }
-    
+
     public PatchView getPatchView() {
         return patchView;
     }
-    
+
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         return patchModel.ChangeObjectInstanceType(obj, objType);
     }
-    
+
     public void cleanUpIntermediateChangeStates(int n) {
         patchModel.cleanUpIntermediateChangeStates(n);
     }
-    
+
     public boolean isLoadingUndoState() {
         return patchModel.isLoadingUndoState();
     }
-    
+
     public void clearLoadingUndoState() {
         patchModel.setLoadingUndoState(false);
     }

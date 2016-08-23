@@ -17,13 +17,17 @@
  */
 package axoloti.inlets;
 
+import axoloti.MainFrame;
 import axoloti.Net;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.inlets.PInletInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -110,7 +114,7 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
 
     public Net disconnect() {
         Net n = axoObj.getPatchModel().disconnect(this);
-        if(n != null) {
+        if (n != null) {
             axoObj.getPatchModel().SetDirty();
         }
         return n;
@@ -119,18 +123,22 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
     public void deleteNet() {
         Net n = axoObj.getPatchModel().GetNet(this);
         axoObj.getPatchModel().delete(n);
-        if(n != null) {
+        if (n != null) {
             axoObj.getPatchModel().SetDirty();
         }
     }
 
-    public InletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new InletInstanceView(this, o);
+    public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+        }
     }
 
-    public InletInstanceView CreateView(AxoObjectInstanceView o) {
-        InletInstanceView inletInstanceView = ViewFactory(o);
-        o.p_inletViews.add(inletInstanceView);
+    public IInletInstanceView createView(IAxoObjectInstanceView o) {
+        IInletInstanceView inletInstanceView = getViewInstance(o);
+        o.addInletInstanceView(inletInstanceView);
         inletInstanceView.PostConstructor();
         return inletInstanceView;
     }

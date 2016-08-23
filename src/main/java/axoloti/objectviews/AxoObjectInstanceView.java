@@ -2,27 +2,31 @@ package axoloti.objectviews;
 
 import axoloti.MainFrame;
 import axoloti.Net;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributeviews.AttributeInstanceView;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
 import axoloti.displayviews.DisplayInstanceView;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectModifiedListener;
+import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceView;
 import components.LabelComponent;
 import components.PopupIcon;
@@ -39,7 +43,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements ObjectModifiedListener {
+public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements ObjectModifiedListener, IAxoObjectInstanceView {
 
     private AxoObjectInstance model;
     LabelComponent IndexLabel;
@@ -50,13 +54,13 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     public final JPanel p_outletViews = new JPanel();
     boolean deferredObjTypeUpdate = false;
 
-    private ArrayList<InletInstanceView> inletInstanceViews = new ArrayList<InletInstanceView>();
-    private ArrayList<OutletInstanceView> outletInstanceViews = new ArrayList<OutletInstanceView>();
-    private ArrayList<ParameterInstanceView> parameterInstanceViews = new ArrayList<ParameterInstanceView>();
+    private final ArrayList<IInletInstanceView> inletInstanceViews = new ArrayList<>();
+    private final ArrayList<IOutletInstanceView> outletInstanceViews = new ArrayList<>();
+    private final ArrayList<IParameterInstanceView> parameterInstanceViews = new ArrayList<>();
 
-    public AxoObjectInstanceView(AxoObjectInstanceAbstract model, PatchView patchView) {
+    public AxoObjectInstanceView(AxoObjectInstance model, PatchViewSwing patchView) {
         super(model, patchView);
-        this.model = (AxoObjectInstance) model;
+        this.model = model;
         init1();
     }
 
@@ -227,7 +231,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 }
             }
             model.inletInstances.add(inletInstance);
-            InletInstanceView view = inletInstance.CreateView(this);
+            InletInstanceView view = (InletInstanceView) inletInstance.createView(this);
             view.setAlignmentX(LEFT_ALIGNMENT);
             p_inletViews.add(view);
             inletInstanceViews.add(view);
@@ -253,7 +257,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
             // need a view here
             model.outletInstances.add(outletInstance);
-            OutletInstanceView view = outletInstance.CreateView(this);
+            OutletInstanceView view = (OutletInstanceView) outletInstance.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             p_outletViews.add(view);
             outletInstanceViews.add(view);
@@ -283,7 +287,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 }
             }
             AttributeInstance attributeInstance1 = p.CreateInstance(this.getObjectInstance(), attributeInstanceP);
-            AttributeInstanceView attributeInstanceView = attributeInstance1.CreateView(this);
+            AttributeInstanceView attributeInstanceView = (AttributeInstanceView) attributeInstance1.createView(this);
             attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
             add(attributeInstanceView);
             attributeInstanceView.doLayout();
@@ -297,7 +301,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                     pin.CopyValueFrom(pinp);
                 }
             }
-            ParameterInstanceView view = pin.CreateView(this);
+            ParameterInstanceView view = (ParameterInstanceView) pin.createView(this);
             view.PostConstructor();
             view.setAlignmentX(RIGHT_ALIGNMENT);
             model.parameterInstances.add(pin);
@@ -305,7 +309,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
-            DisplayInstanceView view = pin.CreateView(this);
+            DisplayInstanceView view = (DisplayInstanceView) pin.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             view.doLayout();
             model.displayInstances.add(pin);
@@ -358,7 +362,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    PatchView.OpenPatch(getType().GetHelpPatchFile());
+                    PatchViewSwing.OpenPatch(getType().GetHelpPatchFile());
                 }
             });
             popup.add(popm_help);
@@ -465,31 +469,52 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     }
 
     @Override
-    public ArrayList<InletInstanceView> getInletInstanceViews() {
+    public ArrayList<IInletInstanceView> getInletInstanceViews() {
         return inletInstanceViews;
     }
 
     @Override
-    public ArrayList<OutletInstanceView> getOutletInstanceViews() {
+    public ArrayList<IOutletInstanceView> getOutletInstanceViews() {
         return outletInstanceViews;
     }
 
     @Override
-    public ArrayList<ParameterInstanceView> getParameterInstanceViews() {
+    public ArrayList<IParameterInstanceView> getParameterInstanceViews() {
         return parameterInstanceViews;
     }
 
-    public void addParameterInstanceView(ParameterInstanceView view) {
-        this.p_parameterViews.add(view);
+    @Override
+    public void addParameterInstanceView(IParameterInstanceView view) {
+        this.p_parameterViews.add((ParameterInstanceView) view);
         this.parameterInstanceViews.add(view);
     }
-    
-    
-     @Override
-     public void Close() {
-         super.Close();
-         for (AttributeInstanceView a : attributeInstanceViews) {
-             a.Close();
-         }
-     }
+
+    @Override
+    public void addAttributeInstanceView(IAttributeInstanceView view) {
+        this.add((AttributeInstanceView) view);
+    }
+
+    @Override
+    public void addDisplayInstanceView(IDisplayInstanceView view) {
+        this.p_displayViews.add((DisplayInstanceView) view);
+    }
+
+    @Override
+    public void addOutletInstanceView(IOutletInstanceView view) {
+        this.p_outletViews.add((OutletInstanceView) view);
+
+    }
+
+    @Override
+    public void addInletInstanceView(IInletInstanceView view) {
+        this.p_inletViews.add((InletInstanceView) view);
+    }
+
+    @Override
+    public void Close() {
+        super.Close();
+        for (AttributeInstanceView a : attributeInstanceViews) {
+            a.Close();
+        }
+    }
 }
