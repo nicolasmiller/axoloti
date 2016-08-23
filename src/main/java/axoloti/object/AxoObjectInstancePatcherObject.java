@@ -18,7 +18,7 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewPatcherObject;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
@@ -57,7 +57,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override
-    public AxoObjectInstanceViewPatcherObject ViewFactory(PatchView patchView) {
+    public AxoObjectInstanceViewPatcherObject ViewFactory(PatchViewSwing patchView) {
         return new AxoObjectInstanceViewPatcherObject(this, patchView);
     }
     

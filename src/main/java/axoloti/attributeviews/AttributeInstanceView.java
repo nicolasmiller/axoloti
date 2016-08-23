@@ -1,6 +1,6 @@
 package axoloti.attributeviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.atom.AtomInstanceView;
 import axoloti.attribute.AttributeInstance;
@@ -10,7 +10,7 @@ import javax.swing.BoxLayout;
 
 public abstract class AttributeInstanceView extends AtomInstanceView {
     AxoObjectInstanceView axoObjectInstanceView;
-    PatchView patchView;
+    PatchViewSwing patchView;
 
     AttributeInstance attributeInstance;
 
@@ -44,7 +44,7 @@ public abstract class AttributeInstanceView extends AtomInstanceView {
         }
     }
 
-    public PatchView getPatchView() {
+    public PatchViewSwing getPatchView() {
         return axoObjectInstanceView.getPatchView();
     }
 

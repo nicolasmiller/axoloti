@@ -272,7 +272,7 @@ public class PatchController {
     }
     
     public Point getViewLocationOnScreen() {
-        return patchView.objectLayerPanel.getLocationOnScreen();
+        return patchView.getLocationOnScreen();
     }
     
     public PatchView getPatchView() {

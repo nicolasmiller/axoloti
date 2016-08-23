@@ -21,7 +21,7 @@ import axoloti.MainFrame;
 import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewPatcher;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
@@ -48,7 +48,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (patchController == null) {
             patchModel = new PatchModel();
             patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchViewSwing patchView = new PatchViewSwing(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
             patchController.setPatchModel(patchModel);
@@ -73,7 +73,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (patchController == null) {
             patchModel = new PatchModel();
             patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchViewSwing patchView = new PatchViewSwing(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
@@ -85,10 +85,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
+        pf.startRendering();
     }
     
     @Override    
-    public AxoObjectInstanceViewPatcher ViewFactory(PatchView patchView) {
+    public AxoObjectInstanceViewPatcher ViewFactory(PatchViewSwing patchView) {
         return new AxoObjectInstanceViewPatcher(this, patchView);
     }
     

@@ -22,6 +22,7 @@ import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
@@ -49,7 +50,7 @@ public class AxoObjectFromPatch extends AxoObject {
         try {
             patchModel = serializer.read(PatchModel.class, f);
             patchController = new PatchController();
-            patchView = new PatchView(patchController);
+            patchView = MainFrame.prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
@@ -97,21 +98,21 @@ public class AxoObjectFromPatch extends AxoObject {
             try {
                 patchModel = serializer.read(PatchModel.class, f);
                 PatchController patchController = new PatchController();
-                PatchView patchView = new PatchView(patchController);
+                PatchView patchView = MainFrame.prefs.getPatchView(patchController);
                 patchModel.addModelChangedListener(patchView);
                 patchController.setPatchModel(patchModel);
                 patchController.setPatchView(patchView);
                 pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
                 patchView.setFileNamePath(f.getPath());
                 patchView.PostConstructor();
-                patchView.ObjEditor = this;
+                patchView.setObjEditor(this);
             } catch (Exception ex) {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (pf == null) {
             PatchController patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
             pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
@@ -120,6 +121,7 @@ public class AxoObjectFromPatch extends AxoObject {
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
+        pf.startRendering();
     }
 
 }

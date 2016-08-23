@@ -32,11 +32,11 @@ import javax.swing.SwingUtilities;
  */
 public class NetDragging extends NetView {
 
-    public NetDragging(PatchView patchView) {
+    public NetDragging(PatchViewSwing patchView) {
         this(new Net(), patchView);
     }
     
-    public NetDragging(Net n, PatchView patchView) {
+    public NetDragging(Net n, PatchViewSwing patchView) {
         super(n, patchView);
         this.net = n;
     }

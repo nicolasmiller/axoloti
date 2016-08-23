@@ -2,7 +2,7 @@ package axoloti.objectviews;
 
 import axoloti.NetView;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectAbstract;
@@ -31,7 +31,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModifiedListener, MouseListener, MouseMotionListener {
@@ -49,7 +48,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     LabelComponent InstanceLabel;
     private boolean Locked = false;
 
-    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchView patchView) {
+    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
         this.model = model;
         this.patchView = patchView;
     }
@@ -243,9 +242,9 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         }
     }
 
-    private PatchView patchView;
+    private PatchViewSwing patchView;
 
-    public PatchView getPatchView() {
+    public PatchViewSwing getPatchView() {
         return this.patchView;
     }
 

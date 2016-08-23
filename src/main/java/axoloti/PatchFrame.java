@@ -35,11 +35,16 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -72,6 +77,56 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
+//    private static PatchFrameFocusListener onTop;
+//    private static boolean onTopChanged = false;
+//    private static List<PatchFrameFocusListener> patchFrameFocusListeners = new ArrayList<>();
+//
+//    private static void setOnTop(PatchFrameFocusListener pfl) {
+//        onTopChanged = onTop != null && pfl != onTop;
+//        onTop = pfl;
+//        notifyPatchFrameFocusListeners();
+//    }
+//
+//    private static void addPatchFrameFocusListener(PatchFrameFocusListener pfl) {
+//        patchFrameFocusListeners.add(pfl);
+//    }
+//
+//    private static void notifyPatchFrameFocusListeners() {
+//        for (PatchFrameFocusListener pfl : patchFrameFocusListeners) {
+//            if (onTopChanged) {
+//                if (!(pfl == onTop)) {
+//                    pfl.patchFrameLostFocus();
+//                }
+//            }
+//        }
+//        
+//        for (PatchFrameFocusListener pfl : patchFrameFocusListeners) {
+//            if (onTopChanged) {
+//                if (pfl == onTop) {
+//                    pfl.patchFrameGainedFocus();
+//                }
+//            }
+//        }
+//    }
+
+//    @Override
+//    public void patchFrameLostFocus() {
+//        System.out.println("lost focus " + toString());
+//        getPatchView().getViewportView().pause();
+//        jScrollPane1.setViewportView(null);
+
+
+//        getPatchView().getViewportView().dispose();
+//        getPatchView().clearViewportView();
+//        this.dispose();
+//    }
+
+//    @Override
+//    public void patchFrameGainedFocus() {
+ //       System.out.println("gained focus " + toString());
+//        jScrollPane1.setViewportView(getPatchView().getViewportView().getComponent());
+//    }
+
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -87,9 +142,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jToolbarPanel.add(visibleCablePanel);
 
-        jScrollPane1.setViewportView(getPatchView().Layers);
+        jScrollPane1.setViewportView(getPatchView().getViewportView().getComponent());
+
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
+
+        jScrollPane1.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                getPatchView().getViewportView().setWidth(jScrollPane1.getWidth());
+                getPatchView().getViewportView().setHeight(jScrollPane1.getHeight());
+                getPatchView().getViewportView().setPreferredSize(jScrollPane1.getSize());
+            }
+        });
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -182,7 +246,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
-        getPatchView().Layers.requestFocus();
+        getPatchView().requestFocus();
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
@@ -194,10 +258,44 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
+
+//        WindowAdapter adapter = new WindowAdapter() {
+//            @Override
+//            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            //    PatchFrame.setOnTop(PatchFrame.this);
+//            }
+//        };
+//        addWindowFocusListener(adapter);
+//        addWindowStateListener(new WindowStateListener() {
+//            @Override
+//            public void windowStateChanged(WindowEvent e) {
+//                System.out.println(e);
+//            }
+//        });
+
+//        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+//            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+//                System.out.println("gained focus resuming");
+//            }
+//            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+//                System.out.println("lost focus pausing");
+//            }
+//        });
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                getPatchView().getViewportView().dispose();
+            }
+        });
     }
 
     private PatchView getPatchView() {
-        return this.patchController.patchView;
+        return patchController.getPatchView();
+    }
+
+    private PatchViewSlick2D getPatchViewSlick2d() {
+        return new PatchViewSlick2D(this.getPatchController());
     }
 
     public PatchModel getPatchModel() {
@@ -222,7 +320,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    void ShowConnect1(boolean status){
+    void ShowConnect1(boolean status) {
         jCheckBoxLive.setEnabled(status);
         jCheckBoxMenuItemLive.setEnabled(status);
         jMenuItemUploadInternalFlash.setEnabled(status);
@@ -354,13 +452,13 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         windowMenu1 = new axoloti.menus.WindowMenu();
         helpMenu1 = new axoloti.menus.HelpMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
-            }
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
+            }
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
             }
         });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -400,6 +498,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler2);
 
         jLabel1.setText("DSP load ");
+        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel1AncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         jToolbarPanel.add(jLabel1);
 
         jProgressBarDSPLoad.setToolTipText("");
@@ -473,12 +580,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         undoItem.setText("Undo");
         undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 undoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         undoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -490,12 +597,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         redoItem.setText("Redo");
         redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 redoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         redoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -896,16 +1003,16 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
         AxoObjectInstanceViewAbstract selObj = null;
         ArrayList<AxoObjectInstanceViewAbstract> oi = getPatchView().getObjectInstanceViews();
-        if(oi != null) {
+        if (oi != null) {
             // need a view here
-            for(AxoObjectInstanceViewAbstract i : oi) {
-                if(i.isSelected() && i instanceof AxoObjectInstanceView) {
+            for (AxoObjectInstanceViewAbstract i : oi) {
+                if (i.isSelected() && i instanceof AxoObjectInstanceView) {
                     selObj = i;
                 }
             }
         }
 
-        if(selObj!=null) {
+        if (selObj != null) {
             ((AxoObjectInstanceView) selObj).OpenEditor();
         } else {
             if (getPatchModel().settings == null) {
@@ -1008,9 +1115,13 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_formWindowLostFocus
 
+    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1AncestorAdded
+
     private boolean GoLive() {
-        if (getPatchModel().getFileNamePath().endsWith(".axs") ||
-                getPatchModel().container() != null) {
+        if (getPatchModel().getFileNamePath().endsWith(".axs")
+                || getPatchModel().container() != null) {
             Object[] options = {"Yes",
                 "No"};
 
@@ -1124,5 +1235,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public void updateUndoRedoEnabled() {
         redoItem.setEnabled(getPatchModel().canRedo());
         undoItem.setEnabled(getPatchModel().canUndo());
+    }
+    
+    public void startRendering() {
+        this.getPatchView().startRendering();
     }
 }
