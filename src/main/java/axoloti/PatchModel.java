@@ -17,6 +17,7 @@
  */
 package axoloti;
 
+import axoloti.attribute.AttributeInstance;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletBool32;
@@ -530,10 +531,10 @@ public class PatchModel {
         if (o == null) {
             return;
         }
-        for (InletInstance ii : o.GetInletInstances()) {
+        for (InletInstance ii : o.getInletInstances()) {
             disconnect(ii, false);
         }
-        for (OutletInstance oi : o.GetOutletInstances()) {
+        for (OutletInstance oi : o.getOutletInstances()) {
             disconnect(oi, false);
         }
         int i;
@@ -699,7 +700,7 @@ public class PatchModel {
 
         DisplayInstances = new ArrayList<DisplayInstance>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            for (DisplayInstance p : o.GetDisplayInstances()) {
+            for (DisplayInstance p : o.getDisplayInstances()) {
                 p.setOffset(offset + 3);
                 int l = p.getLength();
                 offset += l;
@@ -989,7 +990,7 @@ public class PatchModel {
             String s = controllerinstance.getCInstanceName();
             if (!s.isEmpty()) {
                 c += "   " + s + "_i.Init(" + parentReference;
-                for (DisplayInstance i : controllerinstance.GetDisplayInstances()) {
+                for (DisplayInstance i : controllerinstance.getDisplayInstances()) {
                     if (i.display.getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
@@ -1003,7 +1004,7 @@ public class PatchModel {
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
                 c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference;
-                for (DisplayInstance i : o.GetDisplayInstances()) {
+                for (DisplayInstance i : o.getDisplayInstances()) {
                     if (i.display.getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
@@ -1138,13 +1139,13 @@ public class PatchModel {
         c += "  " + o.getCInstanceName() + "_i.dsp(";
 //            c += "  " + o.GenerateDoFunctionName() + "(this";
         boolean needsComma = false;
-        for (InletInstance i : o.GetInletInstances()) {
+        for (InletInstance i : o.getInletInstances()) {
             if (needsComma) {
                 c += ", ";
             }
             Net n = GetNet(i);
             if ((n != null) && (n.isValidNet())) {
-                if (i.GetDataType().equals(n.getDataType())) {
+                if (i.getDataType().equals(n.getDataType())) {
                     if (n.NeedsLatch()
                             && (objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= objectinstances.indexOf(o))) {
                         c += n.CName() + "Latch";
@@ -1153,19 +1154,19 @@ public class PatchModel {
                     }
                 } else if (n.NeedsLatch()
                         && (objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= objectinstances.indexOf(o))) {
-                    c += n.getDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
+                    c += n.getDataType().GenerateConversionToType(i.getDataType(), n.CName() + "Latch");
                 } else {
-                    c += n.getDataType().GenerateConversionToType(i.GetDataType(), n.CName());
+                    c += n.getDataType().GenerateConversionToType(i.getDataType(), n.CName());
                 }
             } else if (n == null) { // unconnected input
-                c += i.GetDataType().GenerateSetDefaultValueCode();
+                c += i.getDataType().GenerateSetDefaultValueCode();
             } else if (!n.isValidNet()) {
-                c += i.GetDataType().GenerateSetDefaultValueCode();
+                c += i.getDataType().GenerateSetDefaultValueCode();
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getObjectInstance().getInstanceName() + ":" + i.getInletname());
             }
             needsComma = true;
         }
-        for (OutletInstance i : o.GetOutletInstances()) {
+        for (OutletInstance i : o.getOutletInstances()) {
             if (needsComma) {
                 c += ", ";
             }
@@ -1177,7 +1178,7 @@ public class PatchModel {
                     c += n.CName() + "+";
                 }
             } else {
-                c += i.GetDataType().UnconnectedSink();
+                c += i.getDataType().UnconnectedSink();
             }
             needsComma = true;
         }
@@ -1190,7 +1191,7 @@ public class PatchModel {
                 needsComma = true;
             }
         }
-        for (DisplayInstance i : o.GetDisplayInstances()) {
+        for (DisplayInstance i : o.getDisplayInstances()) {
             if (i.display.getLength() > 0) {
                 if (needsComma) {
                     c += ", ";
@@ -2198,11 +2199,11 @@ public class PatchModel {
         return pdata;
     }
 
-    public void transferObjectConnections(AxoObjectInstance old_obj, AxoObjectInstance new_obj) {
-        for (int i = 0; i < old_obj.outletInstances.size(); i++) {
-            OutletInstance oldOutletInstance = old_obj.outletInstances.get(i);
+    public void transferObjectConnections(AxoObjectInstance oldObject, AxoObjectInstance newObject) {
+        for (int i = 0; i < oldObject.outletInstances.size(); i++) {
+            OutletInstance oldOutletInstance = oldObject.outletInstances.get(i);
             try {
-                OutletInstance newOutletInstance = new_obj.outletInstances.get(i);
+                OutletInstance newOutletInstance = newObject.outletInstances.get(i);
                 Net net = GetNet(oldOutletInstance);
 
                 if (net != null) {
@@ -2217,10 +2218,10 @@ public class PatchModel {
             }
         }
 
-        for (int i = 0; i < old_obj.inletInstances.size(); i++) {
-            InletInstance oldInletInstance = old_obj.inletInstances.get(i);
+        for (int i = 0; i < oldObject.inletInstances.size(); i++) {
+            InletInstance oldInletInstance = oldObject.inletInstances.get(i);
             try {
-                InletInstance newInletInstance = new_obj.inletInstances.get(i);
+                InletInstance newInletInstance = newObject.inletInstances.get(i);
                 Net net = GetNet(oldInletInstance);
                 if (net != null) {
                     ArrayList<OutletInstance> source = (ArrayList< OutletInstance>) net.source.clone();
@@ -2235,6 +2236,34 @@ public class PatchModel {
         }
     }
 
+    public void transferInputValues(AxoObjectInstance oldObject, AxoObjectInstance newObject) {
+        for (int i = 0; i < oldObject.getParameterInstances().size(); i++) {
+            ParameterInstance oldParameterInstance = oldObject.getParameterInstances().get(i);
+            try {
+                ParameterInstance newParameterInstance = newObject.getParameterInstances().get(i);
+                newParameterInstance.CopyValueFrom(oldParameterInstance);
+                newObject.setDirty(true);
+            } catch (IndexOutOfBoundsException e) {
+                break;
+            }
+        }
+        for (int i = 0; i < oldObject.getAttributeInstances().size(); i++) {
+            AttributeInstance oldAttributeInstance = oldObject.getAttributeInstances().get(i);
+            try {
+                AttributeInstance newAttributeInstance = newObject.getAttributeInstances().get(i);
+                newAttributeInstance.CopyValueFrom(oldAttributeInstance);
+                newObject.setDirty(true);
+            } catch (IndexOutOfBoundsException e) {
+                break;
+            }
+        }
+    }
+
+    public void transferState(AxoObjectInstance oldObject, AxoObjectInstance newObject) {
+        transferObjectConnections(oldObject, newObject);
+        transferInputValues(oldObject, newObject);
+    }
+
     public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract oldObject, AxoObjectAbstract newObjectType, boolean setDirty) {
         if ((oldObject instanceof AxoObjectInstancePatcher) && (newObjectType instanceof AxoObjectPatcher)) {
             return oldObject;
@@ -2246,7 +2275,7 @@ public class PatchModel {
             AxoObjectInstanceAbstract newObject = AddObjectInstance(newObjectType, new Point(oldObject.getX(), oldObject.getY()), setDirty);
 
             if (newObject instanceof AxoObjectInstance) {
-                transferObjectConnections((AxoObjectInstance) oldObject, (AxoObjectInstance) newObject);
+                transferState((AxoObjectInstance) oldObject, (AxoObjectInstance) newObject);
             }
             return newObject;
         } else if (oldObject instanceof AxoObjectInstanceZombie) {
@@ -2517,8 +2546,6 @@ public class PatchModel {
                     newposy += Constants.Y_GRID;
                 }
                 o.setLocation(newposx, newposy);
-// fix object insertion selection
-//                o.SetSelected(true);
             }
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;

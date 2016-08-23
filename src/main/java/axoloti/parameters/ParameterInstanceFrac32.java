@@ -79,7 +79,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         } else {
             value.setRaw(0);
         }
-        updateV();
         needsTransmit = true;
     }
 
@@ -98,11 +97,9 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
                     if ((modulator.name == null) || (modulator.name.isEmpty())) {
                         n = m;
                         break;
-                    } else {
-                        if (modulator.name.equals(m.modName)) {
-                            n = m;
-                            break;
-                        }
+                    } else if (modulator.name.equals(m.modName)) {
+                        n = m;
+                        break;
                     }
                 }
             }
@@ -168,7 +165,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             value.setRaw(p1.value.getRaw());
         }
     }
-
 
     @Override
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {

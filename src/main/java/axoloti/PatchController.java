@@ -1,10 +1,10 @@
 package axoloti;
 
-import axoloti.inlets.InletInstanceView;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.outlets.OutletInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.outlets.IOutletInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -128,7 +128,7 @@ public class PatchController {
         UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
 
-    public Net disconnect(InletInstanceView ii) {
+    public Net disconnect(IInletInstanceView ii) {
         if (!isLocked()) {
             return ii.getInletInstance().disconnect();
         } else {
@@ -137,7 +137,7 @@ public class PatchController {
         }
     }
 
-    public Net disconnect(OutletInstanceView oi) {
+    public Net disconnect(IOutletInstanceView oi) {
         if (!isLocked()) {
             return oi.getOutletInstance().disconnect();
         } else {
@@ -146,7 +146,7 @@ public class PatchController {
         }
     }
 
-    public Net AddConnection(InletInstanceView il, OutletInstanceView ol) {
+    public Net AddConnection(IInletInstanceView il, IOutletInstanceView ol) {
         if (!isLocked()) {
             return patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance());
         } else {
@@ -155,7 +155,7 @@ public class PatchController {
         }
     }
 
-    public Net AddConnection(InletInstanceView il, InletInstanceView ol) {
+    public Net AddConnection(IInletInstanceView il, IInletInstanceView ol) {
         if (!isLocked()) {
             return patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance());
         } else {
@@ -164,7 +164,7 @@ public class PatchController {
         }
     }
 
-    public void deleteNet(InletInstanceView ii) {
+    public void deleteNet(IInletInstanceView ii) {
         if (!isLocked()) {
             ii.getInletInstance().deleteNet();
         } else {
@@ -172,7 +172,7 @@ public class PatchController {
         }
     }
 
-    public void deleteNet(OutletInstanceView oi) {
+    public void deleteNet(IOutletInstanceView oi) {
         if (!isLocked()) {
             oi.getOutletInstance().deleteNet();
         } else {
@@ -187,8 +187,8 @@ public class PatchController {
         }
     }
 
-    public void delete(AxoObjectInstanceViewAbstract o) {
-        patchModel.delete(o.getModel());
+    public void delete(IAxoObjectInstanceView o) {
+        patchModel.delete((AxoObjectInstanceAbstract) o.getModel());
         o.getModel().Close();
     }
 
@@ -270,7 +270,7 @@ public class PatchController {
     }
 
     public Point getViewLocationOnScreen() {
-        return patchView.objectLayerPanel.getLocationOnScreen();
+        return patchView.getLocationOnScreen();
     }
 
     public PatchView getPatchView() {
