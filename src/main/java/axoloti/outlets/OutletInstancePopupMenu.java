@@ -28,9 +28,9 @@ import javax.swing.JPopupMenu;
  */
 public class OutletInstancePopupMenu extends JPopupMenu {
 
-    OutletInstanceView outletInstanceView;
+    IOutletInstanceView outletInstanceView;
 
-    public OutletInstancePopupMenu(OutletInstanceView outletInstanceView) {
+    public OutletInstancePopupMenu(IOutletInstanceView outletInstanceView) {
         super();
         this.outletInstanceView = outletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect outlet");

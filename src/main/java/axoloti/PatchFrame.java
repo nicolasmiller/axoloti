@@ -19,8 +19,7 @@ package axoloti;
 
 import axoloti.object.AxoObjects;
 import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.utils.Constants;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
 import components.PresetPanel;
 import components.VisibleCablePanel;
@@ -40,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -72,13 +72,19 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
+    private static List<PatchFrame> instances = new ArrayList<>();
+    private static PatchFrame topFrame;
+
+    private JScrollPane jScrollPane1;
+
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
-        initComponents();
-        fileMenu1.initComponents();
         this.patchController = patchController;
         this.patchController.setPatchFrame(this);
+
+        initComponents();
+        fileMenu1.initComponents();
 
         presetPanel = new PresetPanel(patchController);
         visibleCablePanel = new VisibleCablePanel(getPatchView());
@@ -87,9 +93,13 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jToolbarPanel.add(visibleCablePanel);
 
-        jScrollPane1.setViewportView(getPatchView().Layers);
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
-        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
+        jScrollPane1 = getPatchView().getViewportView().createScrollPane();
+        jScrollPane1.setViewportView(getPatchView().getViewportView().getComponent());
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setAutoscrolls(true);
+        getContentPane().add(jScrollPane1);
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -182,7 +192,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
-        getPatchView().Layers.requestFocus();
+        getPatchView().requestFocus();
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
@@ -192,12 +202,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         this.redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 KeyUtils.CONTROL_OR_CMD_MASK | KeyEvent.SHIFT_DOWN_MASK));
 
-        createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
     }
 
     private PatchView getPatchView() {
-        return this.patchController.patchView;
+        return patchController.getPatchView();
     }
 
     public PatchModel getPatchModel() {
@@ -293,10 +302,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    public JScrollPane getScrollPane() {
-        return this.jScrollPane1;
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -312,7 +317,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jLabel1 = new javax.swing.JLabel();
         jProgressBarDSPLoad = new javax.swing.JProgressBar();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
-        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu1 = new axoloti.menus.FileMenu();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -354,13 +358,13 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         windowMenu1 = new axoloti.menus.WindowMenu();
         helpMenu1 = new axoloti.menus.HelpMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
-            }
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
+            }
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
             }
         });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -400,6 +404,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler2);
 
         jLabel1.setText("DSP load ");
+        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel1AncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         jToolbarPanel.add(jLabel1);
 
         jProgressBarDSPLoad.setToolTipText("");
@@ -415,11 +428,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler3);
 
         getContentPane().add(jToolbarPanel);
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setAutoscrolls(true);
-        getContentPane().add(jScrollPane1);
 
         fileMenu1.setText("File");
         fileMenu1.add(jSeparator1);
@@ -473,12 +481,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         undoItem.setText("Undo");
         undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 undoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         undoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -490,12 +498,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         redoItem.setText("Redo");
         redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 redoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         redoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -894,11 +902,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        AxoObjectInstanceViewAbstract selObj = null;
-        ArrayList<AxoObjectInstanceViewAbstract> oi = getPatchView().getObjectInstanceViews();
+        IAxoObjectInstanceView selObj = null;
+        List<IAxoObjectInstanceView> oi = getPatchView().getObjectInstanceViews();
         if (oi != null) {
-            // need a view here
-            for (AxoObjectInstanceViewAbstract i : oi) {
+            for (IAxoObjectInstanceView i : oi) {
                 if (i.isSelected() && i instanceof AxoObjectInstanceView) {
                     selObj = i;
                 }
@@ -1008,6 +1015,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_formWindowLostFocus
 
+    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1AncestorAdded
+
     private boolean GoLive() {
         if (getPatchModel().getFileNamePath().endsWith(".axs")
                 || getPatchModel().container() != null) {
@@ -1073,7 +1084,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenuItem jMenuUploadCode;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JProgressBar jProgressBarDSPLoad;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -1124,5 +1134,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public void updateUndoRedoEnabled() {
         redoItem.setEnabled(getPatchModel().canRedo());
         undoItem.setEnabled(getPatchModel().canUndo());
+    }
+
+    public void startRendering() {
+        this.getPatchView().startRendering();
     }
 }
