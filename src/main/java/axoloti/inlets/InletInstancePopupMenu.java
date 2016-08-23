@@ -28,9 +28,9 @@ import javax.swing.JPopupMenu;
  */
 public class InletInstancePopupMenu extends JPopupMenu {
 
-    InletInstanceView inletInstanceView;
+    IInletInstanceView inletInstanceView;
 
-    public InletInstancePopupMenu(InletInstanceView inletInstanceView) {
+    public InletInstancePopupMenu(IInletInstanceView inletInstanceView) {
         super();
         this.inletInstanceView = inletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect inlet");

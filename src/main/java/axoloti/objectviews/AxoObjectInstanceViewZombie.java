@@ -1,6 +1,6 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.object.AxoObjectInstanceZombie;
 import components.LabelComponent;
@@ -18,7 +18,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     AxoObjectInstanceZombie model;
 
-    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchView patchView) {
+    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }
