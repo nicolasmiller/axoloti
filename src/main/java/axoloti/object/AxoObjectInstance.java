@@ -21,6 +21,8 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
@@ -30,9 +32,10 @@ import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
@@ -82,16 +85,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
     public ArrayList<AttributeInstance> attributeInstances = new ArrayList<AttributeInstance>();
     public ArrayList<DisplayInstance> displayInstances = new ArrayList<DisplayInstance>();
-
-    @Override
-    public ArrayList<ParameterInstance> getParameterInstances() {
-        return parameterInstances;
-    }
-
-    @Override
-    public ArrayList<AttributeInstance> getAttributeInstances() {
-        return attributeInstances;
-    }
 
     public AxoObjectInstance() {
         super();
@@ -151,16 +144,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
         }
         return null;
-    }
-
-    @Override
-    public ArrayList<InletInstance> GetInletInstances() {
-        return inletInstances;
-    }
-
-    @Override
-    public ArrayList<OutletInstance> GetOutletInstances() {
-        return outletInstances;
     }
 
     @Override
@@ -310,12 +293,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
             for (InletInstance i : inletInstances) {
-                if (i.GetDataType() instanceof Frac32buffer) {
+                if (i.getDataType() instanceof Frac32buffer) {
                     s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
                 }
             }
             for (OutletInstance i : outletInstances) {
-                if (i.GetDataType() instanceof Frac32buffer) {
+                if (i.getDataType() instanceof Frac32buffer) {
                     s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
                 }
             }
@@ -336,14 +319,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             if (comma) {
                 s += ",\n";
             }
-            s += "const " + i.GetDataType().CType() + " " + i.GetCName();
+            s += "const " + i.getDataType().CType() + " " + i.GetCName();
             comma = true;
         }
         for (OutletInstance i : outletInstances) {
             if (comma) {
                 s += ",\n";
             }
-            s += i.GetDataType().CType() + " & " + i.GetCName();
+            s += i.getDataType().CType() + " & " + i.GetCName();
             comma = true;
         }
         for (ParameterInstance i : parameterInstances) {
@@ -477,7 +460,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         // auto-choose depending on 1st connected inlet
 
         //      InletInstance i = null;// = GetInletInstances().get(0);
-        for (InletInstance j : GetInletInstances()) {
+        for (InletInstance j : getInletInstances()) {
             Net n = getPatchModel().GetNet(j);
             if (n == null) {
                 continue;
@@ -528,11 +511,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return true;
         }
         return false;
-    }
-
-    @Override
-    public ArrayList<DisplayInstance> GetDisplayInstances() {
-        return displayInstances;
     }
 
     @Override
@@ -605,13 +583,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     @Override
-    public AxoObjectInstanceView ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceView(this, patchView);
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewSwing) {
+            return new AxoObjectInstanceView(this, (PatchViewSwing) patchView);
+        } else {
+            return new PAxoObjectInstanceView(this, (PatchViewPiccolo) patchView);
+        }
     }
 
     @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceView pi = ViewFactory(patchView);
+    public IAxoObjectInstanceView createView(PatchView patchView) {
+        IAxoObjectInstanceView pi = getViewInstance(patchView);
         pi.PostConstructor();
         return pi;
     }
@@ -660,4 +642,52 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
     }
 
+    public ArrayList<InletInstance> getInletInstances() {
+        return this.inletInstances;
+    }
+
+    @Override
+    public ArrayList<OutletInstance> getOutletInstances() {
+        return this.outletInstances;
+    }
+
+    @Override
+    public ArrayList<ParameterInstance> getParameterInstances() {
+        return this.parameterInstances;
+    }
+
+    @Override
+    public ArrayList<AttributeInstance> getAttributeInstances() {
+        return this.attributeInstances;
+    }
+
+    @Override
+    public ArrayList<DisplayInstance> getDisplayInstances() {
+        return this.displayInstances;
+    }
+
+    @Override
+    public void setInletInstances(ArrayList<InletInstance> inletInstances) {
+        this.inletInstances = inletInstances;
+    }
+
+    @Override
+    public void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
+        this.outletInstances = outletInstances;
+    }
+
+    @Override
+    public void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
+        this.parameterInstances = parameterInstances;
+    }
+
+    @Override
+    public void setAttributeInstances(ArrayList<AttributeInstance> attributeInstances) {
+        this.attributeInstances = attributeInstances;
+    }
+
+    @Override
+    public void setDisplayInstances(ArrayList<DisplayInstance> displayInstances) {
+        this.displayInstances = displayInstances;
+    }
 }
