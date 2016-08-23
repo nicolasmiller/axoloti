@@ -1,9 +1,11 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstanceView;
 import components.LabelComponent;
 import components.PopupIcon;
@@ -21,7 +23,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     AxoObjectInstanceZombie model;
 
-    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchView patchView) {
+    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }
@@ -115,24 +117,33 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
         repaint();
     }
 
-    private ArrayList<InletInstanceView> inletInstanceViews = new ArrayList<InletInstanceView>();
-    private ArrayList<OutletInstanceView> outletInstanceViews = new ArrayList<OutletInstanceView>();
+    private ArrayList<IInletInstanceView> inletInstanceViews = new ArrayList<IInletInstanceView>();
+    private ArrayList<IOutletInstanceView> outletInstanceViews = new ArrayList<IOutletInstanceView>();
 
     @Override
-    public ArrayList<InletInstanceView> getInletInstanceViews() {
+    public ArrayList<IInletInstanceView> getInletInstanceViews() {
         return inletInstanceViews;
     }
 
     @Override
-    public ArrayList<OutletInstanceView> getOutletInstanceViews() {
+    public ArrayList<IOutletInstanceView> getOutletInstanceViews() {
         return outletInstanceViews;
     }
 
-    public void addInletInstanceView(InletInstanceView view) {
+    @Override
+    public void addInletInstanceView(IInletInstanceView view) {
         inletInstanceViews.add(view);
+        add((InletInstanceView) view);
     }
 
-    public void addOutletInstanceView(OutletInstanceView view) {
+    @Override
+    public void addOutletInstanceView(IOutletInstanceView view) {
         outletInstanceViews.add(view);
+        add((OutletInstanceView) view);
+    }
+
+    @Override
+    public boolean isZombie() {
+        return true;
     }
 }
