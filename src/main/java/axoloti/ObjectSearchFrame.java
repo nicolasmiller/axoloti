@@ -21,6 +21,7 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
@@ -34,7 +35,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.JTextPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -52,7 +56,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     DefaultMutableTreeNode root;
     DefaultTreeModel tm;
     public AxoObjectAbstract type;
-    private final PatchController patchController;
+    protected final PatchController patchController;
     public AxoObjectInstanceAbstract target_object;
     private AxoObjectTreeNode objectTree;
 
@@ -242,27 +246,25 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
         });
     }
-    AxoObjectAbstract previewObj;
+    protected AxoObjectAbstract previewObj;
     int patchLocX;
     int patchLocY;
-    
+
     private Point snapToGrid(Point p) {
         p.x = Constants.X_GRID * (p.x / Constants.X_GRID);
         p.y = Constants.Y_GRID * (p.y / Constants.Y_GRID);
         return p;
     }
 
-    private Point clipToStayWithinScreen(Point patchLoc) {
+    public Point clipToStayWithinScreen(Point patchLoc) {
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] gs = ge.getScreenDevices();
         Rectangle allScreenBounds = new Rectangle();
 
-        for(GraphicsDevice curGs : gs)
-        {
+        for (GraphicsDevice curGs : gs) {
             GraphicsConfiguration[] gc = curGs.getConfigurations();
-            for(GraphicsConfiguration curGc : gc)
-            {
+            for (GraphicsConfiguration curGc : gc) {
                 Rectangle bounds = curGc.getBounds();
                 allScreenBounds = allScreenBounds.union(bounds);
             }
@@ -270,17 +272,21 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         Point patchFrameOnScreen = patchController.getViewLocationOnScreen();
 
-        if(patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
+        if (patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
             patchLoc.x = (int) (allScreenBounds.getWidth() + allScreenBounds.getX() - patchFrameOnScreen.getX() - getWidth());
         }
-        if(patchFrameOnScreen.getY() + patchLoc.getY() + getHeight() > allScreenBounds.getHeight() + allScreenBounds.getY()) {
+        if (patchFrameOnScreen.getY() + patchLoc.getY() + getHeight() > allScreenBounds.getHeight() + allScreenBounds.getY()) {
             patchLoc.y = (int) (allScreenBounds.getHeight() + allScreenBounds.getY() - patchFrameOnScreen.getY() - getHeight());
         }
 
         return patchLoc;
     }
 
-    void Launch(Point patchLoc, AxoObjectInstanceViewAbstract o, String searchString) {
+    public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
+        Launch(patchLoc, o, searchString, true);
+    }
+
+    public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString, boolean setVisible) {
         if (this.objectTree != MainFrame.axoObjects.ObjectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
             this.objectTree = MainFrame.axoObjects.ObjectTree;
@@ -298,10 +304,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
         setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
-        if(o != null) {
-        target_object = o.getObjectInstance();
-        }
-        else {
+        if (o != null) {
+            target_object = o.getObjectInstance();
+        } else {
             target_object = null;
         }
         if (o != null) {
@@ -319,10 +324,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jTextFieldObjName.grabFocus();
         jTextFieldObjName.setSelectionStart(0);
         jTextFieldObjName.setSelectionEnd(jTextFieldObjName.getText().length());
-        setVisible(true);
+        if (setVisible) {
+            setVisible(true);
+        }
     }
 
-    void SetPreview(AxoObjectAbstract o) {
+    public void SetPreview(AxoObjectAbstract o) {
         if (o == null) {
             previewObj = null;
             type = null;
@@ -338,7 +345,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             if (jList1.getSelectedValue() != o) {
             }
             AxoObjectInstanceAbstract objectInstance = o.CreateInstance(null, "dummy", new Point(5, 5));
-            AxoObjectInstanceViewAbstract objectInstanceView = objectInstance.CreateView(patchController.getPatchView());
+            AxoObjectInstanceViewAbstract objectInstanceView = (AxoObjectInstanceViewAbstract) objectInstance.createView(patchController.getPatchView());
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);
             objectInstanceView.invalidate();
@@ -380,7 +387,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         return root;
     }
 
-    void ExpandJTreeToEl(AxoObjectAbstract s) {
+    protected void ExpandJTreeToEl(AxoObjectAbstract s) {
         Enumeration e = root.depthFirstEnumeration();
         DefaultMutableTreeNode n = null;
         while (e.hasMoreElements()) {
@@ -490,6 +497,18 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         }
     }
 
+    protected JPanel getMainView() {
+        return jPanel1;
+    }
+
+    protected JList getListView() {
+        return jList1;
+    }
+
+    protected JTextPane getTextPane() {
+        return jTextPane1;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -510,6 +529,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jSplitPane2 = new javax.swing.JSplitPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
 
         setForeground(java.awt.SystemColor.control);
@@ -564,7 +584,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jTree1.setDragEnabled(true);
         jTree1.setMinimumSize(new java.awt.Dimension(100, 50));
         jTree1.setRootVisible(false);
-        jTree1.setShowsRootHandles(true);
         jScrollPane1.setViewportView(jTree1);
 
         jSplitPane3.setBottomComponent(jScrollPane1);
@@ -584,7 +603,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jTextPane1.setEditable(false);
         jTextPane1.setFocusCycleRoot(false);
-        jTextPane1.setFocusTraversalKeysEnabled(false);
         jTextPane1.setFocusable(false);
         jTextPane1.setRequestFocusEnabled(false);
         jScrollPane4.setViewportView(jTextPane1);
@@ -593,21 +611,22 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         jPanel1.setEnabled(false);
-        jPanel1.setFocusTraversalKeysEnabled(false);
         jPanel1.setFocusable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 349, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jSplitPane2.setRightComponent(jPanel1);
+        jScrollPane2.setViewportView(jPanel1);
+
+        jSplitPane2.setRightComponent(jScrollPane2);
 
         jSplitPane1.setRightComponent(jSplitPane2);
 
@@ -634,6 +653,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;

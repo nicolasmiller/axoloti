@@ -19,7 +19,11 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewPatcherObject;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcherObject;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -57,14 +61,18 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override
-    public AxoObjectInstanceViewPatcherObject ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewPatcherObject(this, patchView);
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewPatcherObject(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewPatcherObject(this, (PatchViewSwing) patchView);
+        }
     }
-    
+
     public AxoObject getAxoObject() {
         return ao;
     }
-    
+
     public void setAxoObject(AxoObjectPatcherObject axoObject) {
         this.ao = axoObject;
     }

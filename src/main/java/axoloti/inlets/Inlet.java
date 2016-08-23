@@ -81,7 +81,7 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
 
     public abstract DataType getDatatype();
 
-    SignalMetaData GetSignalMetaData() {
+    public SignalMetaData GetSignalMetaData() {
         return SignalMetaData.none;
     }
 
@@ -92,6 +92,6 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
 
     @Override
     public Inlet clone() throws CloneNotSupportedException {
-        return (Inlet)super.clone();
+        return (Inlet) super.clone();
     }
 }
