@@ -30,9 +30,9 @@ public class Theme {
         Color labelForeground = (new JLabel()).getForeground();
         Color panelBackground = (new JPanel()).getBackground();
         // ensure we don't have ColorUIResource instances
-        labelForeground = new Color(labelForeground.getRed(), labelForeground.getGreen(), 
+        labelForeground = new Color(labelForeground.getRed(), labelForeground.getGreen(),
                 labelForeground.getBlue(), labelForeground.getAlpha());
-        panelBackground= new Color(panelBackground.getRed(), panelBackground.getGreen(), 
+        panelBackground = new Color(panelBackground.getRed(), panelBackground.getGreen(),
                 panelBackground.getBlue(), panelBackground.getAlpha());
         this.Label_Text = labelForeground;
         this.Object_TitleBar_Foreground = labelForeground;
@@ -63,7 +63,7 @@ public class Theme {
     @Element
     public Color Patch_Locked_Background = Color.DARK_GRAY;
 
-// text    
+// text
     @Element
     public Color Error_Text = Color.RED;
     @Element
@@ -120,7 +120,7 @@ public class Theme {
     @Element
     public Color Parameter_On_Parent_Highlight = Color.BLUE;
     @Element
-    public Color Paramete_Preset_Highlight = Color.YELLOW;
+    public Color Parameter_Preset_Highlight = Color.YELLOW;
 
     @Element
     public Color Component_Primary = Color.BLACK;
@@ -160,6 +160,9 @@ public class Theme {
     public Color VU_Bright_Yellow = new Color(0.8f, 0.8f, 0.0f);
     @Element
     public Color VU_Bright_Red = new Color(0.8f, 0.0f, 0.0f);
+
+    @Element
+    public Color Patch_Border = new Color(0.0f, 0.0f, 0.0f, 0.1f);
 
     private File FileChooserSave(JFrame frame) {
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());

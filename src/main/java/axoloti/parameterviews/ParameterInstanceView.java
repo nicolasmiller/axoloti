@@ -7,7 +7,7 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.datatypes.Value;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
 import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;
@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MouseInputAdapter;
 
-public abstract class ParameterInstanceView extends JPanel implements ActionListener {
+public abstract class ParameterInstanceView extends JPanel implements ActionListener, IParameterInstanceView {
 
     ParameterInstance parameterInstance;
     LabelComponent valuelbl = new LabelComponent("123456789");
@@ -36,11 +36,12 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     AssignMidiCCComponent midiAssign;
 
-    AxoObjectInstanceView axoObjInstanceView;
+    IAxoObjectInstanceView axoObjInstanceView;
 
-    ParameterInstanceView(ParameterInstance parameterInstance) {
+    ParameterInstanceView(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super();
         this.parameterInstance = parameterInstance;
+        this.axoObjInstanceView = axoObjectInstanceView;
     }
 
     public void PostConstructor() {
@@ -205,10 +206,9 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public String getName() {
-        if(parameterInstance != null) {
+        if (parameterInstance != null) {
             return parameterInstance.getName();
-        }
-        else {
+        } else {
             return super.getName();
         }
     }
@@ -223,7 +223,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         UpdateUnit();
     }
 
-    void SetMidiCC(Integer cc) {
+    public void SetMidiCC(Integer cc) {
         parameterInstance.setMidiCC(cc);
         if ((cc != null) && (cc >= 0)) {
             if (midiAssign != null) {
@@ -240,24 +240,6 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
     }
 
     public abstract void ShowPreset(int i);
-
-    public boolean isOnParent() {
-        return parameterInstance.isOnParent();
-    }
-
-//    public void setOnParent(Boolean b) {
-//        if (b == null) {
-//            return;
-//        }
-//        if (isOnParent() == b) {
-//            return;
-//        }
-//        if (b) {
-//            parameterInstance.setOnParent(true);
-//        } else {
-//            parameterInstance.setOnParent(null);
-//        }
-//    }
 
     public int presetEditActive = 0;
 
@@ -287,10 +269,6 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             }
         }
         ShowPreset(presetEditActive);
-    }
-
-    public void CopyValueFrom(ParameterInstanceView p) {
-        parameterInstance.CopyValueFrom(p.parameterInstance);
     }
 
     public void setValue(Value value) {

@@ -3,6 +3,7 @@ package axoloti.parameterviews;
 import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
@@ -21,10 +22,10 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance) {
-        super(parameterInstance);
+    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
-    
+
     @Override
     public ParameterInstanceFrac32UMap getParameterInstance() {
         return (ParameterInstanceFrac32UMap) this.parameterInstance;
@@ -37,8 +38,8 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
 
     @Override
     public void PostConstructor() {
-        super.PostConstructor();        
-        
+        super.PostConstructor();
+
         JPanel btns = new JPanel();
         btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
@@ -75,7 +76,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
         if (i > 0) {
             Preset p = getParameterInstance().GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
+                setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
@@ -87,7 +88,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
         }
         presetAssign.repaint();
         /*
-         if ((presets != null) && (!presets.isEmpty())) {            
+         if ((presets != null) && (!presets.isEmpty())) {
          lblPreset.setVisible(true);
          } else {
          lblPreset.setVisible(false);
@@ -110,7 +111,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
     public DialComponent getControlComponent() {
         return (DialComponent) ctrl;
     }
-    
+
     @Override
     public void updateModulation(int index, double amount) {
         getParameterInstance().updateModulation(index, amount);
@@ -118,7 +119,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
             modulationAssign.repaint();
         }
     }
-    
+
     @Override
     public Preset AddPreset(int index, Value value) {
         Preset p = getParameterInstance().AddPreset(index, value);
@@ -131,7 +132,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
         getParameterInstance().RemovePreset(index);
         presetAssign.repaint();
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         if (parameterInstance.isOnParent()) {

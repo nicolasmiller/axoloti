@@ -63,7 +63,9 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AssignPresetMenuItems.this.param.getParameterInstance().getPresets().clear();
+                    if (AssignPresetMenuItems.this.param.getParameterInstance().getPresets() != null) {
+                        AssignPresetMenuItems.this.param.getParameterInstance().getPresets().clear();
+                    }
                 }
             });
             parent.add(mi);
