@@ -17,13 +17,17 @@
  */
 package axoloti.inlets;
 
+import axoloti.MainFrame;
 import axoloti.Net;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.inlets.PInletInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -70,7 +74,7 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
         RefreshName();
     }
 
-    public DataType GetDataType() {
+    public DataType getDataType() {
         return inlet.getDatatype();
     }
 
@@ -124,14 +128,17 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
         }
     }
 
-    public InletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new InletInstanceView(this, o);
+    public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+        }
     }
 
-    public InletInstanceView CreateView(AxoObjectInstanceViewAbstract o) {
-        InletInstanceView inletInstanceView = ViewFactory(o);
-        AxoObjectInstanceView ov = (AxoObjectInstanceView) o;
-        ov.p_inletViews.add(inletInstanceView);
+    public IInletInstanceView createView(IAxoObjectInstanceView o) {
+        IInletInstanceView inletInstanceView = getViewInstance(o);
+        o.addInletInstanceView(inletInstanceView);
         inletInstanceView.PostConstructor();
         return inletInstanceView;
     }

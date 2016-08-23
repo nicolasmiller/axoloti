@@ -129,7 +129,7 @@ public class USBBulkConnection extends Connection {
                 sync.notifyAll();
             }
 
-            if (receiverThread.isAlive()){
+            if (receiverThread.isAlive()) {
                 receiverThread.interrupt();
                 try {
                     receiverThread.join();
@@ -895,8 +895,7 @@ public class USBBulkConnection extends Connection {
     void RPacketParamChange(final int index, final int value, final int patchID) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public
-                    void run() {
+            public void run() {
                 if (patchController == null) {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null {0} {1}", new Object[]{index, value});
                     return;

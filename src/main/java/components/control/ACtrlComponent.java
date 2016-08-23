@@ -219,8 +219,4 @@ public abstract class ACtrlComponent extends JComponent {
     public void robotMoveToCenter() {
 
     }
-
-    public void setCustomBackgroundColor(Color c) {
-        this.customBackgroundColor = c;
-    }
 }

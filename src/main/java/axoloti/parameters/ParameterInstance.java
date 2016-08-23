@@ -22,8 +22,8 @@ import axoloti.Preset;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.parameterviews.ParameterInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
     @Attribute
     String name;
     @Attribute(required = false)
-    private Boolean onParent = false;
+    private Boolean onParent;
     protected int index;
     public T parameter;
     @ElementList(required = false)
@@ -274,12 +274,26 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         return "";
     }
 
-    public Boolean isOnParent() {
-        return this.onParent;
+    public boolean isOnParent() {
+        if (onParent == null) {
+            return false;
+        } else {
+            return onParent;
+        }
     }
 
-    public void setOnParent(Boolean onParent) {
-        this.onParent = onParent;
+    public void setOnParent(Boolean b) {
+        if (b == null) {
+            return;
+        }
+        if (isOnParent() == b) {
+            return;
+        }
+        if (b) {
+            onParent = true;
+        } else {
+            onParent = null;
+        }
     }
 
     public ArrayList<Modulation> getModulators() {
@@ -306,10 +320,10 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         return this.name;
     }
 
-    public abstract ParameterInstanceView ViewFactory();
+    public abstract IParameterInstanceView getViewInstance(IAxoObjectInstanceView o);
 
-    public ParameterInstanceView CreateView(AxoObjectInstanceView o) {
-        ParameterInstanceView pi = ViewFactory();
+    public IParameterInstanceView createView(IAxoObjectInstanceView o) {
+        IParameterInstanceView pi = getViewInstance(o);
         pi.PostConstructor();
         o.addParameterInstanceView(pi);
         return pi;
