@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.Value;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewBin32;
 import org.simpleframework.xml.Attribute;
 
@@ -63,7 +64,7 @@ public class ParameterInstanceBin32 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public ParameterInstanceViewBin32 ViewFactory() {
+    public IParameterInstanceView getViewInstance() {
         return new ParameterInstanceViewBin32(this);
     }
 }

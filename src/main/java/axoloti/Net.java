@@ -198,10 +198,12 @@ public class Net {
         return "net" + i;
     }
     
-    public NetView CreateView(PatchView patchView) {
-        NetView n =  new NetView(this, patchView);
-        n.PostConstructor();
-        return n;
+    public INetView createView(PatchView patchView) {
+        return null;
+        // fix processing nets
+//        INetView n =  new NetView(this, (PatchViewSwing) patchView);
+//        n.PostConstructor();
+//        return n;
     }
     
     public void setPatchModel(PatchModel patchModel) {

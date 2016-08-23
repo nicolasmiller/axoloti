@@ -22,8 +22,8 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -124,13 +124,13 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
         }
     }
 
-    public InletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new InletInstanceView(this, o);
+    public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
     }
 
-    public InletInstanceView CreateView(AxoObjectInstanceView o) {
-        InletInstanceView inletInstanceView = ViewFactory(o);
-        o.p_inletViews.add(inletInstanceView);
+    public IInletInstanceView createView(IAxoObjectInstanceView o) {
+        IInletInstanceView inletInstanceView = getViewInstance(o);
+        o.addInletInstanceView(inletInstanceView);
         inletInstanceView.PostConstructor();
         return inletInstanceView;
     }

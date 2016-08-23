@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MouseInputAdapter;
 
-public abstract class ParameterInstanceView extends JPanel implements ActionListener {
+public abstract class ParameterInstanceView extends JPanel implements ActionListener, IParameterInstanceView {
 
     ParameterInstance parameterInstance;
     LabelComponent valuelbl = new LabelComponent("123456789");
@@ -223,7 +223,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         UpdateUnit();
     }
 
-    void SetMidiCC(Integer cc) {
+    public void SetMidiCC(Integer cc) {
         parameterInstance.setMidiCC(cc);
         if ((cc != null) && (cc >= 0)) {
             if (midiAssign != null) {

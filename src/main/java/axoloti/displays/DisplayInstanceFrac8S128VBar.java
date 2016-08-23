@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewFrac8S128VBar;
+import axoloti.displayviews.IDisplayInstanceView;
 import java.nio.ByteBuffer;
 
 /**
@@ -71,7 +72,7 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
     }
 
     @Override
-    public DisplayInstanceViewFrac8S128VBar ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewFrac8S128VBar(this);
     }
 }
