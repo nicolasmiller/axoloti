@@ -17,7 +17,11 @@
  */
 package axoloti.displays;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.displayviews.DisplayInstanceViewBool32;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewBool32;
 
 /**
  *
@@ -30,7 +34,11 @@ public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
     }
 
     @Override
-    public DisplayInstanceViewBool32 ViewFactory() {
-        return new DisplayInstanceViewBool32(this);
+    public IDisplayInstanceView getViewInstance() {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewBool32(this);
+        } else {
+            return new DisplayInstanceViewBool32(this);
+        }
     }
 }

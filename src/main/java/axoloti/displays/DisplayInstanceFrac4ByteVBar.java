@@ -17,7 +17,11 @@
  */
 package axoloti.displays;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.displayviews.DisplayInstanceViewFrac4ByteVBar;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac4ByteVBar;
 
 /**
  *
@@ -30,7 +34,11 @@ public class DisplayInstanceFrac4ByteVBar extends DisplayInstanceFrac32<DisplayF
     }
 
     @Override
-    public DisplayInstanceViewFrac4ByteVBar ViewFactory() {
-        return new DisplayInstanceViewFrac4ByteVBar(this);
+    public IDisplayInstanceView getViewInstance() {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac4ByteVBar(this);
+        } else {
+            return new DisplayInstanceViewFrac4ByteVBar(this);
+        }
     }
 }

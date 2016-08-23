@@ -25,7 +25,7 @@ import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.SDCardInfo;
 import axoloti.SDFileInfo;
 import axoloti.USBBulkConnection;
@@ -750,7 +750,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (row >= 0) {
             File f = files.get(jTable1.getSelectedRow());
             if (f.isFile() && f.canRead()) {
-                PatchView.OpenPatch(f);
+                PatchViewSwing.OpenPatch(f);
             }
         }
     }//GEN-LAST:event_jButtonOpenActionPerformed
@@ -759,7 +759,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (!f.isFile() || !f.canRead()) {
             return;
         }
-        PatchFrame pf = PatchView.OpenPatchInvisible(f);
+        PatchFrame pf = PatchViewSwing.OpenPatchInvisible(f);
         if (pf != null) {
             boolean isVisible = pf.isVisible();
             PatchModel patchModel = pf.getPatchModel();

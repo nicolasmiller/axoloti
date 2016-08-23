@@ -19,8 +19,11 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewComment;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
 import java.awt.Point;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -31,9 +34,9 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "comment")
 public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
-    
+
     static int nextInstanceNumber = 0;
-    
+
     @Attribute(name = "text", required = false)
     private String commentText;
 
@@ -51,7 +54,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             InstanceName = getGeneratedInstanceName();
         }
     }
-    
+
     private String getGeneratedInstanceName() {
         String instanceName = Integer.toString(nextInstanceNumber);
         nextInstanceNumber++;
@@ -74,16 +77,13 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     public void setCommentText(String commentText) {
         this.commentText = commentText;
     }
-    
+
     @Override
-    public AxoObjectInstanceViewComment ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewComment(this, patchView);
-    }
-    
-    @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceViewComment pi = ViewFactory(patchView);
-        pi.PostConstructor();
-        return pi;
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewComment(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewComment(this, (PatchViewSwing) patchView);
+        }
     }
 }
