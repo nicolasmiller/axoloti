@@ -20,9 +20,10 @@ package axoloti.attribute;
 import axoloti.SDFileReference;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.attributeviews.AttributeInstanceView;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.util.ArrayList;
@@ -73,11 +74,11 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
         return null;
     }
 
-    public abstract AttributeInstanceView ViewFactory(AxoObjectInstanceView o);
+    public abstract IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o);
 
-    public AttributeInstanceView CreateView(AxoObjectInstanceView o) {
-        AttributeInstanceView pi = ViewFactory(o);
-        o.add(pi);
+    public IAttributeInstanceView createView(IAxoObjectInstanceView o) {
+        IAttributeInstanceView pi = getViewInstance(o);
+        o.addAttributeInstanceView(pi);
         pi.PostConstructor();
         return pi;
     }

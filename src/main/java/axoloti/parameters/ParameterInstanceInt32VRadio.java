@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewInt32VRadio;
 import org.simpleframework.xml.Attribute;
 
@@ -58,7 +59,8 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
         return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 
-    public ParameterInstanceViewInt32VRadio ViewFactory() {
+    @Override
+    public IParameterInstanceView getViewInstance() {
         return new ParameterInstanceViewInt32VRadio(this);
     }
 }

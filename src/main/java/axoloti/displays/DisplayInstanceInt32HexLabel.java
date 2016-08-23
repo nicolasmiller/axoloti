@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewInt32HexLabel;
+import axoloti.displayviews.IDisplayInstanceView;
 
 /**
  *
@@ -30,7 +31,7 @@ public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayIn
     }
 
     @Override
-    public DisplayInstanceViewInt32HexLabel ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewInt32HexLabel(this);
     }
 }

@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFrac32SMap;
 import org.simpleframework.xml.Attribute;
 
@@ -81,7 +82,7 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     }
 
     @Override
-    public ParameterInstanceViewFrac32SMap ViewFactory() {
+    public IParameterInstanceView getViewInstance() {
         return new ParameterInstanceViewFrac32SMap(this);
     }
 }
