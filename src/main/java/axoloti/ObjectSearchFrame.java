@@ -338,7 +338,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             if (jList1.getSelectedValue() != o) {
             }
             AxoObjectInstanceAbstract objectInstance = o.CreateInstance(null, "dummy", new Point(5, 5));
-            AxoObjectInstanceViewAbstract objectInstanceView = objectInstance.CreateView(patchController.getPatchView());
+            AxoObjectInstanceViewAbstract objectInstanceView = objectInstance.CreateView((PatchViewSwing) patchController.getPatchView());
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);
             objectInstanceView.invalidate();

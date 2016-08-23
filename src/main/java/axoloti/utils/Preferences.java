@@ -18,6 +18,9 @@
 package axoloti.utils;
 
 import axoloti.Axoloti;
+import axoloti.PatchController;
+import axoloti.PatchView;
+import axoloti.PatchViewSlick2D;
 import axoloti.Version;
 import java.io.File;
 import java.io.IOException;
@@ -144,7 +147,9 @@ public class Preferences {
     }
 
     public AxolotiLibrary getLibrary(String id) {
-        if(libraries == null) return null;
+        if (libraries == null) {
+            return null;
+        }
         for (AxolotiLibrary lib : libraries) {
             if (lib.getId().equals(id)) {
                 return lib;
@@ -243,13 +248,13 @@ public class Preferences {
                         Logger.getLogger(Preferences.class
                                 .getName()).log(Level.SEVERE, null, ex);
                         Logger.getLogger(Preferences.class
-                                .getName()).log(Level.INFO,"Attempt to load preferenced in relaxed mode");
-                        prefs = serializer.read(Preferences.class, p,false);
+                                .getName()).log(Level.INFO, "Attempt to load preferenced in relaxed mode");
+                        prefs = serializer.read(Preferences.class, p, false);
                     } catch (Exception ex1) {
                         Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                 }
-                if (prefs == null){
+                if (prefs == null) {
                     prefs = new Preferences();
                 }
                 singleton = prefs;
@@ -429,7 +434,7 @@ public class Preferences {
                     "https://github.com/axoloti/axoloti-contrib.git",
                     false
             ));
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -459,13 +464,18 @@ public class Preferences {
         }
         ObjectPath = objPath.toArray(new String[0]);
     }
-    
+
     public String getThemePath() {
         return themePath;
     }
-    
+
     public void setThemePath(String themePath) {
         this.themePath = themePath;
         SavePrefs();
+    }
+
+    public PatchView getPatchView(PatchController patchController) {
+        return new PatchViewSlick2D(patchController);
+//        return new PatchViewSwing(patchController);
     }
 }

@@ -339,7 +339,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                                     if (axoObjects.LoaderThread.isAlive()) {
                                         EventQueue.invokeLater(this);
                                     } else {
-                                        PatchView.OpenPatch(f);
+                                        PatchViewSwing.OpenPatch(f);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -762,7 +762,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchView patchView = prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
             patchController.setPatchModel(patchModel);
@@ -833,7 +833,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchView patchView = prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
@@ -922,7 +922,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             InputStream input = new URL(url).openStream();
             String name = url.substring(url.lastIndexOf("/") + 1, url.length());
-            PatchView.OpenPatch(name, input);
+            PatchViewSwing.OpenPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
@@ -933,7 +933,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
         PatchController patchController = new PatchController();
-        PatchView patchView = new PatchView(patchController);
+        PatchView patchView = prefs.getPatchView(patchController);
         patchModel.addModelChangedListener(patchView);
         patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);
@@ -941,6 +941,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         patchView.PostConstructor();
         patchView.setFileNamePath("untitled");
         pf.setVisible(true);
+        pf.startRendering();
     }
 
     public void NewBank() {
@@ -1168,7 +1169,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             if (fn.endsWith(".axb")) {
                 PatchBank.OpenBank(new File(fn));
             } else if (fn.endsWith(".axp") || fn.endsWith(".axs") || fn.endsWith(".axh")) {
-                PatchView.OpenPatch(new File(fn));
+                PatchViewSwing.OpenPatch(new File(fn));
             }
         }
     }
