@@ -22,8 +22,8 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -129,14 +129,14 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
             axoObj.getPatchModel().SetDirty();
         }
     }
-
-    public OutletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new OutletInstanceView(this, o);
+    
+    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        return new OutletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
     }
 
-    public OutletInstanceView CreateView(AxoObjectInstanceView o) {
-        OutletInstanceView outletInstanceView = ViewFactory(o);
-        o.p_outletViews.add(outletInstanceView);
+    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
+        IOutletInstanceView outletInstanceView = getViewInstance(o);
+        o.addOutletInstanceView(outletInstanceView);
         outletInstanceView.PostConstructor();
         return outletInstanceView;
     }

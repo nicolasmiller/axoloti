@@ -1420,8 +1420,8 @@ public class USBBulkConnection extends Connection {
         return targetProfile;
     }
 
-    public PatchView getPatchView() {
-        return this.patchController.patchView;
+    public PatchViewSwing getPatchView() {
+        return (PatchViewSwing) this.patchController.patchView;
     }
 
     public PatchModel getPatchModel() {

@@ -18,6 +18,7 @@
 package axoloti.displays;
 
 import axoloti.displayviews.DisplayInstanceViewVScale;
+import axoloti.displayviews.IDisplayInstanceView;
 import java.nio.ByteBuffer;
 
 /**
@@ -46,7 +47,7 @@ public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
     }
 
     @Override
-    public DisplayInstanceViewVScale ViewFactory() {
+    public IDisplayInstanceView getViewInstance() {
         return new DisplayInstanceViewVScale(this);
     }
 }

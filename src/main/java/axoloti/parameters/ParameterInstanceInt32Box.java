@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewInt32Box;
 import org.simpleframework.xml.Attribute;
 
@@ -75,7 +76,8 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
         return "";
     }
 
-    public ParameterInstanceViewInt32Box ViewFactory() {
+    @Override
+    public IParameterInstanceView getViewInstance() {
         return new ParameterInstanceViewInt32Box(this);
     }
 }

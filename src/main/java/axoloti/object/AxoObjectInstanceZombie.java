@@ -19,11 +19,15 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewProcessing;
+import axoloti.PatchViewSwing;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewZombie;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
+import axoloti.pobjectviews.PAxoObjectInstanceViewZombie;
 import java.awt.Point;
 import java.util.ArrayList;
 import org.simpleframework.xml.Root;
@@ -93,7 +97,12 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public AxoObjectInstanceViewZombie ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewZombie(this, patchView);
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if(patchView instanceof PatchViewProcessing) {
+            return new PAxoObjectInstanceViewZombie(this, (PatchViewProcessing) patchView);
+        }
+        else {
+            return new AxoObjectInstanceViewZombie(this, (PatchViewSwing) patchView);
+        }
     }
 }

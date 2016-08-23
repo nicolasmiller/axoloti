@@ -22,7 +22,11 @@ import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewProcessing;
+import axoloti.PatchViewSwing;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewPatcher;
+import axoloti.pobjectviews.PAxoObjectInstanceViewPatcher;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -48,7 +52,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (patchController == null) {
             patchModel = new PatchModel();
             patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchViewSwing patchView = new PatchViewSwing(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
             patchController.setPatchModel(patchModel);
@@ -73,7 +77,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (patchController == null) {
             patchModel = new PatchModel();
             patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchViewSwing patchView = new PatchViewSwing(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
@@ -85,11 +89,17 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
+        pf.startRendering();
     }
     
     @Override    
-    public AxoObjectInstanceViewPatcher ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewPatcher(this, patchView);
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if(patchView instanceof PatchViewProcessing) {
+            return new PAxoObjectInstanceViewPatcher(this, (PatchViewProcessing) patchView);
+        }
+        else {
+            return new AxoObjectInstanceViewPatcher(this, (PatchViewSwing) patchView);
+        }
     }
     
     public PatchController getPatchController() {

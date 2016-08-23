@@ -1,7 +1,7 @@
 package axoloti;
 
-import axoloti.inlets.InletInstanceView;
-import axoloti.outlets.OutletInstanceView;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.outlets.IOutletInstanceView;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,17 +14,17 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-public class NetView extends JComponent {
+public class NetView extends JComponent implements INetView {
 
-    ArrayList<OutletInstanceView> source = new ArrayList<OutletInstanceView>();
-    ArrayList<InletInstanceView> dest = new ArrayList<InletInstanceView>();
+    private ArrayList<IOutletInstanceView> source = new ArrayList<>();
+    private ArrayList<IInletInstanceView> dest = new ArrayList<>();
 
     Net net;
     boolean selected = false;
 
-    PatchView patchView;
+    PatchViewSwing patchView;
 
-    NetView(Net net, PatchView patchView) {
+    NetView(Net net, PatchViewSwing patchView) {
         this.net = net;
         this.patchView = patchView;
 
@@ -42,17 +42,13 @@ public class NetView extends JComponent {
             return;
         }
         this.selected = selected;
-        for (OutletInstanceView i : source) {
+        for (IOutletInstanceView i : source) {
             i.setHighlighted(selected);
         }
-        for (InletInstanceView i : dest) {
+        for (IInletInstanceView i : dest) {
             i.setHighlighted(selected);
         }
         repaint();
-    }
-
-    public boolean isSelected() {
-        return selected;
     }
 
     public boolean getSelected() {
@@ -75,14 +71,14 @@ public class NetView extends JComponent {
         g2.draw(curve);
     }
 
-    public void connectInlet(InletInstanceView inlet) {
+    public void connectInlet(IInletInstanceView inlet) {
         if(inlet == null) {
             throw new RuntimeException("Cannot connect a null InletInstanceView to a NetView.");
         }
         dest.add(inlet);
     }
 
-    public void connectOutlet(OutletInstanceView outlet) {
+    public void connectOutlet(IOutletInstanceView outlet) {
         if(outlet == null) {
             throw new RuntimeException("Cannot connect a null OutInstanceView to a NetView.");
         }
@@ -95,14 +91,14 @@ public class NetView extends JComponent {
         int max_y = Integer.MIN_VALUE;
         int max_x = Integer.MIN_VALUE;
 
-        for (InletInstanceView i : dest) {
+        for (IInletInstanceView i : dest) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
             max_x = Math.max(max_x, p1.x);
             max_y = Math.max(max_y, p1.y);
         }
-        for (OutletInstanceView i : source) {
+        for (IOutletInstanceView i : source) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -158,7 +154,7 @@ public class NetView extends JComponent {
         }
 
         Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
-        for (InletInstanceView i : dest) {
+        for (IInletInstanceView i : dest) {
             Point p1 = i.getJackLocInCanvas();
 
             Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
@@ -167,7 +163,7 @@ public class NetView extends JComponent {
             g2.setColor(c);
             DrawWire(g2, from.x, from.y, to.x, to.y);
         }
-        for (OutletInstanceView i : source) {
+        for (IOutletInstanceView i : source) {
             Point p1 = i.getJackLocInCanvas();
 
             Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
@@ -181,5 +177,13 @@ public class NetView extends JComponent {
     
     public Net getNet() {
         return this.net;
+    }
+    
+    public ArrayList<IOutletInstanceView> getSourceViews() {
+        return source;
+    }
+    
+    public ArrayList<IInletInstanceView> getDestinationViews() {
+        return dest;
     }
 }

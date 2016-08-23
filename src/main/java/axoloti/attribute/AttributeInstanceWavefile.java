@@ -19,8 +19,10 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.attributeviews.AttributeInstanceViewWavefile;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -102,8 +104,8 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     }
 
     @Override
-    public AttributeInstanceViewWavefile ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceViewWavefile(this, o);
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        return new AttributeInstanceViewWavefile(this, (AxoObjectInstanceView) o);
     }
     
     private String valueBeforeAdjustment;
