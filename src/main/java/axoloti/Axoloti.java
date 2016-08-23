@@ -46,6 +46,9 @@ public class Axoloti {
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
+        System.setProperty("java.library.path", "lib");
+        System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
+        
         try {
             initProperties();
 

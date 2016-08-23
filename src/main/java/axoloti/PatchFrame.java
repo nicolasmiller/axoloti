@@ -50,6 +50,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
+import org.newdawn.slick.CanvasGameContainer;
+import org.newdawn.slick.SlickException;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import qcmds.QCmdLock;
@@ -87,7 +89,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jToolbarPanel.add(visibleCablePanel);
 
-        jScrollPane1.setViewportView(getPatchView().Layers);
+        CanvasGameContainer canvas = this.getPatchViewSlick2d().getCanvas();
+        //jScrollPane1.setViewportView(getPatchView().Layers);
+        jScrollPane1.setViewportView(canvas);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
 
@@ -195,10 +199,20 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
+        try {
+            canvas.start();
+        }
+        catch(SlickException e) {
+            
+        }
     }
     
     private PatchView getPatchView() {
         return this.patchController.patchView;
+    }
+    
+    private PatchViewSlick2D getPatchViewSlick2d() {
+        return new PatchViewSlick2D(this.getPatchController());
     }
     
     public PatchModel getPatchModel() {
