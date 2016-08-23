@@ -22,8 +22,8 @@ import axoloti.Preset;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.parameterviews.ParameterInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.util.ArrayList;
@@ -306,10 +306,10 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         return this.name;
     }
 
-    public abstract ParameterInstanceView ViewFactory();
+    public abstract IParameterInstanceView getViewInstance(IAxoObjectInstanceView o);
 
-    public ParameterInstanceView CreateView(AxoObjectInstanceView o) {
-        ParameterInstanceView pi = ViewFactory();
+    public IParameterInstanceView createView(IAxoObjectInstanceView o) {
+        IParameterInstanceView pi = getViewInstance(o);
         pi.PostConstructor();
         o.addParameterInstanceView(pi);
         return pi;

@@ -531,10 +531,10 @@ public class PatchModel {
         if (o == null) {
             return;
         }
-        for (InletInstance ii : o.GetInletInstances()) {
+        for (InletInstance ii : o.getInletInstances()) {
             disconnect(ii, false);
         }
-        for (OutletInstance oi : o.GetOutletInstances()) {
+        for (OutletInstance oi : o.getOutletInstances()) {
             disconnect(oi, false);
         }
         int i;
@@ -700,7 +700,7 @@ public class PatchModel {
 
         DisplayInstances = new ArrayList<DisplayInstance>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            for (DisplayInstance p : o.GetDisplayInstances()) {
+            for (DisplayInstance p : o.getDisplayInstances()) {
                 p.setOffset(offset + 3);
                 int l = p.getLength();
                 offset += l;
@@ -990,7 +990,7 @@ public class PatchModel {
             String s = controllerinstance.getCInstanceName();
             if (!s.isEmpty()) {
                 c += "   " + s + "_i.Init(" + parentReference;
-                for (DisplayInstance i : controllerinstance.GetDisplayInstances()) {
+                for (DisplayInstance i : controllerinstance.getDisplayInstances()) {
                     if (i.display.getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
@@ -1004,7 +1004,7 @@ public class PatchModel {
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
                 c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference;
-                for (DisplayInstance i : o.GetDisplayInstances()) {
+                for (DisplayInstance i : o.getDisplayInstances()) {
                     if (i.display.getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
@@ -1139,7 +1139,7 @@ public class PatchModel {
         c += "  " + o.getCInstanceName() + "_i.dsp(";
 //            c += "  " + o.GenerateDoFunctionName() + "(this";
         boolean needsComma = false;
-        for (InletInstance i : o.GetInletInstances()) {
+        for (InletInstance i : o.getInletInstances()) {
             if (needsComma) {
                 c += ", ";
             }
@@ -1166,7 +1166,7 @@ public class PatchModel {
             }
             needsComma = true;
         }
-        for (OutletInstance i : o.GetOutletInstances()) {
+        for (OutletInstance i : o.getOutletInstances()) {
             if (needsComma) {
                 c += ", ";
             }
@@ -1191,7 +1191,7 @@ public class PatchModel {
                 needsComma = true;
             }
         }
-        for (DisplayInstance i : o.GetDisplayInstances()) {
+        for (DisplayInstance i : o.getDisplayInstances()) {
             if (i.display.getLength() > 0) {
                 if (needsComma) {
                     c += ", ";
