@@ -24,7 +24,7 @@ import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CharEscape;
@@ -213,24 +213,24 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
         return "";
     }
 
-    public ArrayList<InletInstance> GetInletInstances() {
-        return new ArrayList<InletInstance>();
+    public ArrayList<InletInstance> getInletInstances() {
+        return new ArrayList<>();
     }
 
-    public ArrayList<OutletInstance> GetOutletInstances() {
-        return new ArrayList<OutletInstance>();
+    public ArrayList<OutletInstance> getOutletInstances() {
+        return new ArrayList<>();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
-        return new ArrayList<ParameterInstance>();
+        return new ArrayList<>();
     }
 
     public ArrayList<AttributeInstance> getAttributeInstances() {
-        return new ArrayList<AttributeInstance>();
+        return new ArrayList<>();
     }
 
-    public ArrayList<DisplayInstance> GetDisplayInstances() {
-        return new ArrayList<DisplayInstance>();
+    public ArrayList<DisplayInstance> getDisplayInstances() {
+        return new ArrayList<>();
     }
 
     public InletInstance GetInletInstance(String n) {
@@ -316,8 +316,6 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
         return false;
     }
 
-
-
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
@@ -336,11 +334,28 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
 
     public void updateObj1() {
     }
-    public abstract AxoObjectInstanceViewAbstract ViewFactory(PatchView patchView);
 
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceViewAbstract pi = ViewFactory(patchView);
+    public abstract IAxoObjectInstanceView getViewInstance(PatchView patchView);
+
+    public IAxoObjectInstanceView createView(PatchView patchView) {
+        IAxoObjectInstanceView pi = getViewInstance(patchView);
         pi.PostConstructor();
         return pi;
+    }
+
+    public void setDisplayInstances(ArrayList<DisplayInstance> displayInstances) {
+    }
+
+    public void setAttributeInstances(ArrayList<AttributeInstance> Instances) {
+    }
+
+    public void setInletInstances(ArrayList<InletInstance> inletInstances) {
+    }
+
+    public void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
+    }
+
+    public void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
+
     }
 }
