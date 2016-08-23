@@ -18,7 +18,7 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewComment;
 import java.awt.Point;
@@ -76,12 +76,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     }
     
     @Override
-    public AxoObjectInstanceViewComment ViewFactory(PatchView patchView) {
+    public AxoObjectInstanceViewComment ViewFactory(PatchViewSwing patchView) {
         return new AxoObjectInstanceViewComment(this, patchView);
     }
     
     @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
+    public AxoObjectInstanceViewAbstract CreateView(PatchViewSwing patchView) {
         AxoObjectInstanceViewComment pi = ViewFactory(patchView);
         pi.PostConstructor();
         return pi;
