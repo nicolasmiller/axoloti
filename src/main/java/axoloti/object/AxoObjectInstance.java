@@ -21,7 +21,7 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
@@ -553,7 +553,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         String iname = getInstanceName();
         AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().ChangeObjectInstanceType1(this, o);
         AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
-        PatchFrame pf = PatchView.OpenPatch(ao.f);
+        PatchFrame pf = PatchViewSwing.OpenPatch(ao.f);
         oi.pf = pf;
         oi.patchModel = pf.getPatchModel();
         oi.setInstanceName(iname);
@@ -594,12 +594,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public AxoObjectInstanceView ViewFactory(PatchView patchView) {
+    public AxoObjectInstanceView ViewFactory(PatchViewSwing patchView) {
         return new AxoObjectInstanceView(this, patchView);
     }
 
     @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
+    public AxoObjectInstanceViewAbstract CreateView(PatchViewSwing patchView) {
         AxoObjectInstanceView pi = ViewFactory(patchView);
         pi.PostConstructor();
         return pi;

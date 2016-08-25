@@ -24,8 +24,8 @@ public class Slick2dRenderer extends BasicGame {
     public float scale = 1.0f;
     public float trans_x = 0.0f;
     public float trans_y = 0.0f;
-    private static int width = 1000;
-    private static int height = 1000;
+    private static final int width = 1000;
+    private static final int height = 1000;
     private int mouse_x;
     private int mouse_y;
     private int objDim = 5;
@@ -240,20 +240,14 @@ public class Slick2dRenderer extends BasicGame {
         trans_y += mouse_y;
     }
     
-    public static CanvasGameContainer getCanvas() {
+    public static PatchCanvasGameContainer getCanvas() {
         try {
-            CanvasGameContainer container;
+            PatchCanvasGameContainer container;
             Slick2dRenderer game = new Slick2dRenderer("Simple Slick Game");
 
-            container = new CanvasGameContainer(game) {
-                public int getWidth() {
-                    return width;
-                }
-
-                public int getHeight() {
-                    return height;
-                }
-            };
+            container = new PatchCanvasGameContainer(game);
+            container.setWidth(width);
+            container.setHeight(height);
             container.getContainer().setTargetFrameRate(60);
             container.getContainer().setSmoothDeltas(true);
             container.getContainer().setVSync(true);
@@ -267,40 +261,40 @@ public class Slick2dRenderer extends BasicGame {
     }
 
     public static void main(String[] args) {
-       System.setProperty("java.library.path", "lib");
-       System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
-       JFrame frame = new JFrame("Test");
-       
-       CanvasGameContainer container = getCanvas();
-       JScrollPane scrollPane = new JScrollPane();
-       
-       scrollPane.setViewportView(container);
-            
-       frame.getContentPane().add(scrollPane);
-       frame.setSize(width, height);
-       frame.addWindowListener(new WindowAdapter() {
-           @Override
-           public void windowClosing(WindowEvent e) {
-               container.dispose();
-               System.exit(0);
-           }
-       });
-
-       scrollPane.addComponentListener(new ComponentAdapter() {
-           public void componentResized(ComponentEvent e) {
-               width = scrollPane.getWidth();
-               height = scrollPane.getHeight();
-               container.setPreferredSize(scrollPane.getSize());
-           }
-       });
-
-       frame.setVisible(true);
-       try {
-           container.start();
-       }
-       catch (SlickException ex) {
-            ex.printStackTrace();
-       }
+//       System.setProperty("java.library.path", "lib");
+//       System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
+//       JFrame frame = new JFrame("Test");
+//       
+//       CanvasGameContainer container = getCanvas();
+//       JScrollPane scrollPane = new JScrollPane();
+//       
+//       scrollPane.setViewportView(container);
+//            
+//       frame.getContentPane().add(scrollPane);
+//       frame.setSize(width, height);
+//       frame.addWindowListener(new WindowAdapter() {
+//           @Override
+//           public void windowClosing(WindowEvent e) {
+//               container.dispose();
+//               System.exit(0);
+//           }
+//       });
+//
+//       scrollPane.addComponentListener(new ComponentAdapter() {
+//           public void componentResized(ComponentEvent e) {
+//               width = scrollPane.getWidth();
+//               height = scrollPane.getHeight();
+//               container.setPreferredSize(scrollPane.getSize());
+//           }
+//       });
+//
+//       frame.setVisible(true);
+//       try {
+//           container.start();
+//       }
+//       catch (SlickException ex) {
+//            ex.printStackTrace();
+//       }
     }
 
     public Net getDragNet() {

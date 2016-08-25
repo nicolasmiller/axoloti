@@ -2,7 +2,7 @@ package axoloti.objectviews;
 
 import axoloti.NetView;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectAbstract;
@@ -46,7 +46,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     LabelComponent InstanceLabel;
     private boolean Locked = false;
 
-    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchView patchView) {
+    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
         this.model = model;
         this.patchView = patchView;
     }
@@ -241,10 +241,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
         }
     }
 
-    private PatchView patchView;
+    private PatchViewSwing patchView;
     private PatchModel patchModel;
 
-    public PatchView getPatchView() {
+    public PatchViewSwing getPatchView() {
         return this.patchView;
     }
 

@@ -19,7 +19,7 @@ package axoloti.object;
 
 import axoloti.MainFrame;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
@@ -336,9 +336,9 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
 
     public void updateObj1() {
     }
-    public abstract AxoObjectInstanceViewAbstract ViewFactory(PatchView patchView);
+    public abstract AxoObjectInstanceViewAbstract ViewFactory(PatchViewSwing patchView);
 
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
+    public AxoObjectInstanceViewAbstract CreateView(PatchViewSwing patchView) {
         AxoObjectInstanceViewAbstract pi = ViewFactory(patchView);
         pi.PostConstructor();
         return pi;

@@ -22,9 +22,9 @@ public class NetView extends JComponent {
     Net net;
     boolean selected = false;
 
-    PatchView patchView;
+    PatchViewSwing patchView;
 
-    NetView(Net net, PatchView patchView) {
+    NetView(Net net, PatchViewSwing patchView) {
         this.net = net;
         this.patchView = patchView;
 
