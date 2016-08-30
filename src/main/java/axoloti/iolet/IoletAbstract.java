@@ -118,7 +118,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                     }
                 }
                 dragnet.setVisible(true);
-                if(getPatchView() != null) {
+                if (getPatchView() != null) {
                     getPatchView().selectionRectLayerPanel.add(dragnet);
                 }
                 e.consume();
@@ -200,12 +200,10 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                     Point jackLocation = dragtarget.getJackLocInCanvas();
                     dragnet.SetDragPoint(jackLocation);
                 }
-            } else {
-                // floating
-                if (dragnet != null) {
-                    dragnet.SetDragPoint(p);
-                    dragtarget = null;
-                }
+            } else // floating
+            if (dragnet != null) {
+                dragnet.SetDragPoint(p);
+                dragtarget = null;
             }
         }
         e.consume();

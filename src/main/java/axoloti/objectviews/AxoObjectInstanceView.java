@@ -19,7 +19,6 @@ import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.Outlet;
@@ -44,7 +43,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements ObjectModifiedListener {
+public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements ObjectModifiedListener, IAxoObjectInstanceView {
+
     private AxoObjectInstance model;
     LabelComponent IndexLabel;
     public final JPanel p_parameterViews = new JPanel();
@@ -58,9 +58,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     private final ArrayList<IOutletInstanceView> outletInstanceViews = new ArrayList<>();
     private final ArrayList<IParameterInstanceView> parameterInstanceViews = new ArrayList<>();
 
-    public AxoObjectInstanceView(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
+    public AxoObjectInstanceView(AxoObjectInstance model, PatchViewSwing patchView) {
         super(model, patchView);
-        this.model = (AxoObjectInstance) model;
+        this.model = model;
         init1();
     }
 
@@ -488,29 +488,28 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         this.p_parameterViews.add((ParameterInstanceView) view);
         this.parameterInstanceViews.add(view);
     }
-    
+
     @Override
     public void addAttributeInstanceView(IAttributeInstanceView view) {
         this.add((AttributeInstanceView) view);
     }
-    
+
     @Override
     public void addDisplayInstanceView(IDisplayInstanceView view) {
         this.p_displayViews.add((DisplayInstanceView) view);
     }
-    
+
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
         this.p_outletViews.add((OutletInstanceView) view);
 
     }
-    
+
     @Override
     public void addInletInstanceView(IInletInstanceView view) {
         this.p_inletViews.add((InletInstanceView) view);
-    }  
+    }
 
-    
     @Override
     public void Close() {
         super.Close();

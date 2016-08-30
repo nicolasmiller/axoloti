@@ -1,21 +1,36 @@
 package axoloti.pobjectviews;
 
 import axoloti.INetView;
+import axoloti.Net;
 import axoloti.PatchModel;
 import axoloti.PatchViewProcessing;
 import axoloti.Theme;
+import axoloti.attribute.AttributeInstance;
+import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributeviews.IAttributeInstanceView;
+import axoloti.displays.Display;
+import axoloti.displays.DisplayInstance;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.Inlet;
+import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.Outlet;
+import axoloti.outlets.OutletInstance;
+import axoloti.parameters.Parameter;
+import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.pinlets.PInletInstanceView;
+import axoloti.poutlets.POutletInstanceView;
 import axoloti.processing.PComponent;
 import static axoloti.processing.PLayoutType.HORIZONTAL_CENTERED;
+import static axoloti.processing.PLayoutType.VERTICAL_CENTERED;
 import axoloti.processing.PatchPApplet;
 import axoloti.utils.Constants;
 import components.processing.PLabelComponent;
@@ -38,11 +53,12 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     private boolean Locked = false;
     PatchPApplet pApplet;
 
-//    public final PComponent p_parameterViews;
-//    public final PComponent p_displayViews;
-//    public final PComponent p_ioletViews;
-//    public final PComponent p_inletViews;
-//    public final PComponent p_outletViews;
+    public PComponent p_parameterViews;
+    public PComponent p_displayViews;
+    public PComponent p_ioletViews;
+    public PComponent p_inletViews;
+    public PComponent p_outletViews;
+
     private final ArrayList<IInletInstanceView> inletInstanceViews = new ArrayList<>();
     private final ArrayList<IOutletInstanceView> outletInstanceViews = new ArrayList<>();
     private final ArrayList<IParameterInstanceView> parameterInstanceViews = new ArrayList<>();
@@ -57,8 +73,8 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     private AxoObjectInstanceAbstract model;
 
     @Override
-    public AxoObjectInstanceAbstract getModel() {
-        return model;
+    public AxoObjectInstance getModel() {
+        return (AxoObjectInstance) model;
     }
 
     @Override
@@ -87,8 +103,50 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         setBounds(getX(), getY(), getWidth(), 100);
     }
 
+    public void updateObj1() {
+        getType().addObjectModifiedListener(this);
+    }
+
     @Override
     public void PostConstructor() {
+        p_parameterViews = new PComponent(pApplet);
+        p_displayViews = new PComponent(pApplet);
+        p_ioletViews = new PComponent(pApplet);
+        p_inletViews = new PComponent(pApplet);
+        p_outletViews = new PComponent(pApplet);
+
+        boolean isFucked = false;
+
+        try {
+            getModel();
+        } catch (ClassCastException e) {
+            isFucked = true;
+        }
+
+        ArrayList<ParameterInstance> pParameterInstances = new ArrayList<>();
+        ArrayList<AttributeInstance> pAttributeInstances = new ArrayList<>();
+        ArrayList<InletInstance> pInletInstances = new ArrayList<>();
+        ArrayList<OutletInstance> pOutletInstances = new ArrayList<>();
+
+        if (!isFucked) {
+//        updateObj1();
+//            ArrayList<ParameterInstance> pParameterInstances = getModel().parameterInstances;
+//            ArrayList<AttributeInstance> pAttributeInstances = getModel().attributeInstances;
+//            ArrayList<InletInstance> pInletInstances = getModel().inletInstances;
+//            ArrayList<OutletInstance> pOutletInstances = getModel().outletInstances;
+
+            pParameterInstances = getModel().parameterInstances;
+            pAttributeInstances = getModel().attributeInstances;
+            pInletInstances = getModel().inletInstances;
+            pOutletInstances = getModel().outletInstances;
+
+            getModel().parameterInstances = new ArrayList<>();
+            getModel().attributeInstances = new ArrayList<>();
+            getModel().displayInstances = new ArrayList<>();
+            getModel().inletInstances = new ArrayList<>();
+            getModel().outletInstances = new ArrayList<>();
+        }
+
         setBounds(model.getX(), model.getY(), MIN_WIDTH, MIN_HEIGHT);
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         this.titleBar = new PComponent(this.pApplet);
@@ -97,6 +155,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         titleBar.setLayout(HORIZONTAL_CENTERED);
 
         final PPopupIcon popupIcon = new PPopupIcon(pApplet);
+// TODO
 //        popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
 //            @Override
 //            public void ShowPopup() {
@@ -113,6 +172,183 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         objectLabel.setTextHeight(Constants.FONT_POINT_SIZE);
         titleBar.add(objectLabel);
         add(titleBar);
+
+//TODO
+//        String tooltiptxt = "<html>";
+//        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
+//            tooltiptxt += getType().sDescription;
+//        }
+//        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
+//            tooltiptxt += "<p>Author: " + getType().sAuthor;
+//        }
+//        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
+//            tooltiptxt += "<p>License: " + getType().sLicense;
+//        }
+//        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
+//            tooltiptxt += "<p>Path: " + getType().sPath;
+//        }
+//        Titlebar.setToolTipText(tooltiptxt);
+// TODO
+//        InstanceLabel.addMouseListener(new MouseListener() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (e.getClickCount() == 2) {
+//                    addInstanceNameEditor();
+//                    e.consume();
+//                }
+//            }
+//
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//            }
+//
+//            @Override
+//            public void mouseReleased(MouseEvent e) {
+//            }
+//
+//            @Override
+//            public void mouseEntered(MouseEvent e) {
+//            }
+//
+//            @Override
+//            public void mouseExited(MouseEvent e) {
+//            }
+//        });
+//        add(InstanceLabel);
+        if (!isFucked) {
+            p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
+            p_ioletViews.setLayout(HORIZONTAL_CENTERED);
+            p_inletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
+            p_inletViews.setLayout(VERTICAL_CENTERED);
+            p_outletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
+            p_outletViews.setLayout(VERTICAL_CENTERED);
+            p_parameterViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+            if (getType().getRotatedParams()) {
+                p_parameterViews.setLayout(HORIZONTAL_CENTERED);
+            } else {
+                p_parameterViews.setLayout(VERTICAL_CENTERED);
+            }
+            p_displayViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
+            if (getType().getRotatedParams()) {
+                p_displayViews.setLayout(HORIZONTAL_CENTERED);
+            } else {
+                p_displayViews.setLayout(VERTICAL_CENTERED);
+            }
+
+            for (Inlet inlet : getType().inlets) {
+                InletInstance inletInstanceP = null;
+                for (InletInstance inletInstance : pInletInstances) {
+                    if (inletInstance.GetLabel().equals(inlet.getName())) {
+                        inletInstanceP = inletInstance;
+                    }
+                }
+                InletInstance inletInstance = new InletInstance(inlet, this.getObjectInstance());
+                if (inletInstanceP != null) {
+                    Net n = getPatchModel().GetNet(inletInstanceP);
+                    if (n != null) {
+                        n.connectInlet(inletInstance);
+                    }
+                }
+                getModel().inletInstances.add(inletInstance);
+                PInletInstanceView view = (PInletInstanceView) inletInstance.createView(this);
+//            view.setAlignmentX(LEFT_ALIGNMENT);
+                p_inletViews.add(view);
+                inletInstanceViews.add(view);
+            }
+            // disconnect stale inlets from nets
+            for (InletInstance inletInstance : pInletInstances) {
+                getPatchModel().disconnect(inletInstance);
+            }
+
+            for (Outlet o : getType().outlets) {
+                OutletInstance outletInstanceP = null;
+                for (OutletInstance outletInstance : pOutletInstances) {
+                    if (outletInstance.GetLabel().equals(o.getName())) {
+                        outletInstanceP = outletInstance;
+                    }
+                }
+                OutletInstance outletInstance = new OutletInstance(o, this.getObjectInstance());
+                if (outletInstanceP != null) {
+                    Net n = getPatchModel().GetNet(outletInstanceP);
+                    if (n != null) {
+                        n.connectOutlet(outletInstance);
+                    }
+                }
+                // need a view here
+                getModel().outletInstances.add(outletInstance);
+                POutletInstanceView view = (POutletInstanceView) outletInstance.createView(this);
+                //          view.setAlignmentX(RIGHT_ALIGNMENT);
+                p_outletViews.add(view);
+                outletInstanceViews.add(view);
+            }
+            // disconnect stale outlets from nets
+            for (OutletInstance outletInstance : pOutletInstances) {
+                getPatchModel().disconnect(outletInstance);
+            }
+
+            /*
+         if (p_inlets.getComponents().length == 0){
+         p_inlets.add(Box.createHorizontalGlue());
+         }
+         if (p_outlets.getComponents().length == 0){
+         p_outlets.add(Box.createHorizontalGlue());
+         }*/
+            p_ioletViews.add(p_inletViews);
+            //    p_ioletViews.add(Box.createHorizontalGlue());
+            p_ioletViews.add(p_outletViews);
+            add(p_ioletViews);
+
+            for (AxoAttribute p : getType().attributes) {
+                AttributeInstance attributeInstanceP = null;
+                for (AttributeInstance attributeInstance : pAttributeInstances) {
+                    if (attributeInstance.getAttributeName().equals(p.getName())) {
+                        attributeInstanceP = attributeInstance;
+                    }
+                }
+//            AttributeInstance attributeInstance1 = p.CreateInstance(this.getObjectInstance(), attributeInstanceP);
+//            PAttributeInstanceView attributeInstanceView = (PAttributeInstanceView) attributeInstance1.createView(this);
+                //      attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
+//            add(attributeInstanceView);
+//            getModel().attributeInstances.add(attributeInstance1);
+            }
+
+            for (Parameter p : getType().params) {
+                ParameterInstance pin = p.CreateInstance(this.getObjectInstance());
+                for (ParameterInstance pinp : pParameterInstances) {
+                    if (pinp.getName().equals(pin.getName())) {
+                        pin.CopyValueFrom(pinp);
+                    }
+                }
+//            PParameterInstanceView view = (PParameterInstanceView) pin.createView(this);
+//            view.PostConstructor();
+//            view.setAlignmentX(RIGHT_ALIGNMENT);
+                getModel().parameterInstances.add(pin);
+            }
+
+            for (Display p : getType().displays) {
+                DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
+//            PDisplayInstanceView view = (PDisplayInstanceView) pin.createView(this);
+                //          view.setAlignmentX(RIGHT_ALIGNMENT);
+//            getModel().displayInstances.add(pin);
+            }
+//        p_displays.add(Box.createHorizontalGlue());
+//        p_params.add(Box.createHorizontalGlue());
+//        add(p_parameterViews);
+//        add(p_displayViews);
+//        p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
+//        p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
+
+            getType().addObjectModifiedListener(this);
+
+            //      synchronized (getTreeLock()) {
+//            validateTree();
+//        }
+            resizeToGrid();
+        }
     }
 
     @Override
@@ -216,8 +452,8 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     }
 
     @Override
-    public AxoObjectInstanceAbstract getObjectInstance() {
-        return model;
+    public AxoObjectInstance getObjectInstance() {
+        return (AxoObjectInstance) model;
     }
 
     public void repaint() {
@@ -287,26 +523,28 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
 
     @Override
     public void addParameterInstanceView(IParameterInstanceView view) {
-        this.parameterInstanceViews.add(view);
+//        this.p_parameterViews.add((PParameterInstanceView) view);
+//        this.parameterInstanceViews.add(view);
     }
 
     @Override
     public void addAttributeInstanceView(IAttributeInstanceView view) {
-        // TODO
+//        this.add((PAttributeInstanceView) view);
     }
 
     @Override
     public void addDisplayInstanceView(IDisplayInstanceView view) {
-
+//        this.p_displayViews.add((PDisplayInstanceView) view);
     }
 
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
+        this.p_outletViews.add((POutletInstanceView) view);
 
     }
 
     @Override
     public void addInletInstanceView(IInletInstanceView view) {
-
+        this.p_inletViews.add((PInletInstanceView) view);
     }
 }

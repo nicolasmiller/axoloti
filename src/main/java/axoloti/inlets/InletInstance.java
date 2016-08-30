@@ -22,8 +22,9 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.pinlets.PInletInstanceView;
+import axoloti.pobjectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -110,7 +111,7 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
 
     public Net disconnect() {
         Net n = axoObj.getPatchModel().disconnect(this);
-        if(n != null) {
+        if (n != null) {
             axoObj.getPatchModel().SetDirty();
         }
         return n;
@@ -119,13 +120,14 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
     public void deleteNet() {
         Net n = axoObj.getPatchModel().GetNet(this);
         axoObj.getPatchModel().delete(n);
-        if(n != null) {
+        if (n != null) {
             axoObj.getPatchModel().SetDirty();
         }
     }
 
     public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+        return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
+//        return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
     }
 
     public IInletInstanceView createView(IAxoObjectInstanceView o) {

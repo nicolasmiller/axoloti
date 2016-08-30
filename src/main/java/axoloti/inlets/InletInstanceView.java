@@ -58,7 +58,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
     public InletInstance getInletInstance() {
         return this.inletInstance;
     }
-    
+
     public void disconnect() {
         getPatchView().getPatchController().disconnect(this);
     }
@@ -66,7 +66,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
     public void deleteNet() {
         getPatchView().getPatchController().deleteNet(this);
     }
-    
+
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)

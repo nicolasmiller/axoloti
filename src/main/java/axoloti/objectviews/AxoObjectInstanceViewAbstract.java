@@ -8,6 +8,7 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.outlets.IOutletInstanceView;
@@ -432,8 +433,9 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     public void ObjectModified(Object src) {
     }
 
-    public AxoObjectInstanceAbstract getObjectInstance() {
-        return model;
+    public AxoObjectInstance getObjectInstance() {
+        // TODO fix this SNAFU
+        return (AxoObjectInstance) model;
     }
 
     @Override

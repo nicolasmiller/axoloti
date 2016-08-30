@@ -51,7 +51,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
     public OutletInstance getOutletInstance() {
         return this.outletInstance;
     }
-    
+
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)
@@ -64,7 +64,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
             }
         }
     }
-    
+
     public void disconnect() {
         getPatchView().getPatchController().disconnect(this);
     }

@@ -220,6 +220,10 @@ public class PComponent {
         this.parent = parent;
     }
 
+    public PComponent getParent() {
+        return parent;
+    }
+
     public void removeAll() {
         this.children.clear();
     }

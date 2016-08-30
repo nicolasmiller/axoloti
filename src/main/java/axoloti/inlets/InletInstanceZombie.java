@@ -46,12 +46,12 @@ public class InletInstanceZombie extends InletInstance {
     public String GetLabel() {
         return inletname;
     }
-    
+
     @Override
     public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
         return new InletInstanceZombieView(this, (AxoObjectInstanceViewAbstract) o);
     }
-    
+
     @Override
     public IInletInstanceView createView(IAxoObjectInstanceView o) {
         IInletInstanceView inletInstanceView = getViewInstance(o);
