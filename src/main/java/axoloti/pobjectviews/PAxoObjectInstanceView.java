@@ -15,6 +15,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.processing.PComponent;
+import static axoloti.processing.PLayoutType.HORIZONTAL_CENTERED;
 import axoloti.processing.PatchPApplet;
 import axoloti.utils.Constants;
 import components.processing.PLabelComponent;
@@ -27,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInstanceView, ObjectModifiedListener {
+
     protected String InstanceName;
     protected boolean selected = false;
     PTextFieldComponent InstanceNameTF;
@@ -35,22 +37,27 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     private PComponent titleBar;
     private boolean Locked = false;
     PatchPApplet pApplet;
-    
+
+//    public final PComponent p_parameterViews;
+//    public final PComponent p_displayViews;
+//    public final PComponent p_ioletViews;
+//    public final PComponent p_inletViews;
+//    public final PComponent p_outletViews;
     private final ArrayList<IInletInstanceView> inletInstanceViews = new ArrayList<>();
     private final ArrayList<IOutletInstanceView> outletInstanceViews = new ArrayList<>();
     private final ArrayList<IParameterInstanceView> parameterInstanceViews = new ArrayList<>();
-    
+
     public PAxoObjectInstanceView(AxoObjectInstanceAbstract model, PatchViewProcessing p) {
         super(p.getPatchPApplet());
         this.model = model;
         this.patchView = p;
         this.pApplet = p.getPatchPApplet();
     }
-    
+
     private AxoObjectInstanceAbstract model;
 
     @Override
-    public AxoObjectInstanceAbstract getModel() { 
+    public AxoObjectInstanceAbstract getModel() {
         return model;
     }
 
@@ -68,20 +75,17 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     public boolean isLocked() {
         return Locked;
     }
-    
+
     public static final int PADDING = 2;
-    
+
     public static final int MIN_WIDTH = 60;
     public static final int MIN_HEIGHT = 40;
-    
+
     @Override
     public void setup() {
         super.setup();
         setBounds(getX(), getY(), getWidth(), 100);
     }
-    
-    private final int TITLE_TEXT_HEIGHT = 20;
-    
 
     @Override
     public void PostConstructor() {
@@ -89,9 +93,10 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         this.titleBar = new PComponent(this.pApplet);
         titleBar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
-        
+//        titleBar.setBackground(Color.PINK);
+        titleBar.setLayout(HORIZONTAL_CENTERED);
+
         final PPopupIcon popupIcon = new PPopupIcon(pApplet);
-        popupIcon.setMinSize(TITLE_TEXT_HEIGHT);
 //        popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
 //            @Override
 //            public void ShowPopup() {
@@ -105,17 +110,16 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
 
         PLabelComponent objectLabel = new PLabelComponent(this.pApplet, model.typeName);
         objectLabel.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
-        objectLabel.setLocation(TITLE_TEXT_HEIGHT + PADDING, 0);
-        objectLabel.setTextHeight(TITLE_TEXT_HEIGHT);
+        objectLabel.setTextHeight(Constants.FONT_POINT_SIZE);
         titleBar.add(objectLabel);
         add(titleBar);
     }
 
-    @Override    
-    public PatchViewProcessing getPatchView() { 
+    @Override
+    public PatchViewProcessing getPatchView() {
         return patchView;
     }
-    
+
     @Override
     public PatchModel getPatchModel() {
         return patchView.getPatchController().patchModel;
@@ -125,17 +129,17 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     public ArrayList<IInletInstanceView> getInletInstanceViews() {
         return inletInstanceViews;
     }
-    
+
     @Override
     public ArrayList<IOutletInstanceView> getOutletInstanceViews() {
         return outletInstanceViews;
     }
-    
+
     @Override
     public ArrayList<IParameterInstanceView> getParameterInstanceViews() {
         return parameterInstanceViews;
     }
-    
+
     @Override
     public void setLocation(int x, int y) {
         super.setLocation(x, y);
@@ -160,14 +164,14 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
             }
         }
     }
-    
+
     static int borderSelected = 0;
     static int borderUnselected = 1;
-    
+
     private void setBorder(int borderType) {
-        
+
     }
-    
+
     @Override
     public void setSelected(boolean Selected) {
         if (this.selected != Selected) {
@@ -185,7 +189,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     public Boolean isSelected() {
         return this.selected;
     }
-    
+
     @Override
     public void SetLocation(int x1, int y1) {
         super.setLocation(x1, y1);
@@ -196,7 +200,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
             }
         }
     }
-    
+
     @Override
     public void resizeToGrid() {
         Dimension d = getPreferredSize();
@@ -204,35 +208,36 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
         setSize(d);
     }
-    
-    public void addInstanceNameEditor() {}
-    
-    public void moveToFront() {}
 
-    @Override    
+    public void addInstanceNameEditor() {
+    }
+
+    public void moveToFront() {
+    }
+
+    @Override
     public AxoObjectInstanceAbstract getObjectInstance() {
         return model;
     }
 
     public void repaint() {
     }
-    
+
     public void Close() {
         AxoObjectAbstract t = model.getType();
         if (t != null) {
             t.removeObjectModifiedListener(this);
         }
     }
-    
-    
+
     public void updateObj() {
         model.getType().addObjectModifiedListener(this);
         getPatchModel().ChangeObjectInstanceType(this.getObjectInstance(), this.getObjectInstance().getType());
         getPatchModel().cleanUpIntermediateChangeStates(3);
     }
-    
+
     public void setInstanceName(String InstanceName) {
-            if (this.InstanceName != null && this.InstanceName.equals(InstanceName)) {
+        if (this.InstanceName != null && this.InstanceName.equals(InstanceName)) {
             return;
         }
 
@@ -249,7 +254,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
             InstanceLabel.setText(InstanceName);
         }
     }
-    
+
     boolean deferredObjTypeUpdate = false;
     Rectangle editorBounds;
     Integer editorActiveTabIndex;
@@ -275,33 +280,33 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         } catch (ClassCastException ex) {
         }
     }
-    
+
     public AxoObject getType() {
         return (AxoObject) model.getType();
     }
-    
+
     @Override
     public void addParameterInstanceView(IParameterInstanceView view) {
         this.parameterInstanceViews.add(view);
     }
-    
+
     @Override
     public void addAttributeInstanceView(IAttributeInstanceView view) {
         // TODO
     }
-    
+
     @Override
     public void addDisplayInstanceView(IDisplayInstanceView view) {
-        
+
     }
-    
+
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
-        
+
     }
-    
+
     @Override
     public void addInletInstanceView(IInletInstanceView view) {
-        
-    }   
+
+    }
 }

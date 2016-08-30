@@ -79,6 +79,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
     private static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
 
+    @Override
     public void PostConstructor() {
         removeAll();
         setMinimumSize(new Dimension(60, 40));
@@ -162,7 +163,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
                     nx = ((nx + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
                     ny = ((ny + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
                 }
-                if(o.model.getX() != nx || o.model.getY() != ny) {
+                if (o.model.getX() != nx || o.model.getY() != ny) {
                     o.setLocation(nx, ny);
                 }
             }
@@ -430,33 +431,32 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements ObjectModif
     @Override
     public void ObjectModified(Object src) {
     }
-    
 
     public AxoObjectInstanceAbstract getObjectInstance() {
         return model;
     }
-    
+
     @Override
     public void addParameterInstanceView(IParameterInstanceView view) {
     }
-    
+
     @Override
     public void addAttributeInstanceView(IAttributeInstanceView view) {
-        
+
     }
-    
+
     @Override
     public void addDisplayInstanceView(IDisplayInstanceView view) {
-        
+
     }
-    
+
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
-        
+
     }
-    
+
     @Override
     public void addInletInstanceView(IInletInstanceView view) {
-        
-    }  
+
+    }
 }
