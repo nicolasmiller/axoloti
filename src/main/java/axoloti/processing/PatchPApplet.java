@@ -114,7 +114,7 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
     public int getHeight() {
         return height;
     }
-    
+
     public void updateSize() {
         ps.setSize(p_width, p_height);
     }
@@ -181,7 +181,6 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
 //            c.setPreferredSize(d);
 //        }
 //    }
-
     public void startThread() {
         ps.startThread();
     }

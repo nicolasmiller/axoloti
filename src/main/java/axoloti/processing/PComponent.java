@@ -128,7 +128,7 @@ public class PComponent {
             } else if (layout == VERTICAL_CENTERED) {
                 for (PComponent c : getChildren()) {
                     c.setup();
-                    width += c.getWidth() > width ? c.getWidth() : width;
+                    width = c.getWidth() > width ? c.getWidth() : width;
                     height += c.getHeight();
                 }
             }
