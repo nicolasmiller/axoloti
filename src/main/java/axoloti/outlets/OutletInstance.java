@@ -22,8 +22,9 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.pobjectviews.PAxoObjectInstanceView;
+import axoloti.poutlets.POutletInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -132,8 +133,8 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
 
     public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
         // TODO fix
-//        return new POutletInstanceView(this, (PAxoObjectInstanceView) o);
-        return new OutletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+        return new POutletInstanceView(this, (PAxoObjectInstanceView) o);
+//        return new OutletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
     }
 
     public IOutletInstanceView createView(IAxoObjectInstanceView o) {

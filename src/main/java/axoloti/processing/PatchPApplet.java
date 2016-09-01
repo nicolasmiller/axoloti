@@ -1,6 +1,8 @@
 package axoloti.processing;
 
 import axoloti.PatchViewportView;
+import axoloti.Theme;
+import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,12 +101,14 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
         }
     }
 
+    Color backgroundColor = Theme.getCurrentTheme().Patch_Unlocked_Background;
+
     @Override
     public void draw() {
         translate(trans_x, trans_y);
         scale(scale / 9, scale / 9);
 
-        background(153);
+        background(backgroundColor.getRGB(), backgroundColor.getAlpha());
         for (PComponent c : components) {
             c.update();
             c.display();

@@ -28,9 +28,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
         PApplet p = getPApplet();
         setLayout(HORIZONTAL_CENTERED);
 
-//        setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-//        add(Box.createHorizontalGlue());
 
         add(new PSignalMetaDataIcon(p, inletInstance.getInlet().GetSignalMetaData()));
         jack = new PJackInputComponent(p, this);

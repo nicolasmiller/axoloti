@@ -27,10 +27,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     public void PostConstructor() {
         PApplet p = getPApplet();
         setLayout(HORIZONTAL_CENTERED);
-//                setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-//        setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-//        add(Box.createHorizontalGlue());
         if (axoObj.getObjectInstance().getType().GetOutlets().size() > 1) {
             add(new PLabelComponent(p, outletInstance.getOutlet().getName()));
         }

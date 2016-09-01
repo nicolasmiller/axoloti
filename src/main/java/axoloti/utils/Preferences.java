@@ -20,7 +20,7 @@ package axoloti.utils;
 import axoloti.Axoloti;
 import axoloti.PatchController;
 import axoloti.PatchView;
-import axoloti.PatchViewSwing;
+import axoloti.PatchViewProcessing;
 import axoloti.Version;
 import java.io.File;
 import java.io.IOException;
@@ -475,8 +475,8 @@ public class Preferences {
     }
 
     public PatchView getPatchView(PatchController patchController) {
-//        return new PatchViewProcessing(patchController);
+        return new PatchViewProcessing(patchController);
 //        return new PatchViewSlick2D(patchController);
-        return new PatchViewSwing(patchController);
+//        return new PatchViewSwing(patchController);
     }
 }
