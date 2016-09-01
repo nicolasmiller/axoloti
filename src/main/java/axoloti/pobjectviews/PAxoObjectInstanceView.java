@@ -31,6 +31,7 @@ import axoloti.poutlets.POutletInstanceView;
 import axoloti.processing.PComponent;
 import static axoloti.processing.PLayoutType.HORIZONTAL_CENTERED;
 import static axoloti.processing.PLayoutType.VERTICAL_CENTERED;
+import static axoloti.processing.PLayoutType.VERTICAL_LEFT;
 import axoloti.processing.PatchPApplet;
 import axoloti.utils.Constants;
 import components.processing.PLabelComponent;
@@ -100,7 +101,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
     @Override
     public void setup() {
         super.setup();
-        setBounds(getX(), getY(), getWidth(), 100);
+//        setBounds(getX(), getY(), getWidth(), 100);
     }
 
     public void updateObj1() {
@@ -112,8 +113,11 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         p_parameterViews = new PComponent(pApplet);
         p_displayViews = new PComponent(pApplet);
         p_ioletViews = new PComponent(pApplet);
+        p_ioletViews.setLayout(HORIZONTAL_CENTERED);
         p_inletViews = new PComponent(pApplet);
+        p_inletViews.setLayout(VERTICAL_LEFT);
         p_outletViews = new PComponent(pApplet);
+        p_outletViews.setLayout(VERTICAL_LEFT);
 
         boolean isFucked = false;
 
@@ -129,11 +133,11 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         ArrayList<OutletInstance> pOutletInstances = new ArrayList<>();
 
         if (!isFucked) {
-//        updateObj1();
+            updateObj1();
 //            ArrayList<ParameterInstance> pParameterInstances = getModel().parameterInstances;
-//            ArrayList<AttributeInstance> pAttributeInstances = getModel().attributeInstances;
-//            ArrayList<InletInstance> pInletInstances = getModel().inletInstances;
-//            ArrayList<OutletInstance> pOutletInstances = getModel().outletInstances;
+////            ArrayList<AttributeInstance> pAttributeInstances = getModel().attributeInstances;
+////            ArrayList<InletInstance> pInletInstances = getModel().inletInstances;
+////            ArrayList<OutletInstance> pOutletInstances = getModel().outletInstances;
 
             pParameterInstances = getModel().parameterInstances;
             pAttributeInstances = getModel().attributeInstances;
@@ -149,9 +153,9 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
 
         setBounds(model.getX(), model.getY(), MIN_WIDTH, MIN_HEIGHT);
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        this.setLayout(VERTICAL_LEFT);
         this.titleBar = new PComponent(this.pApplet);
         titleBar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
-//        titleBar.setBackground(Color.PINK);
         titleBar.setLayout(HORIZONTAL_CENTERED);
 
         final PPopupIcon popupIcon = new PPopupIcon(pApplet);
@@ -165,8 +169,9 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
 //                        0, popupIcon.getHeight());
 //            }
 //        });
-        titleBar.add(popupIcon);
 
+        titleBar.add(popupIcon);
+//
         PLabelComponent objectLabel = new PLabelComponent(this.pApplet, model.typeName);
         objectLabel.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
         objectLabel.setTextHeight(Constants.FONT_POINT_SIZE);
@@ -214,7 +219,9 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
 //            public void mouseExited(MouseEvent e) {
 //            }
 //        });
-//        add(InstanceLabel);
+        InstanceLabel = new PLabelComponent(pApplet, model.getInstanceName());
+        add(InstanceLabel);
+
         if (!isFucked) {
             p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
@@ -256,7 +263,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
                 getModel().inletInstances.add(inletInstance);
                 PInletInstanceView view = (PInletInstanceView) inletInstance.createView(this);
 //            view.setAlignmentX(LEFT_ALIGNMENT);
-                p_inletViews.add(view);
+//                p_inletViews.add(view);
                 inletInstanceViews.add(view);
             }
             // disconnect stale inlets from nets
@@ -282,7 +289,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
                 getModel().outletInstances.add(outletInstance);
                 POutletInstanceView view = (POutletInstanceView) outletInstance.createView(this);
                 //          view.setAlignmentX(RIGHT_ALIGNMENT);
-                p_outletViews.add(view);
+//                p_outletViews.add(view);
                 outletInstanceViews.add(view);
             }
             // disconnect stale outlets from nets
@@ -297,6 +304,8 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
          if (p_outlets.getComponents().length == 0){
          p_outlets.add(Box.createHorizontalGlue());
          }*/
+            System.out.println(model.getInstanceName());
+            System.out.println(p_inletViews.getChildren().size());
             p_ioletViews.add(p_inletViews);
             //    p_ioletViews.add(Box.createHorizontalGlue());
             p_ioletViews.add(p_outletViews);

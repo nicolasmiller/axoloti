@@ -5,6 +5,7 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.piolet.PIoletAbstract;
 import axoloti.pobjectviews.PAxoObjectInstanceView;
+import static axoloti.processing.PLayoutType.HORIZONTAL_CENTERED;
 import components.processing.PJackInputComponent;
 import components.processing.PLabelComponent;
 import components.processing.PSignalMetaDataIcon;
@@ -25,17 +26,19 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     @Override
     public void PostConstructor() {
         PApplet p = getPApplet();
-//                setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setLayout(HORIZONTAL_CENTERED);
+
 //        setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
 //        add(Box.createHorizontalGlue());
-        if (axoObj.getObjectInstance().getType().GetInlets().size() > 1) {
-            add(new PLabelComponent(p, inletInstance.getInlet().getName()));
-        }
+
         add(new PSignalMetaDataIcon(p, inletInstance.getInlet().GetSignalMetaData()));
         jack = new PJackInputComponent(p, this);
         jack.setForeground(inletInstance.getInlet().getDatatype().GetColor());
         add(jack);
+        if (axoObj.getObjectInstance().getType().GetInlets().size() > 1) {
+            add(new PLabelComponent(p, inletInstance.getInlet().getName()));
+        }
 
 // TODO tooltips
 //        setToolTipText(outletInstance.getOutlet().getDescription());

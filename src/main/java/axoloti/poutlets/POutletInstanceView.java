@@ -5,6 +5,7 @@ import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.piolet.PIoletAbstract;
 import axoloti.pobjectviews.PAxoObjectInstanceView;
+import static axoloti.processing.PLayoutType.HORIZONTAL_CENTERED;
 import components.processing.PJackOutputComponent;
 import components.processing.PLabelComponent;
 import components.processing.PSignalMetaDataIcon;
@@ -29,6 +30,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     @Override
     public void PostConstructor() {
         PApplet p = getPApplet();
+        setLayout(HORIZONTAL_CENTERED);
 //                setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 //        setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);

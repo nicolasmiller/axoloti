@@ -5,6 +5,7 @@ import static axoloti.pobjectviews.PAxoObjectInstanceView.MIN_HEIGHT;
 import static axoloti.pobjectviews.PAxoObjectInstanceView.MIN_WIDTH;
 import static axoloti.processing.PLayoutType.HORIZONTAL_CENTERED;
 import static axoloti.processing.PLayoutType.VERTICAL_CENTERED;
+import static axoloti.processing.PLayoutType.VERTICAL_LEFT;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -12,8 +13,11 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import processing.core.PApplet;
+import processing.core.PShape;
 
 public class PComponent {
+
+    public static int count = 0;
 
     private final PApplet p;
     private final List<PComponent> children = new ArrayList<PComponent>();
@@ -30,6 +34,7 @@ public class PComponent {
 
     public PComponent(PApplet p) {
         this.p = p;
+        count++;
     }
 
     public PApplet getPApplet() {
@@ -115,6 +120,8 @@ public class PComponent {
         this.layout = layout;
     }
 
+    private static PShape shape;
+
     public void setup() {
         if (sizedToChildren) {
             int width = 0;
@@ -125,30 +132,39 @@ public class PComponent {
                     width += c.getWidth();
                     height = c.getHeight() > height ? c.getHeight() : height;
                 }
-            } else if (layout == VERTICAL_CENTERED) {
+                this.setBounds(getX(), getY(),
+                        (width == 0 ? MIN_WIDTH : width) + 2 * PADDING + (getChildren().size() - 1) * PADDING,
+                        (height == 0 ? MIN_HEIGHT : height) + 2 * PADDING);
+            } else if (layout == VERTICAL_CENTERED || layout == VERTICAL_LEFT) {
                 for (PComponent c : getChildren()) {
                     c.setup();
                     width = c.getWidth() > width ? c.getWidth() : width;
                     height += c.getHeight();
                 }
+                this.setBounds(getX(), getY(),
+                        (width == 0 ? MIN_WIDTH : width) + 2 * PADDING,
+                        (height == 0 ? MIN_HEIGHT : height) + 2 * PADDING + (getChildren().size() - 1) * PADDING);
             }
-            this.setBounds(getX(), getY(),
-                    (width == 0 ? MIN_WIDTH : width) + 2 * PADDING,
-                    (height == 0 ? MIN_HEIGHT : height) + 2 * PADDING);
+
         }
+        shape = p.createShape(p.RECT, 0, 0, getBounds().width, getBounds().height);
+        shape.setStrokeWeight(0);
+        shape.setFill(p.color(backgroundColor.getRGB(), backgroundColor.getAlpha()));
     }
 
     public void display() {
-        p.fill(backgroundColor.getRGB(), backgroundColor.getAlpha());
         p.noStroke();
-        p.rect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
-        if (mouseOver || mouseDown) {
-            p.line(getBounds().x, getBounds().y,
-                    getBounds().x + getBounds().width, getBounds().y + getBounds().height);
-            p.line(getBounds().x, getBounds().y + getBounds().height,
-                    getBounds().x + getBounds().width, getBounds().y);
-        }
+//        shape.setFill(p.color(backgroundColor.getRGB(), backgroundColor.getAlpha()));
+//        p.shape(shape);
+        p.fill(backgroundColor.getRGB(), backgroundColor.getAlpha());
 
+        p.rect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+//        if (mouseOver || mouseDown) {
+//            p.line(getBounds().x, getBounds().y,
+//                    getBounds().x + getBounds().width, getBounds().y + getBounds().height);
+//            p.line(getBounds().x, getBounds().y + getBounds().height,
+//                    getBounds().x + getBounds().width, getBounds().y);
+//        }
         if (layout == HORIZONTAL_CENTERED) {
             p.pushMatrix();
             p.translate(getX() + PADDING, getY());
@@ -168,6 +184,16 @@ public class PComponent {
             for (PComponent child : children) {
                 p.pushMatrix();
                 p.translate(-child.getWidth() / 2, 0);
+                child.display();
+                p.popMatrix();
+                p.translate(0, child.getHeight());
+            }
+            p.popMatrix();
+        } else if (layout == VERTICAL_LEFT) {
+            p.pushMatrix();
+            p.translate(getX() + PADDING, getY() + PADDING);
+            for (PComponent child : children) {
+                p.pushMatrix();
                 child.display();
                 p.popMatrix();
                 p.translate(0, child.getHeight());

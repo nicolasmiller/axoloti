@@ -18,8 +18,8 @@
 package axoloti;
 
 import axoloti.object.AxoObjects;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import components.PresetPanel;
@@ -99,7 +99,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 //                }
 //            }
 //        }
-//        
+//
 //        for (PatchFrameFocusListener pfl : patchFrameFocusListeners) {
 //            if (onTopChanged) {
 //                if (pfl == onTop) {
@@ -108,25 +108,20 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 //            }
 //        }
 //    }
-
 //    @Override
 //    public void patchFrameLostFocus() {
 //        System.out.println("lost focus " + toString());
 //        getPatchView().getViewportView().pause();
 //        jScrollPane1.setViewportView(null);
-
-
 //        getPatchView().getViewportView().dispose();
 //        getPatchView().clearViewportView();
 //        this.dispose();
 //    }
-
 //    @Override
 //    public void patchFrameGainedFocus() {
- //       System.out.println("gained focus " + toString());
+    //       System.out.println("gained focus " + toString());
 //        jScrollPane1.setViewportView(getPatchView().getViewportView().getComponent());
 //    }
-
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -146,10 +141,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
-        
+
         getPatchView().getViewportView().setWidth(jScrollPane1.getWidth());
         getPatchView().getViewportView().setHeight(jScrollPane1.getHeight());
-        getPatchView().getViewportView().updateSize();
+//        getPatchView().getViewportView().updateSize();
 //        getPatchView().getViewportView().setPreferredSize(jScrollPane1.getSize());
 //        getPatchView().getViewportView().setSize(jScrollPane1.getWidth(), jScrollPane1.getHeight());
 
@@ -158,7 +153,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 //                getPatchView().getViewportView().setSize(jScrollPane1.getWidth(), jScrollPane1.getHeight());
                 getPatchView().getViewportView().setWidth(jScrollPane1.getWidth());
                 getPatchView().getViewportView().setHeight(jScrollPane1.getHeight());
-                getPatchView().getViewportView().updateSize();
+//                getPatchView().getViewportView().updateSize();
 //                getPatchView().getViewportView().setPreferredSize(jScrollPane1.getSize());
             }
         });
@@ -270,7 +265,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 //        WindowAdapter adapter = new WindowAdapter() {
 //            @Override
 //            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
-            //    PatchFrame.setOnTop(PatchFrame.this);
+        //    PatchFrame.setOnTop(PatchFrame.this);
 //            }
 //        };
 //        addWindowFocusListener(adapter);
@@ -280,7 +275,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 //                System.out.println(e);
 //            }
 //        });
-
 //        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
 //            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
 //                System.out.println("gained focus resuming");
@@ -289,7 +283,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 //                System.out.println("lost focus pausing");
 //            }
 //        });
-        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -1239,7 +1232,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         redoItem.setEnabled(getPatchModel().canRedo());
         undoItem.setEnabled(getPatchModel().canUndo());
     }
-    
+
     public void startRendering() {
         this.getPatchView().startRendering();
     }

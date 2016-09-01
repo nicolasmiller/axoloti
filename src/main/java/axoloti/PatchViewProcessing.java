@@ -6,6 +6,7 @@ import axoloti.processing.PatchPApplet;
 import java.awt.Point;
 
 public class PatchViewProcessing extends PatchView {
+
     private PatchPApplet container;
 
     public PatchViewProcessing(PatchController patchController) {
@@ -14,12 +15,12 @@ public class PatchViewProcessing extends PatchView {
 
     @Override
     public PatchViewportView getViewportView() {
-        if(container == null) {
+        if (container == null) {
             container = new PatchPApplet();
         }
         return container;
     }
-    
+
     @Override
     public void repaint() {
 
@@ -57,22 +58,33 @@ public class PatchViewProcessing extends PatchView {
         //start your sketch
         container.startThread();
     }
-    
+
     public void add(IAxoObjectInstanceView v) {
         container.add((PComponent) v);
     }
-    
+
     public void remove(IAxoObjectInstanceView v) {
         container.remove((PComponent) v);
     }
-    public void removeAllObjectViews() {}
-    public void removeAllNetViews() {}
-    public void add(INetView v) {}
-    
-    public void validate() {}
-    public void validateObjects() {}
-    public void validateNets() {}
-    
+
+    public void removeAllObjectViews() {
+    }
+
+    public void removeAllNetViews() {
+    }
+
+    public void add(INetView v) {
+    }
+
+    public void validate() {
+    }
+
+    public void validateObjects() {
+    }
+
+    public void validateNets() {
+    }
+
     public PatchPApplet getPatchPApplet() {
         return container;
     }

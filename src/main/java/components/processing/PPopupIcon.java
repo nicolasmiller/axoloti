@@ -2,9 +2,11 @@ package components.processing;
 
 import axoloti.Theme;
 import axoloti.processing.PComponent;
+import axoloti.processing.PatchPApplet;
 import java.awt.Color;
 import java.awt.Dimension;
 import processing.core.PApplet;
+import processing.core.PShape;
 
 public class PPopupIcon extends PComponent {
 //    public interface PopupIconListener {
@@ -14,6 +16,8 @@ public class PPopupIcon extends PComponent {
 //    private PopupIconListener pl;
 
     private final Dimension size = new Dimension(10, 12);
+
+    private static PShape shape;
 
     public PPopupIcon(PApplet p) {
         super(p);
@@ -34,38 +38,31 @@ public class PPopupIcon extends PComponent {
                 0,
                 (int) (size.getWidth()),
                 (int) (size.getHeight()));
+        if (shape == null) {
+            PatchPApplet p = (PatchPApplet) getPApplet();
+            shape = p.createShape();
+            Color c = Theme.getCurrentTheme().Component_Primary;
+            shape.setFill(p.color(c.getRGB(), c.getAlpha()));
+            final int htick = 3;
+            int[] xp = new int[]{getWidth() - htick * 2, getWidth(), getWidth() - htick};
+            int[] yp = new int[]{0, 0, htick * 2};
+            shape.beginShape();
+            for (int i = 0; i < xp.length; i++) {
+                shape.vertex(xp[i], yp[i]);
+            }
+            shape.endShape(p.CLOSE);
+            shape.translate(-getWidth() / 5, getHeight() / 4);
+        }
     }
 
     @Override
     public void display() {
         PApplet p = this.getPApplet();
-        p.pushStyle();
-        Color c = Theme.getCurrentTheme().Component_Primary;
-        p.fill(c.getRGB(), c.getAlpha());
-        final int htick = 3;
-        int[] xp = new int[]{getWidth() - htick * 2, getWidth(), getWidth() - htick};
-        int[] yp = new int[]{0, 0, htick * 2};
-
-        if (!isEnabled()) {
-            p.noFill();
-        }
-        p.pushMatrix();
-        p.translate(-getWidth() / 5, getHeight() / 4);
-        p.beginShape();
-        for (int i = 0; i < xp.length; i++) {
-            p.vertex(getBounds().x + xp[i], getBounds().y + yp[i]);
-        }
-        p.endShape(p.CLOSE);
-        p.popMatrix();
-//        displayBounds();
-//        drawCenterLines();
-
-        p.popStyle();
-
-//        p.stroke(0);
-//        p.strokeWeight(1);
-//        p.noFill();
-//        p.rect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+        // TODO does this ever happen?
+//        if (!isEnabled()) {
+//            shape.noFill();
+//        }
+        p.shape(shape);
     }
 
 //    @Override
