@@ -20,7 +20,7 @@ package axoloti.utils;
 import axoloti.Axoloti;
 import axoloti.PatchController;
 import axoloti.PatchView;
-import axoloti.PatchViewProcessing;
+import axoloti.PatchViewSwing;
 import axoloti.Version;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class Preferences {
     @Element(required = false)
     String CurrentFileDirectory;
 
-    // search path will be removed from persistance, 
+    // search path will be removed from persistance,
     // here for compatibility only
     @Deprecated
     @Element(required = false)
@@ -475,8 +475,8 @@ public class Preferences {
     }
 
     public PatchView getPatchView(PatchController patchController) {
-        return new PatchViewProcessing(patchController);
+//        return new PatchViewProcessing(patchController);
 //        return new PatchViewSlick2D(patchController);
-//        return new PatchViewSwing(patchController);
+        return new PatchViewSwing(patchController);
     }
 }

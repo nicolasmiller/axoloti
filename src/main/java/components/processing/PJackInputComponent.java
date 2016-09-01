@@ -5,7 +5,6 @@ import axoloti.pinlets.PInletInstanceView;
 import axoloti.processing.PComponent;
 import axoloti.processing.PatchPApplet;
 import java.awt.Color;
-import java.awt.Dimension;
 import processing.core.PApplet;
 import processing.core.PShape;
 
@@ -14,7 +13,6 @@ public class PJackInputComponent extends PComponent {
     private static final int SZ = 10;
     private static final int MARGIN = 2;
     private static final float STROKE_WEIGHT = 1.5f;
-    private static final Dimension DIM = new Dimension(SZ, SZ);
 
     final PInletInstanceView inletInstanceView;
 
@@ -50,18 +48,23 @@ public class PJackInputComponent extends PComponent {
     @Override
     public void display() {
         PatchPApplet p = (PatchPApplet) this.getPApplet();
-        p.shape(shadowShape);
+        p.pushStyle();
 
         // compensate for p3d strokeWeight bug
         float weight = STROKE_WEIGHT * p.getScaleFactor();
         shadowShape.setStrokeWeight(weight);
         foregroundShape.setStrokeWeight(weight);
 
+        p.shape(shadowShape);
+
         if (inletInstanceView.getInletInstance().isConnected()) {
+            foregroundShape.setStrokeWeight(0);
             foregroundShape.setFill(p.color(getForeground().getRGB(), getForeground().getAlpha()));
         } else {
+            foregroundShape.setFill(p.color(0, 0, 0, 0));
             foregroundShape.setStroke(p.color(getForeground().getRGB(), getForeground().getAlpha()));
         }
         p.shape(foregroundShape);
+        p.popStyle();
     }
 }

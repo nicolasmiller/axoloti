@@ -24,10 +24,6 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     }
 
     @Override
-    public void setup() {
-    }
-
-    @Override
     public void PostConstructor() {
         PApplet p = getPApplet();
         setLayout(HORIZONTAL_CENTERED);

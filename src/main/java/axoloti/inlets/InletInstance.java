@@ -22,9 +22,8 @@ import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.pinlets.PInletInstanceView;
-import axoloti.pobjectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -126,8 +125,8 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
     }
 
     public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
-//        return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+//        return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
+        return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
     }
 
     public IInletInstanceView createView(IAxoObjectInstanceView o) {
