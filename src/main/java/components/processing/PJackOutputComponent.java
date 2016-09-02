@@ -22,73 +22,97 @@ public class PJackOutputComponent extends PComponent {
         this.outletInstanceView = outletInstanceView;
     }
 
-    private static PShape unconnectedShadowShape;
-    private static PShape unconnectedForegroundShape;
+    private static PShape connectedGroup;
+    private static PShape unconnectedGroup;
 
-    private static PShape connectedShadowShape;
-    private static PShape connectedForegroundShape;
+    // consolodate into single pshape
+    private static PShape unconnectedShadow;
+    private static PShape unconnectedForeground;
 
-    private static PShape rectShape;
-    private static PShape shadowRectShape;
+    private static PShape connectedShadow;
+    private static PShape connectedForeground;
+
+    private static PShape unconnectedForegroundRect;
+    private static PShape unconnectedShadowRect;
+    private static PShape connectedForegroundRect;
+    private static PShape connectedShadowRect;
 
     @Override
     public void setup() {
         PatchPApplet p = (PatchPApplet) this.getPApplet();
         setBounds(0, 0, SZ, SZ);
-        if (unconnectedShadowShape == null) {
+        if (connectedGroup == null) {
             int p2 = SZ - MARGIN - MARGIN;
-            shadowRectShape = p.createShape(p.RECT, MARGIN, MARGIN + 1, p2, p2);
-            shadowRectShape.setFill(p.color(0, 0, 0, 0));
+            connectedShadowRect = p.createShape(p.RECT, MARGIN, MARGIN + 1, p2, p2);
+            connectedShadowRect.setFill(p.color(0, 0, 0, 0));
             Color componentPrimary = Theme.getCurrentTheme().Component_Primary;
-            shadowRectShape.setStroke(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
+            connectedShadowRect.setStroke(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
 
             int p1 = SZ - (MARGIN + INSET) * 2 + 1;
-            connectedShadowShape = p.createShape(p.ELLIPSE, MARGIN + INSET, MARGIN + INSET + 1, p1, p1);
-            connectedShadowShape.setStroke(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
-            connectedShadowShape.setFill(p.color(0, 0, 0, 0));
+            connectedShadow = p.createShape(p.ELLIPSE, MARGIN + INSET, MARGIN + INSET + 1, p1, p1);
+            connectedShadow.setFill(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
+            connectedShadow.setStrokeWeight(0);
 
-            connectedForegroundShape = p.createShape(p.ELLIPSE, MARGIN + INSET - 1, MARGIN + INSET, p1, p1);
-            connectedForegroundShape.setStrokeWeight(0);
+            connectedForeground = p.createShape(p.ELLIPSE, MARGIN + INSET - 1, MARGIN + INSET, p1, p1);
+            connectedForeground.setStrokeWeight(0);
+
+            connectedForegroundRect = p.createShape(p.RECT, MARGIN - 1, MARGIN, p2, p2, 0);
+            connectedForegroundRect.setFill(p.color(0, 0, 0, 0));
 
             p1 = SZ - (MARGIN + INSET) * 2;
 
-            unconnectedShadowShape = p.createShape(p.ELLIPSE, MARGIN + INSET, MARGIN + INSET + 1, p1, p1);
-            unconnectedShadowShape.setFill(p.color(0, 0, 0, 0));
-            unconnectedShadowShape.setStroke(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
+            unconnectedShadowRect = p.createShape(p.RECT, MARGIN, MARGIN + 1, p2, p2);
+            unconnectedShadowRect.setFill(p.color(0, 0, 0, 0));
+            unconnectedShadowRect.setStroke(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
 
-            unconnectedForegroundShape = p.createShape(p.ELLIPSE, MARGIN + INSET - 1, MARGIN + INSET, p1, p1);
-            unconnectedForegroundShape.setFill(p.color(0, 0, 0, 0));
+            unconnectedShadow = p.createShape(p.ELLIPSE, MARGIN + INSET, MARGIN + INSET + 1, p1, p1);
+            unconnectedShadow.setFill(p.color(0, 0, 0, 0));
+            unconnectedShadow.setStroke(p.color(componentPrimary.getRGB(), componentPrimary.getAlpha()));
 
-            rectShape = p.createShape(p.RECT, MARGIN - 1, MARGIN, p2, p2);
-            rectShape.setFill(p.color(0, 0, 0, 0));
+            unconnectedForeground = p.createShape(p.ELLIPSE, MARGIN + INSET - 1, MARGIN + INSET, p1, p1);
+            unconnectedForeground.setFill(p.color(0, 0, 0, 0));
+
+            unconnectedForegroundRect = p.createShape(p.RECT, MARGIN - 1, MARGIN, p2, p2, 0);
+            unconnectedForegroundRect.setFill(p.color(0, 0, 0, 0));
+
+            unconnectedGroup = p.createShape(p.GROUP);
+            // unfortunately children cannot be reused across parents
+            unconnectedGroup.addChild(unconnectedShadowRect);
+            unconnectedGroup.addChild(unconnectedShadow);
+            unconnectedGroup.addChild(unconnectedForeground);
+            unconnectedGroup.addChild(unconnectedForegroundRect);
+
+            connectedGroup = p.createShape(p.GROUP);
+            connectedGroup.addChild(connectedShadowRect);
+            connectedGroup.addChild(connectedShadow);
+            connectedGroup.addChild(connectedForeground);
+            connectedGroup.addChild(connectedForegroundRect);
         }
     }
 
     @Override
     public void display() {
         PatchPApplet p = (PatchPApplet) this.getPApplet();
+        int foreground = p.color(getForeground().getRGB(), getForeground().getAlpha());
 
-        connectedForegroundShape.setFill(p.color(getForeground().getRGB(), getForeground().getAlpha()));
-        unconnectedForegroundShape.setStroke(p.color(getForeground().getRGB(), getForeground().getAlpha()));
-        rectShape.setStroke(p.color(getForeground().getRGB(), getForeground().getAlpha()));
+        connectedForeground.setFill(foreground);
+        unconnectedForeground.setStroke(foreground);
+        unconnectedForegroundRect.setStroke(foreground);
+        connectedForegroundRect.setStroke(foreground);
 
         // compensate for p3d strokeWeight bug
         float weight = STROKE_WEIGHT * p.getScaleFactor();
-        shadowRectShape.setStrokeWeight(weight);
-        p.shape(shadowRectShape);
+        connectedShadowRect.setStrokeWeight(weight);
+        connectedForegroundRect.setStrokeWeight(weight);
+        unconnectedShadowRect.setStrokeWeight(weight);
+        unconnectedForegroundRect.setStrokeWeight(weight);
 
         if (outletInstanceView.getOutletInstance().isConnected()) {
-            connectedShadowShape.setStrokeWeight(weight);
-            p.shape(connectedShadowShape);
-            p.shape(connectedForegroundShape);
+            p.shape(connectedGroup);
         } else {
-            unconnectedShadowShape.setStrokeWeight(weight);
-            unconnectedForegroundShape.setStrokeWeight(weight);
-            p.shape(unconnectedShadowShape);
-            p.shape(unconnectedForegroundShape);
+            unconnectedShadow.setStrokeWeight(weight);
+            unconnectedForeground.setStrokeWeight(weight);
+            p.shape(unconnectedGroup);
         }
-
-        rectShape.setStrokeWeight(weight);
-        p.shape(rectShape);
     }
 }

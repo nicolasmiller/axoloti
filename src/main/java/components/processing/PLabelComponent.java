@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PGraphics;
 
 public class PLabelComponent extends PComponent {
 
@@ -24,6 +25,8 @@ public class PLabelComponent extends PComponent {
 
     private int textHeight = 9;
 //    private PFont font;
+
+    PGraphics g;
 
     @Override
     public void setup() {
@@ -44,6 +47,10 @@ public class PLabelComponent extends PComponent {
         int width = (int) Math.round(p.textWidth(text));
         setBounds(getX(), getY(), width, textHeight);
 
+//        g = p.createGraphics(width, textHeight, p.P3D);
+//        g.beginDraw();
+//        g.text(text, 0, textHeight);
+//        g.endDraw();
 //        font = p.createFont("SansSerf", 48);
 //        p.textFont(font);
     }
@@ -73,6 +80,8 @@ public class PLabelComponent extends PComponent {
     @Override
     public void display() {
         // TODO make this faster
+        // make a class cache of PGraphics keyed on text-textSize combinations
+
         PatchPApplet p = (PatchPApplet) getPApplet();
         p.pushMatrix();
         p.scale(p.getScaleInverse(), p.getScaleInverse());

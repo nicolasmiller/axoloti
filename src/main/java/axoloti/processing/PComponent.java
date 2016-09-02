@@ -30,6 +30,8 @@ public class PComponent {
     protected boolean mouseOver;
     protected boolean mouseDown;
 
+    private boolean drawBackground = false;
+
     private final int PADDING = 1;
 
     public PComponent(PApplet p) {
@@ -75,37 +77,37 @@ public class PComponent {
     float yOffset = 0;
 
     public void mouseDragged(float mouseX, float mouseY) {
-        updateOver(mouseX, mouseY);
-
-        for (PComponent c : children) {
-            float childX = mouseX - this.getX();
-            float childY = mouseY - this.getY();
-            c.mouseDragged(childX, childY);
-        }
-        if (mouseOver && p.mouseButton != p.CENTER) {
-            getBounds().x = (int) (mouseX - xOffset);
-            getBounds().y = (int) (mouseY - yOffset);
-        }
+//        updateOver(mouseX, mouseY);
+//
+//        for (PComponent c : children) {
+//            float childX = mouseX - this.getX();
+//            float childY = mouseY - this.getY();
+//            c.mouseDragged(childX, childY);
+//        }
+//        if (mouseOver && p.mouseButton != p.CENTER) {
+//            getBounds().x = (int) (mouseX - xOffset);
+//            getBounds().y = (int) (mouseY - yOffset);
+//        }
     }
 
     public void mousePressed(float mouseX, float mouseY) {
-        updateOver(mouseX, mouseY);
-        xOffset = mouseX - getBounds().x;
-        yOffset = mouseY - getBounds().y;
-        mouseX -= this.getX();
-        mouseY -= this.getY();
-        for (PComponent c : children) {
-            c.mousePressed(mouseX, mouseY);
-        }
+//        updateOver(mouseX, mouseY);
+//        xOffset = mouseX - getBounds().x;
+//        yOffset = mouseY - getBounds().y;
+//        mouseX -= this.getX();
+//        mouseY -= this.getY();
+//        for (PComponent c : children) {
+//            c.mousePressed(mouseX, mouseY);
+//        }
     }
 
     public void mouseReleased(float mouseX, float mouseY) {
-        updateOver(mouseX, mouseY);
-        mouseX -= this.getX();
-        mouseY -= this.getY();
-        for (PComponent c : children) {
-            c.mouseReleased(mouseX, mouseY);
-        }
+//        updateOver(mouseX, mouseY);
+//        mouseX -= this.getX();
+//        mouseY -= this.getY();
+//        for (PComponent c : children) {
+//            c.mouseReleased(mouseX, mouseY);
+//        }
     }
 
     protected boolean sizedToChildren = true;
@@ -156,9 +158,10 @@ public class PComponent {
         p.noStroke();
 //        shape.setFill(p.color(backgroundColor.getRGB(), backgroundColor.getAlpha()));
 //        p.shape(shape);
-        p.fill(backgroundColor.getRGB(), backgroundColor.getAlpha());
-
-        p.rect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+        if (drawBackground) {
+            p.fill(backgroundColor.getRGB(), backgroundColor.getAlpha());
+            p.rect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+        }
 //        if (mouseOver || mouseDown) {
 //            p.line(getBounds().x, getBounds().y,
 //                    getBounds().x + getBounds().width, getBounds().y + getBounds().height);
@@ -297,5 +300,9 @@ public class PComponent {
         p.line(getBounds().x, centerY, getBounds().x + getBounds().width, centerY);
         p.line(centerX, getBounds().y, centerX, getBounds().y + getBounds().height);
         p.popStyle();
+    }
+
+    public void setDrawBackground(boolean drawBackground) {
+        this.drawBackground = drawBackground;
     }
 }

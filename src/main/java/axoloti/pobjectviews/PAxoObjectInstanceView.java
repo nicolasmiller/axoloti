@@ -69,6 +69,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         this.model = model;
         this.patchView = p;
         this.pApplet = p.getPatchPApplet();
+        this.setDrawBackground(true);
     }
 
     private AxoObjectInstanceAbstract model;
@@ -156,6 +157,7 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         this.setLayout(VERTICAL_LEFT);
         this.titleBar = new PComponent(this.pApplet);
         titleBar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
+        titleBar.setDrawBackground(true);
         titleBar.setLayout(HORIZONTAL_CENTERED);
 
         final PPopupIcon popupIcon = new PPopupIcon(pApplet);
@@ -178,50 +180,50 @@ public class PAxoObjectInstanceView extends PComponent implements IAxoObjectInst
         titleBar.add(objectLabel);
         add(titleBar);
 
-//TODO
-//        String tooltiptxt = "<html>";
-//        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
-//            tooltiptxt += getType().sDescription;
-//        }
-//        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
-//            tooltiptxt += "<p>Author: " + getType().sAuthor;
-//        }
-//        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
-//            tooltiptxt += "<p>License: " + getType().sLicense;
-//        }
-//        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
-//            tooltiptxt += "<p>Path: " + getType().sPath;
-//        }
-//        Titlebar.setToolTipText(tooltiptxt);
-// TODO
-//        InstanceLabel.addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                if (e.getClickCount() == 2) {
-//                    addInstanceNameEditor();
-//                    e.consume();
-//                }
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent e) {
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//            }
-//        });
+////TODO
+////        String tooltiptxt = "<html>";
+////        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
+////            tooltiptxt += getType().sDescription;
+////        }
+////        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
+////            tooltiptxt += "<p>Author: " + getType().sAuthor;
+////        }
+////        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
+////            tooltiptxt += "<p>License: " + getType().sLicense;
+////        }
+////        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
+////            tooltiptxt += "<p>Path: " + getType().sPath;
+////        }
+////        Titlebar.setToolTipText(tooltiptxt);
+//// TODO
+////        InstanceLabel.addMouseListener(new MouseListener() {
+////            @Override
+////            public void mouseClicked(MouseEvent e) {
+////                if (e.getClickCount() == 2) {
+////                    addInstanceNameEditor();
+////                    e.consume();
+////                }
+////            }
+////
+////            @Override
+////            public void mousePressed(MouseEvent e) {
+////            }
+////
+////            @Override
+////            public void mouseReleased(MouseEvent e) {
+////            }
+////
+////            @Override
+////            public void mouseEntered(MouseEvent e) {
+////            }
+////
+////            @Override
+////            public void mouseExited(MouseEvent e) {
+////            }
+////        });
         InstanceLabel = new PLabelComponent(pApplet, model.getInstanceName());
         add(InstanceLabel);
-
+//
         if (!isFucked) {
             p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 

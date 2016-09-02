@@ -58,14 +58,14 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
     @Override
     public void mouseReleased() {
         for (PComponent c : components) {
-            c.mouseReleased(getWorldX(), getWorldY());
+//            c.mouseReleased(getWorldX(), getWorldY());
         }
     }
 
     @Override
     public void mousePressed() {
         for (PComponent c : components) {
-            c.mousePressed(getWorldX(), getWorldY());
+//            c.mousePressed(getWorldX(), getWorldY());
         }
     }
 
@@ -78,7 +78,7 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
         mouse_y = mouseY;
 
         for (PComponent c : components) {
-            c.mouseDragged(getWorldX(), getWorldY());
+//            c.mouseDragged(getWorldX(), getWorldY());
         }
     }
 
@@ -92,7 +92,7 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
         // lock to integer coords?
         size(width, height, P3D);
 //        noSmooth();
-        frameRate(60);
+        frameRate(1000);
 
 //        textMode(SCREEN);
 //        smooth();
@@ -103,12 +103,29 @@ public class PatchPApplet extends PApplet implements PatchViewportView {
 
     Color backgroundColor = Theme.getCurrentTheme().Patch_Unlocked_Background;
 
+//    private boolean isEntirelyInsideViewport(int x, int y, int width, int height) {
+//        int cameraX = (int) -(trans_x / scale);
+//        int cameraY = (int) -(trans_y / scale);
+//        int minX = cameraX;
+//        int maxX = cameraX + (int) (getWidth() / scale);
+//        int minY = cameraY;
+//        int maxY = cameraY + (int) (getWidth() / scale);
+//        int objMaxX = x + width;
+//        int objMaxY = y + height;
+//
+//        if ((x < maxX && x > minX) || (objMaxX < maxX && objMaxX > minX)) {
+//            if ((y < maxY && y > minY) || (objMaxY < maxY && objMaxY > minY)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
     @Override
     public void draw() {
         translate(trans_x, trans_y);
         scale(scale / 9, scale / 9);
-
         background(backgroundColor.getRGB(), backgroundColor.getAlpha());
+
         for (PComponent c : components) {
             c.update();
             c.display();

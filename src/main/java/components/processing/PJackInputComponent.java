@@ -16,6 +16,8 @@ public class PJackInputComponent extends PComponent {
 
     final PInletInstanceView inletInstanceView;
 
+    private static PShape group;
+
     private static PShape shadowShape;
     private static PShape foregroundShape;
 
@@ -27,7 +29,7 @@ public class PJackInputComponent extends PComponent {
     @Override
     public void setup() {
         setBounds(0, 0, SZ, SZ);
-        if (shadowShape == null) {
+        if (group == null) {
             PApplet p = this.getPApplet();
             int p1 = MARGIN + 1;
             int p2 = SZ - MARGIN - MARGIN;
@@ -42,29 +44,30 @@ public class PJackInputComponent extends PComponent {
             foregroundShape = p.createShape(p.ELLIPSE, MARGIN, MARGIN, p2, p2);
             foregroundShape.setFill(transparent);
             foregroundShape.setStrokeWeight(STROKE_WEIGHT);
+
+            group = p.createShape(p.GROUP);
+            group.addChild(shadowShape);
+            group.addChild(foregroundShape);
         }
     }
 
     @Override
     public void display() {
         PatchPApplet p = (PatchPApplet) this.getPApplet();
-        p.pushStyle();
 
         // compensate for p3d strokeWeight bug
         float weight = STROKE_WEIGHT * p.getScaleFactor();
         shadowShape.setStrokeWeight(weight);
         foregroundShape.setStrokeWeight(weight);
 
-        p.shape(shadowShape);
-
+        int foreground = p.color(getForeground().getRGB(), getForeground().getAlpha());
+        foregroundShape.setStroke(foreground);
         if (inletInstanceView.getInletInstance().isConnected()) {
-            foregroundShape.setStrokeWeight(0);
-            foregroundShape.setFill(p.color(getForeground().getRGB(), getForeground().getAlpha()));
+            foregroundShape.setFill(foreground);
         } else {
             foregroundShape.setFill(p.color(0, 0, 0, 0));
-            foregroundShape.setStroke(p.color(getForeground().getRGB(), getForeground().getAlpha()));
         }
-        p.shape(foregroundShape);
-        p.popStyle();
+
+        p.shape(group);
     }
 }
