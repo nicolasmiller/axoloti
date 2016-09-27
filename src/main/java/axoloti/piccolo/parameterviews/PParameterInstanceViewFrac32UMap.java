@@ -5,7 +5,6 @@ import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_CENTERED;
 import axoloti.piccolo.PatchPNode;
 import components.piccolo.PAssignMidiCCComponent;
 import components.piccolo.PAssignMidiCCMenuItems;
@@ -17,6 +16,7 @@ import java.awt.Graphics2D;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.util.PPaintContext;
+import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
 
 public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac32U {
 
@@ -43,7 +43,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
         super.PostConstructor();
 
         PatchPNode btns = new PatchPNode(getPatchView());
-        btns.setLayout(VERTICAL_CENTERED);
+        btns.setLayout(VERTICAL_LEFT);
 
         //lblCC = new LabelComponent("C");
         //btns.add(lblCC);

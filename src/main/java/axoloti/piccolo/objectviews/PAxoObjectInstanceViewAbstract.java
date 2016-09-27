@@ -17,7 +17,7 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.parameterviews.IParameterInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
 import axoloti.utils.Constants;
@@ -86,7 +86,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
         titleBar.removeAllChildren();
         titleBar.setPickable(false);
-        titleBar.setLayout(HORIZONTAL_CENTERED);
+        titleBar.setLayout(HORIZONTAL_TOP);
         titleBar.setPaint(Theme.getCurrentTheme().Object_TitleBar_Background);
 
         model.resolveType();
@@ -247,9 +247,16 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public void resizeToGrid() {
-        Dimension d = getPreferredSize();
-        setWidth(((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID);
-        setHeight(((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID);
+//        Rectangle2D d = getBounds();
+//        Dimension foo = new Dimension(d.getWidth(), d.getHeight());
+        int w = (((int) getBounds().width + Constants.X_GRID) / Constants.X_GRID) * Constants.X_GRID;
+        int h = (((int) getBounds().height + Constants.Y_GRID) / Constants.Y_GRID) * Constants.Y_GRID;
+//        setSize(d);
+//        Dimension d = getPreferredSize();
+        setWidth(w - Constants.X_GRID);
+        setHeight(h - Constants.Y_GRID);
+//        setWidth(((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID);
+//        setHeight(((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID);
     }
 
     @Override

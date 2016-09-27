@@ -2,10 +2,10 @@ package axoloti.piccolo.outlets;
 
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstanceZombie;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import components.piccolo.PJackOutputComponent;
 import components.piccolo.PLabelComponent;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class POutletInstanceZombieView extends POutletInstanceView implements IOutletInstanceView {
 
@@ -18,7 +18,7 @@ public class POutletInstanceZombieView extends POutletInstanceView implements IO
 
     @Override
     public void PostConstructor() {
-        setLayout(HORIZONTAL_CENTERED);
+        setLayout(HORIZONTAL_TOP);
         addChild(new PLabelComponent(outletInstanceZombie.outletname));
         jack = new PJackOutputComponent(this);
         jack.setForeground(outletInstanceZombie.getDataType().GetColor());

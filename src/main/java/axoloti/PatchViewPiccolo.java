@@ -6,6 +6,7 @@ import axoloti.outlets.IOutletInstanceView;
 import axoloti.piccolo.PObjectSearchFrame;
 import axoloti.piccolo.PPatchBorder;
 import static axoloti.piccolo.PUtils.asPoint;
+import axoloti.piccolo.PatchLayoutTestPNode;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
 import axoloti.utils.Constants;
@@ -118,6 +119,8 @@ public class PatchViewPiccolo extends PatchView {
             } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                 e.setHandled(true);
+            } else if (e.getKeyCode() == KeyEvent.VK_T) {
+                canvas.getLayer().addChild(new PatchLayoutTestPNode());
             }
         }
     };

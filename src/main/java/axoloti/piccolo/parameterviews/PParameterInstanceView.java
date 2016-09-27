@@ -6,8 +6,6 @@ import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_CENTERED;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPNode;
 import components.piccolo.PAssignMidiCCComponent;
@@ -27,6 +25,8 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public abstract class PParameterInstanceView extends PatchPNode implements ActionListener, IParameterInstanceView {
 
@@ -49,7 +49,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     @Override
     public void PostConstructor() {
         this.setPickable(false);
-        this.setLayout(HORIZONTAL_CENTERED);
+        this.setLayout(HORIZONTAL_TOP);
         this.removeAllChildren();
 
         PatchPNode lbls = null;
@@ -57,7 +57,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
                 || (parameterInstance.getParameter().noLabel == false)))
                 && (parameterInstance.getConvs() != null)) {
             lbls = new PatchPNode(getPatchView());
-            lbls.setLayout(VERTICAL_CENTERED);
+            lbls.setLayout(VERTICAL_LEFT);
             this.addChild(lbls);
         }
 

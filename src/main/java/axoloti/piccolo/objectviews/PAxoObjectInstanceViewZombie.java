@@ -5,8 +5,6 @@ import axoloti.Theme;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.outlets.IOutletInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_CENTERED;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
@@ -22,6 +20,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract {
 
@@ -38,16 +38,16 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     public void PostConstructor() {
         super.PostConstructor();
-        setLayout(VERTICAL_CENTERED);
+        setLayout(VERTICAL_LEFT);
 
         p_ioletViews = new PatchPNode(patchView);
-        p_ioletViews.setLayout(HORIZONTAL_CENTERED);
+        p_ioletViews.setLayout(HORIZONTAL_TOP);
         p_ioletViews.setPickable(false);
         p_inletViews = new PatchPNode(patchView);
         p_inletViews.setPickable(false);
-        p_inletViews.setLayout(VERTICAL_CENTERED);
+        p_inletViews.setLayout(VERTICAL_LEFT);
         p_outletViews = new PatchPNode(patchView);
-        p_outletViews.setLayout(VERTICAL_CENTERED);
+        p_outletViews.setLayout(VERTICAL_LEFT);
         p_outletViews.setPickable(false);
 
         PLabelComponent idlbl = new PLabelComponent(model.typeName);
@@ -76,7 +76,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
         addChild(titleBar);
 
         setPaint(Theme.getCurrentTheme().Object_Zombie_Background);
-        setLayout(VERTICAL_CENTERED);
+        setLayout(VERTICAL_LEFT);
         instanceLabel = new PLabelComponent(model.getInstanceName());
         instanceLabel.addInputEventListener(new PBasicInputEventHandler() {
             @Override

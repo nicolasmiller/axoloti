@@ -5,7 +5,6 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstancePopupMenu;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackOutputComponent;
 import components.piccolo.PLabelComponent;
@@ -13,6 +12,7 @@ import components.piccolo.PSignalMetaDataIcon;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class POutletInstanceView extends PIoletAbstract implements IOutletInstanceView {
 
@@ -40,7 +40,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public void PostConstructor() {
-        setLayout(HORIZONTAL_CENTERED);
+        setLayout(HORIZONTAL_TOP);
 
         if (axoObjectInstanceView.getObjectInstance().getType().GetOutlets().size() > 1) {
             addChild(new PLabelComponent(outletInstance.getOutlet().getName()));

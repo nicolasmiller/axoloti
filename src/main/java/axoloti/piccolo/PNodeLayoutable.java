@@ -1,5 +1,6 @@
 package axoloti.piccolo;
 
+import java.awt.geom.Point2D;
 import org.piccolo2d.util.PBounds;
 
 public interface PNodeLayoutable {
@@ -19,4 +20,6 @@ public interface PNodeLayoutable {
     public double getY();
 
     public void setOffset(double x, double y);
+
+    public Point2D getOffset();
 }

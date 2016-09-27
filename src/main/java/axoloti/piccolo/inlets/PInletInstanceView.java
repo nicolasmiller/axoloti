@@ -5,7 +5,6 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstancePopupMenu;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackInputComponent;
 import components.piccolo.PLabelComponent;
@@ -13,6 +12,7 @@ import components.piccolo.PSignalMetaDataIcon;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PInletInstanceView extends PIoletAbstract implements IInletInstanceView {
 
@@ -40,7 +40,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
 
     @Override
     public void PostConstructor() {
-        setLayout(HORIZONTAL_CENTERED);
+        setLayout(HORIZONTAL_TOP);
 
         jack = new PJackInputComponent(this);
         ((PJackInputComponent) jack).setForeground(inletInstance.getInlet().getDatatype().GetColor());

@@ -2,13 +2,13 @@ package axoloti.piccolo.objectviews;
 
 import axoloti.PatchViewPiccolo;
 import axoloti.object.AxoObjectInstanceHyperlink;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
 import components.piccolo.PLabelComponent;
 import components.piccolo.control.PCtrlEvent;
 import components.piccolo.control.PCtrlListener;
 import components.piccolo.control.PPulseButtonComponent;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstract {
 
@@ -25,7 +25,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
         super.PostConstructor();
         setDrawBorder(true);
 
-        setLayout(HORIZONTAL_CENTERED);
+        setLayout(HORIZONTAL_TOP);
         button = new PPulseButtonComponent(this);
         button.addPCtrlListener(new PCtrlListener() {
             @Override

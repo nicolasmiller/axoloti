@@ -2,7 +2,8 @@ package axoloti.piccolo;
 
 public enum PNodeLayout {
     DEFAULT,
-    HORIZONTAL_CENTERED,
-    VERTICAL_CENTERED,
-    VERTICAL_LEFT
+    HORIZONTAL_TOP,
+    VERTICAL_LEFT,
+    VERTICAL_RIGHT,
+    VERTICAL_CENTERED
 }

@@ -29,7 +29,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
         this.removeInputEventListener(selectionEventHandler);
 
         PatchPNode container = new PatchPNode();
-        container.setLayout(PNodeLayout.VERTICAL_CENTERED);
+        container.setLayout(PNodeLayout.VERTICAL_LEFT);
         setLocation(0, 0);
         double scale = parameterInstanceView.getPatchView().getViewportView().getViewScale();
         container.setEnabled(false);
@@ -39,7 +39,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
 
         for (int i = 0; i < n; i++) {
             PatchPNode row = new PatchPNode();
-            row.setLayout(PNodeLayout.HORIZONTAL_CENTERED);
+            row.setLayout(PNodeLayout.HORIZONTAL_TOP);
 
             PCheckboxComponent cb = new PCheckboxComponent(0, 1, parameterInstanceView.getObjectInstanceView());
             cb.addPActionListener(cbActionListener);

@@ -2,11 +2,11 @@ package axoloti.piccolo.objectviews;
 
 import axoloti.PatchViewPiccolo;
 import axoloti.object.AxoObjectInstanceComment;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
 import components.piccolo.PLabelComponent;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstract {
 
@@ -26,7 +26,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
             model.setCommentText(InstanceName);
             InstanceName = null;
         }
-        setLayout(HORIZONTAL_CENTERED);
+        setLayout(HORIZONTAL_TOP);
         instanceLabel = new PLabelComponent(model.getCommentText());
         instanceLabel.setHorizontalAlignment(CENTER_ALIGNMENT);
         addInputEventListener(new PBasicInputEventHandler() {

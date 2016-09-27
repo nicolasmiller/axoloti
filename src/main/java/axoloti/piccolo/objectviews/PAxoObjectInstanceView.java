@@ -25,8 +25,9 @@ import axoloti.outlets.OutletInstance;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_CENTERED;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_CENTERED;
+import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
+import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
+import static axoloti.piccolo.PNodeLayout.VERTICAL_RIGHT;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
@@ -85,23 +86,23 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         model.updateObj1();
 
         setLocation(model.getX(), model.getY());
-        setLayout(VERTICAL_CENTERED);
+        setLayout(VERTICAL_LEFT);
         setDrawBorder(true);
 
         p_parameterViews = new PatchPNode(patchView);
         p_parameterViews.setPickable(false);
-        p_parameterViews.setLayout(VERTICAL_CENTERED);
+        p_parameterViews.setLayout(VERTICAL_RIGHT);
         p_displayViews = new PatchPNode(patchView);
         p_displayViews.setPickable(false);
-        p_displayViews.setLayout(VERTICAL_CENTERED);
+        p_displayViews.setLayout(VERTICAL_RIGHT);
         p_ioletViews = new PatchPNode(patchView);
-        p_ioletViews.setLayout(HORIZONTAL_CENTERED);
+        p_ioletViews.setLayout(HORIZONTAL_TOP);
         p_ioletViews.setPickable(false);
         p_inletViews = new PatchPNode(patchView);
         p_inletViews.setPickable(false);
-        p_inletViews.setLayout(VERTICAL_CENTERED);
+        p_inletViews.setLayout(VERTICAL_LEFT);
         p_outletViews = new PatchPNode(patchView);
-        p_outletViews.setLayout(VERTICAL_CENTERED);
+        p_outletViews.setLayout(VERTICAL_RIGHT);
         p_outletViews.setPickable(false);
 
         ArrayList<ParameterInstance> pParameterInstances = getModel().getParameterInstances();
@@ -165,17 +166,17 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         p_parameterViews = new PatchPNode(patchView);
         p_parameterViews.setPickable(false);
         if (getType().getRotatedParams()) {
-            p_parameterViews.setLayout(HORIZONTAL_CENTERED);
+            p_parameterViews.setLayout(HORIZONTAL_TOP);
         } else {
-            p_parameterViews.setLayout(VERTICAL_CENTERED);
+            p_parameterViews.setLayout(VERTICAL_LEFT);
         }
 
         p_displayViews = new PatchPNode(patchView);
         p_displayViews.setPickable(false);
         if (getType().getRotatedParams()) {
-            p_displayViews.setLayout(HORIZONTAL_CENTERED);
+            p_displayViews.setLayout(HORIZONTAL_TOP);
         } else {
-            p_displayViews.setLayout(VERTICAL_CENTERED);
+            p_displayViews.setLayout(VERTICAL_LEFT);
         }
 
         for (Inlet inlet : getType().inlets) {
@@ -252,12 +253,14 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 }
             }
             PParameterInstanceView view = (PParameterInstanceView) pin.createView(this);
+//            view.setLayout(VERTICAL_RIGHT);
             getModel().getParameterInstances().add(pin);
         }
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
             PDisplayInstanceView view = (PDisplayInstanceView) pin.createView(this);
+//            view.setLayout(VERTICAL_RIGHT);
             getModel().getDisplayInstances().add(pin);
         }
 
