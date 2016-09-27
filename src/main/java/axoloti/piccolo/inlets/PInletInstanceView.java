@@ -9,10 +9,10 @@ import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackInputComponent;
 import components.piccolo.PLabelComponent;
 import components.piccolo.PSignalMetaDataIcon;
+import javax.swing.Box;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PInletInstanceView extends PIoletAbstract implements IInletInstanceView {
 
@@ -40,20 +40,19 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
 
     @Override
     public void PostConstructor() {
-        setLayout(HORIZONTAL_TOP);
-
         jack = new PJackInputComponent(this);
         ((PJackInputComponent) jack).setForeground(inletInstance.getInlet().getDatatype().GetColor());
 
-        addChild(jack);
+        addChild(jack, Anchor.EAST);
         addChild(new PSignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData(), axoObjectInstanceView));
 
         if (axoObjectInstanceView.getObjectInstance().getType().GetInlets().size() > 1) {
+            getContainer().add(Box.createHorizontalStrut(3));
             addChild(new PLabelComponent(inletInstance.getInlet().getName()));
         }
+        getContainer().add(Box.createHorizontalGlue());
 
-        setBounds(0, 0, getChildrenWidth(), getChildrenHeight());
-
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
         addInputEventListener(getInputEventHandler());
         addInputEventListener(toolTipEventListener);
     }

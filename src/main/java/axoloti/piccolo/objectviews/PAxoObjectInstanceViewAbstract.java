@@ -17,7 +17,6 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.parameterviews.IParameterInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
 import axoloti.utils.Constants;
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
@@ -53,7 +53,13 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     private boolean Locked = false;
 
     PAxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewPiccolo patchView) {
-        super(patchView);
+        super(patchView, BoxLayout.LINE_AXIS);
+        this.model = model;
+        titleBar = new PatchPNode(patchView);
+    }
+
+    PAxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewPiccolo patchView, int layoutAxis) {
+        super(patchView, layoutAxis);
         this.model = model;
         titleBar = new PatchPNode(patchView);
     }
@@ -80,14 +86,19 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     JPopupMenu popup;
 
+    private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
+    private static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
+
     @Override
     public void PostConstructor() {
         removeAllChildren();
+        getContainer().setMinimumSize(new Dimension(60, 40));
 
         titleBar.removeAllChildren();
         titleBar.setPickable(false);
-        titleBar.setLayout(HORIZONTAL_TOP);
         titleBar.setPaint(Theme.getCurrentTheme().Object_TitleBar_Background);
+        titleBar.getContainer().setMinimumSize(TITLEBAR_MINIMUM_SIZE);
+        titleBar.getContainer().setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
 
         model.resolveType();
 
@@ -245,18 +256,12 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         // new objects added to front by default
     }
 
-    @Override
     public void resizeToGrid() {
-//        Rectangle2D d = getBounds();
-//        Dimension foo = new Dimension(d.getWidth(), d.getHeight());
-        int w = (((int) getBounds().width + Constants.X_GRID) / Constants.X_GRID) * Constants.X_GRID;
-        int h = (((int) getBounds().height + Constants.Y_GRID) / Constants.Y_GRID) * Constants.Y_GRID;
-//        setSize(d);
-//        Dimension d = getPreferredSize();
-        setWidth(w - Constants.X_GRID);
-        setHeight(h - Constants.Y_GRID);
-//        setWidth(((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID);
-//        setHeight(((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID);
+        Dimension d = getPreferredSize();
+        d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
+        d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
+        setWidth(d.width);
+        setHeight(d.height);
     }
 
     @Override

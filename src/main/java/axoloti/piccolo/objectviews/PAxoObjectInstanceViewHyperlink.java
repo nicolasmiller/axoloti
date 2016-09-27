@@ -8,7 +8,6 @@ import components.piccolo.control.PCtrlListener;
 import components.piccolo.control.PPulseButtonComponent;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstract {
 
@@ -25,7 +24,6 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
         super.PostConstructor();
         setDrawBorder(true);
 
-        setLayout(HORIZONTAL_TOP);
         button = new PPulseButtonComponent(this);
         button.addPCtrlListener(new PCtrlListener() {
             @Override
@@ -55,7 +53,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
         });
 
         addChild(instanceLabel);
-        setBounds(0, 0, getChildrenWidth(), getChildrenHeight());
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
         translate(model.getX(), model.getY());
 
         resizeToGrid();
@@ -64,9 +62,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
     @Override
     protected void handleInstanceNameEditorAction() {
         super.handleInstanceNameEditorAction();
-
-        setBounds(0, 0,
-                getChildrenWidth(), getChildrenHeight());
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
         repaint();
     }
 

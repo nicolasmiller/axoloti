@@ -6,7 +6,6 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.PatchPNode;
 import components.piccolo.PLabelComponent;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public abstract class PAttributeInstanceView extends PatchPNode implements IAttributeInstanceView {
 
@@ -28,10 +27,9 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
 
     @Override
     public void PostConstructor() {
-        this.setLayout(HORIZONTAL_TOP);
         setPickable(false);
         addChild(new PLabelComponent(attributeInstance.getDefinition().getName()));
-        setBounds(this.getUnionOfChildrenBounds(null));
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
     }
 
     @Override

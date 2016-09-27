@@ -20,13 +20,12 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public abstract class PParameterInstanceView extends PatchPNode implements ActionListener, IParameterInstanceView {
 
@@ -49,15 +48,13 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     @Override
     public void PostConstructor() {
         this.setPickable(false);
-        this.setLayout(HORIZONTAL_TOP);
         this.removeAllChildren();
 
         PatchPNode lbls = null;
         if ((((parameterInstance.getParameter().noLabel == null)
                 || (parameterInstance.getParameter().noLabel == false)))
                 && (parameterInstance.getConvs() != null)) {
-            lbls = new PatchPNode(getPatchView());
-            lbls.setLayout(VERTICAL_LEFT);
+            lbls = new PatchPNode(getPatchView(), BoxLayout.Y_AXIS);
             this.addChild(lbls);
         }
 
@@ -121,7 +118,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         });
         updateV();
         parameterInstance.setMidiCC(parameterInstance.getMidiCC());
-        setBounds(0, 0, getChildrenWidth(), getChildrenHeight());
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
     }
 
     double valueBeforeAdjustment;

@@ -25,9 +25,6 @@ import axoloti.outlets.OutletInstance;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_RIGHT;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
@@ -42,6 +39,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
@@ -71,7 +70,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     String tooltiptxt = "<html>";
 
     public PAxoObjectInstanceView(AxoObjectInstance model, PatchViewPiccolo patchView) {
-        super(model, patchView);
+        super(model, patchView, BoxLayout.PAGE_AXIS);
         this.model = model;
     }
 
@@ -86,23 +85,19 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         model.updateObj1();
 
         setLocation(model.getX(), model.getY());
-        setLayout(VERTICAL_LEFT);
         setDrawBorder(true);
 
-        p_parameterViews = new PatchPNode(patchView);
+        p_parameterViews = new PatchPNode(patchView, getType().getRotatedParams() ? BoxLayout.LINE_AXIS : BoxLayout.PAGE_AXIS);
         p_parameterViews.setPickable(false);
-        p_parameterViews.setLayout(VERTICAL_RIGHT);
-        p_displayViews = new PatchPNode(patchView);
+        p_displayViews = new PatchPNode(patchView, getType().getRotatedParams() ? BoxLayout.LINE_AXIS : BoxLayout.PAGE_AXIS);
         p_displayViews.setPickable(false);
-        p_displayViews.setLayout(VERTICAL_RIGHT);
         p_ioletViews = new PatchPNode(patchView);
-        p_ioletViews.setLayout(HORIZONTAL_TOP);
         p_ioletViews.setPickable(false);
-        p_inletViews = new PatchPNode(patchView);
+
+        p_inletViews = new PatchPNode(patchView, BoxLayout.PAGE_AXIS);
         p_inletViews.setPickable(false);
-        p_inletViews.setLayout(VERTICAL_LEFT);
-        p_outletViews = new PatchPNode(patchView);
-        p_outletViews.setLayout(VERTICAL_RIGHT);
+
+        p_outletViews = new PatchPNode(patchView, BoxLayout.PAGE_AXIS);
         p_outletViews.setPickable(false);
 
         ArrayList<ParameterInstance> pParameterInstances = getModel().getParameterInstances();
@@ -136,8 +131,6 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         PLabelComponent titleBarLabel = new PLabelComponent(model.typeName);
         titleBar.addChild(titleBarLabel);
 
-        titleBar.setBounds(0, 0, titleBar.getChildrenWidth(), titleBar.getChildrenHeight());
-
         PInputEventFilter eventFilter = new PInputEventFilter();
         eventFilter.setMarksAcceptedEventsAsHandled(false);
         toolTipEventListener.setEventFilter(eventFilter);
@@ -163,21 +156,10 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
         });
 
-        p_parameterViews = new PatchPNode(patchView);
         p_parameterViews.setPickable(false);
-        if (getType().getRotatedParams()) {
-            p_parameterViews.setLayout(HORIZONTAL_TOP);
-        } else {
-            p_parameterViews.setLayout(VERTICAL_LEFT);
-        }
-
-        p_displayViews = new PatchPNode(patchView);
         p_displayViews.setPickable(false);
-        if (getType().getRotatedParams()) {
-            p_displayViews.setLayout(HORIZONTAL_TOP);
-        } else {
-            p_displayViews.setLayout(VERTICAL_LEFT);
-        }
+        p_displayViews.getContainer().add(Box.createHorizontalGlue());
+        p_parameterViews.getContainer().add(Box.createHorizontalGlue());
 
         for (Inlet inlet : getType().inlets) {
             InletInstance inletInstanceP = null;
@@ -228,7 +210,9 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
 
         p_ioletViews.addChild(p_inletViews);
-        p_ioletViews.addChild(p_outletViews);
+        p_ioletViews.getContainer().add(Box.createHorizontalGlue());
+        p_ioletViews.updateContainerLayout();
+        p_ioletViews.addChild(p_outletViews, Anchor.NORTHEAST);
         addChild(p_ioletViews);
 
         for (AxoAttribute p : getType().attributes) {
@@ -240,7 +224,6 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
             AttributeInstance attributeInstance1 = p.CreateInstance(this.getObjectInstance(), attributeInstanceP);
             PAttributeInstanceView attributeInstanceView = (PAttributeInstanceView) attributeInstance1.createView(this);
-            //      attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
             addChild(attributeInstanceView);
             getModel().getAttributeInstances().add(attributeInstance1);
         }
@@ -253,36 +236,33 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 }
             }
             PParameterInstanceView view = (PParameterInstanceView) pin.createView(this);
-//            view.setLayout(VERTICAL_RIGHT);
             getModel().getParameterInstances().add(pin);
         }
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(this.getObjectInstance());
             PDisplayInstanceView view = (PDisplayInstanceView) pin.createView(this);
-//            view.setLayout(VERTICAL_RIGHT);
             getModel().getDisplayInstances().add(pin);
         }
 
-        addChild(p_parameterViews);
-        addChild(p_displayViews);
+        addChild(p_parameterViews, Anchor.EAST);
+        addChild(p_displayViews, Anchor.EAST);
 
         getType().addObjectModifiedListener(model);
 
-        p_inletViews.setBounds(
-                0, 0, p_inletViews.getChildrenWidth(), p_inletViews.getChildrenHeight());
-        p_outletViews.setBounds(
-                0, 0, p_outletViews.getChildrenWidth(), p_outletViews.getChildrenHeight());
-        p_ioletViews.setBounds(
-                0, 0, p_ioletViews.getChildrenWidth(), p_ioletViews.getChildrenHeight());
+//        p_inletViews.setBounds(
+//                0, 0, p_inletViews.getContainer().getWidth(), p_inletViews.getContainer().getHeight());
+//        p_outletViews.setBounds(
+//                0, 0, p_outletViews.getContainer().getWidth(), p_outletViews.getContainer().getHeight());
+//        p_ioletViews.setBounds(
+//                0, 0, p_ioletViews.getContainer().getWidth(), p_ioletViews.getContainer().getHeight());
         p_displayViews.setBounds(
-                0, 0, p_displayViews.getChildrenWidth(), p_displayViews.getChildrenHeight());
+                0, 0, p_displayViews.getContainer().getWidth(), p_displayViews.getContainer().getHeight());
         p_parameterViews.setBounds(
-                0, 0, p_parameterViews.getChildrenWidth(), p_parameterViews.getChildrenHeight());
+                0, 0, p_parameterViews.getContainer().getWidth(), p_parameterViews.getContainer().getHeight());
 
         this.setBounds(
-                0, 0, getChildrenWidth(), getChildrenHeight());
-
+                0, 0, getContainer().getWidth(), getContainer().getHeight());
         this.addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void mousePressed(PInputEvent e) {
@@ -299,7 +279,18 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
         });
         resizeToGrid();
-        titleBar.setBounds(0, 0, getBounds().width - 2, titleBar.getChildrenHeight());
+        titleBar.setBounds(0, 0, getWidth(), titleBar.getContainer().getHeight());
+//        p_inletViews.setBounds(
+//                0, 0, getWidth() / 2, p_inletViews.getContainer().getHeight());
+        p_outletViews.setOffset(getWidth() - p_outletViews.getContainer().getWidth(), 0);
+//        p_outletViews.setBounds(
+//                0, 0, getWidth() / 2, p_outletViews.getContainer().getHeight());
+        p_ioletViews.setBounds(
+                0, 0, getWidth(), p_ioletViews.getContainer().getHeight());
+//        p_displayViews.setBounds(
+//                0, 0, getWidth(), p_displayViews.getContainer().getHeight());
+//        p_parameterViews.setBounds(
+//                0, 0, getWidth(), p_parameterViews.getContainer().getHeight());
         translate(model.getX(), model.getY());
     }
 
@@ -478,7 +469,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     @Override
     public void addParameterInstanceView(IParameterInstanceView view) {
-        this.p_parameterViews.addChild((PParameterInstanceView) view);
+        this.p_parameterViews.addChild((PParameterInstanceView) view, Anchor.EAST);
         this.parameterInstanceViews.add(view);
     }
 
@@ -489,12 +480,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     @Override
     public void addDisplayInstanceView(IDisplayInstanceView view) {
-        this.p_displayViews.addChild((PDisplayInstanceView) view);
+        this.p_displayViews.addChild((PDisplayInstanceView) view, Anchor.EAST);
     }
 
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
-        this.p_outletViews.addChild((POutletInstanceView) view);
+        this.p_outletViews.addChild((POutletInstanceView) view, Anchor.EAST);
     }
 
     @Override

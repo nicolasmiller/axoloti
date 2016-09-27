@@ -5,7 +5,6 @@ import axoloti.inlets.InletInstanceZombie;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import components.piccolo.PJackInputComponent;
 import components.piccolo.PLabelComponent;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class PInletInstanceZombieView extends PInletInstanceView implements IInletInstanceView {
 
@@ -18,7 +17,6 @@ public class PInletInstanceZombieView extends PInletInstanceView implements IInl
 
     @Override
     public void PostConstructor() {
-        setLayout(HORIZONTAL_TOP);
         addChild(new PLabelComponent(inletInstanceZombie.inletname));
         jack = new PJackInputComponent(this);
         jack.setForeground(inletInstanceZombie.getDataType().GetColor());

@@ -9,10 +9,10 @@ import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackOutputComponent;
 import components.piccolo.PLabelComponent;
 import components.piccolo.PSignalMetaDataIcon;
+import javax.swing.Box;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-import static axoloti.piccolo.PNodeLayout.HORIZONTAL_TOP;
 
 public class POutletInstanceView extends PIoletAbstract implements IOutletInstanceView {
 
@@ -40,18 +40,17 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public void PostConstructor() {
-        setLayout(HORIZONTAL_TOP);
-
+        getContainer().add(Box.createHorizontalGlue());
         if (axoObjectInstanceView.getObjectInstance().getType().GetOutlets().size() > 1) {
-            addChild(new PLabelComponent(outletInstance.getOutlet().getName()));
+            addChild(new PLabelComponent(outletInstance.getOutlet().getName()), Anchor.EAST);
+            getContainer().add(Box.createHorizontalStrut(2));
         }
-        addChild(new PSignalMetaDataIcon(outletInstance.getOutlet().GetSignalMetaData(), axoObjectInstanceView));
+        addChild(new PSignalMetaDataIcon(outletInstance.getOutlet().GetSignalMetaData(), axoObjectInstanceView), Anchor.EAST);
         jack = new PJackOutputComponent(this);
         ((PJackOutputComponent) jack).setForeground(outletInstance.getOutlet().getDatatype().GetColor());
-        addChild(jack);
+        addChild(jack, Anchor.EAST);
 
-        setBounds(0, 0, getChildrenWidth(), getChildrenHeight());
-
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
         addInputEventListener(getInputEventHandler());
         addInputEventListener(toolTipEventListener);
     }

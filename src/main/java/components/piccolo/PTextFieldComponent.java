@@ -2,8 +2,6 @@ package components.piccolo;
 
 import axoloti.PatchView;
 import axoloti.PatchViewPiccolo;
-import axoloti.piccolo.PNodeLayout;
-import axoloti.piccolo.PNodeLayoutable;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -13,7 +11,7 @@ import javax.swing.text.Document;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.extras.pswing.PSwing;
 
-public class PTextFieldComponent extends PSwing implements PNodeLayoutable, PFocusable {
+public class PTextFieldComponent extends PSwing implements PFocusable {
 
     public PTextFieldComponent() {
         this("");
@@ -44,26 +42,6 @@ public class PTextFieldComponent extends PSwing implements PNodeLayoutable, PFoc
 
     public void setText(String text) {
         getComponent().setText(text);
-    }
-
-    @Override
-    public void setLayout(PNodeLayout layout) {
-
-    }
-
-    @Override
-    public PNodeLayout getLayout() {
-        return PNodeLayout.DEFAULT;
-    }
-
-    @Override
-    public double getChildrenHeight() {
-        return getComponent().getHeight();
-    }
-
-    @Override
-    public double getChildrenWidth() {
-        return getComponent().getWidth();
     }
 
     @Override

@@ -28,7 +28,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
             }
         });
         addChild(BtnEdit);
-        this.setBounds(0, 0, getChildrenWidth(), getChildrenHeight());
+        setBounds(0, 0, getContainer().getWidth(), getContainer().getHeight());
         resizeToGrid();
     }
 

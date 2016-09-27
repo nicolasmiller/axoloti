@@ -13,10 +13,10 @@ import components.piccolo.PAssignModulatorMenuItems;
 import components.piccolo.PAssignPresetComponent;
 import components.piccolo.control.PDialComponent;
 import java.awt.Graphics2D;
+import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.util.PPaintContext;
-import static axoloti.piccolo.PNodeLayout.VERTICAL_LEFT;
 
 public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac32U {
 
@@ -42,8 +42,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     public void PostConstructor() {
         super.PostConstructor();
 
-        PatchPNode btns = new PatchPNode(getPatchView());
-        btns.setLayout(VERTICAL_LEFT);
+        PatchPNode btns = new PatchPNode(getPatchView(), BoxLayout.PAGE_AXIS);
 
         //lblCC = new LabelComponent("C");
         //btns.add(lblCC);
