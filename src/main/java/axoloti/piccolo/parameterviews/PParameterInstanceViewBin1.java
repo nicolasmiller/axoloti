@@ -1,16 +1,17 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceBin1;
-import axoloti.piccolo.components.PAssignMidiCCMenuItems;
-import axoloti.piccolo.components.control.PCheckboxComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.piccolo.components.PAssignMidiCCMenuItems;
+import axoloti.piccolo.components.control.PCheckboxComponent;
+
 public class PParameterInstanceViewBin1 extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin1(ParameterInstanceBin1 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewBin1(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -20,11 +21,6 @@ public class PParameterInstanceViewBin1 extends PParameterInstanceViewBin {
 
     @Override
     public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue());
     }
 
     @Override

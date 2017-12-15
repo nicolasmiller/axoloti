@@ -1,28 +1,20 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.preset.Preset;
-import axoloti.preset.PresetDouble;
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32UMapVSlider;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.components.control.PVSliderComponent;
+import axoloti.preferences.Theme;
+import axoloti.preset.PresetDouble;
 
 public class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceViewFrac32U {
 
-    public PParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewFrac32UMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-    }
-
-    @Override
-    public void updateV() {
-        if (ctrl != null) {
-            ctrl.setValue(getModel().getValue());
-        }
     }
 
     /*
@@ -44,11 +36,11 @@ public class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceV
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(getModel().getValue());
         }
-        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
+//        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);
-        } else {
+//        } else {
 //            lblPreset.setVisible(false);
-        }
+//        }
     }
 
     @Override

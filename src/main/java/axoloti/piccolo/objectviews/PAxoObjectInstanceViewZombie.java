@@ -1,35 +1,36 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.preferences.Theme;
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.AxoObjectInstanceZombie;
-import axoloti.abstractui.IOutletInstanceView;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.inlets.PInletInstanceView;
-import axoloti.piccolo.outlets.POutletInstanceView;
-import axoloti.piccolo.components.PLabelComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract {
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.inlets.PInletInstanceView;
+import axoloti.piccolo.outlets.POutletInstanceView;
+import axoloti.preferences.Theme;
 
-    AxoObjectInstanceZombie model;
+public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract {
 
     public PatchPNode p_ioletViews;
     public PatchPNode p_inletViews;
@@ -37,11 +38,8 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     private String tooltipText = "<html>" + "Unresolved object!";
 
-    public PAxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchViewPiccolo p) {
-        super(model, p);
-        this.model = model;
-        System.out.println(model.getInletInstances().size());
-        System.out.println(model.getOutletInstances().size());
+    public PAxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewPiccolo p) {
+        super(controller, p);
     }
 
     public void PostConstructor() {
@@ -83,7 +81,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
         setPaint(Theme.getCurrentTheme().Object_Zombie_Background);
 
-        instanceLabel = new PLabelComponent(model.getInstanceName());
+        instanceLabel = new PLabelComponent(getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
 
         instanceLabel.addInputEventListener(new PBasicInputEventHandler() {
@@ -204,7 +202,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
         addToSwingProxy(Box.createVerticalGlue());
 
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     private boolean layoutFinished = false;

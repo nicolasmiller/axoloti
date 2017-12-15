@@ -17,19 +17,28 @@ import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.util.PPaintContext;
+import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
+
+import javax.swing.BoxLayout;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 
 public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac32U {
 
     PAssignModulatorComponent modulationAssign;
     PAssignPresetComponent presetAssign;
 
-    public PParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public ParameterInstanceFrac32UMap getModel() {
-        return (ParameterInstanceFrac32UMap) parameterInstance;
+        return (ParameterInstanceFrac32UMap) super.getModel();
     }
 
     @Override
@@ -53,27 +62,20 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
         //lblCC = new LabelComponent("C");
         //btns.add(lblCC);
         midiAssign = new PAssignMidiCCComponent(this);
-
         btns.addChild(midiAssign);
-        modulationAssign = new PAssignModulatorComponent(this);
-        btns.addChild(modulationAssign);
+
+        // modulationAssign = new PAssignModulatorComponent(this);
+        // btns.addChild(modulationAssign);
+
         presetAssign = new PAssignPresetComponent(this);
         btns.addChild(presetAssign);
         addChild(btns);
+
         updatePresetAssignVisibility(false);
         updateModulationAssignVisibility(false);
 
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
         addInputEventListener(popupMouseListener);
-        updateV();
-    }
-
-    @Override
-    public void updateV() {
-        super.updateV();
-        if (ctrl != null) {
-            ctrl.setValue(getModel().getValue());
-        }
     }
 
     private void updatePresetAssignVisibility() {
@@ -162,10 +164,18 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     protected void paint(PPaintContext paintContext) {
         super.paint(paintContext);
         Graphics2D g2 = paintContext.getGraphics();
-        if (parameterInstance.getOnParent()) {
-            ctrl.setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
-        } else {
+        // if (parameterInstance.getOnParent()) {
+        //     ctrl.setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
+        // } else {
             ctrl.setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
+//        }
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInstance.PRESETS.is(evt)) {
+            presetAssign.repaint();
         }
     }
 }

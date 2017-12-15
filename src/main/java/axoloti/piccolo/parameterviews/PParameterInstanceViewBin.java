@@ -1,30 +1,27 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.preset.PresetInt;
-import axoloti.preferences.Theme;
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueInt32;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceBin;
 import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
+
 import org.piccolo2d.util.PPaintContext;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.datatypes.Value;
+import axoloti.patch.object.parameter.ParameterInstanceBin;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.preferences.Theme;
+import axoloti.preset.PresetInt;
 
 public abstract class PParameterInstanceViewBin extends PParameterInstanceView {
 
-    PParameterInstanceViewBin(ParameterInstanceBin parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    PParameterInstanceViewBin(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
 
     }
 
     @Override
     public ParameterInstanceBin getModel() {
         return (ParameterInstanceBin)controller.getModel();
-    }    
-    
-    @Override
-    public void setValue(Value value) {
-        parameterInstance.setValue(value);
-        updateV();
     }
 
     @Override
@@ -51,8 +48,8 @@ public abstract class PParameterInstanceViewBin extends PParameterInstanceView {
         if (p != null) {
             p.setValue((int) getControlComponent().getValue());
         } else if (getModel().getValue() != (int) getControlComponent().getValue()) {
-            parameterInstance.setValue(new ValueInt32((int) getControlComponent().getValue()));
-            parameterInstance.setNeedsTransmit(true);
+//            parameterInstance.setValue(new ValueInt32((int) getControlComponent().getValue()));
+//            parameterInstance.setNeedsTransmit(true);
             UpdateUnit();
         } else {
             return false;
@@ -63,17 +60,26 @@ public abstract class PParameterInstanceViewBin extends PParameterInstanceView {
     @Override
     public void CopyValueFrom(PParameterInstanceView p) {
         if (p instanceof PParameterInstanceViewBin) {
-            parameterInstance.CopyValueFrom(((PParameterInstanceViewBin) p).parameterInstance);
+//            parameterInstance.CopyValueFrom(((PParameterInstanceViewBin) p).parameterInstance);
         }
     }
 
     @Override
     protected void paint(PPaintContext paintContext) {
         Graphics2D g2 = paintContext.getGraphics();
-        if (parameterInstance.getOnParent()) {
-            ctrl.setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
-        } else {
+//        if (parameterInstance.getOnParent()) {
+//            ctrl.setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
+//        } else {
             ctrl.setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
+//        }
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInstanceBin.VALUE.is(evt)) {
+            Integer v = (Integer)evt.getNewValue();
+            ctrl.setValue(v);
         }
     }
 }

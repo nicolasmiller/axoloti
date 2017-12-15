@@ -241,7 +241,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                 }
                 draggingObjects = null;
                 getPatchView().AdjustSize();
-                getController().getParent().fixNegativeObjectCoordinates();                
+                getController().getParent().fixNegativeObjectCoordinates();
             }
             me.consume();
         }
@@ -285,7 +285,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     @Override
     public void addInstanceNameEditor() {
-        getController().addMetaUndo("edit object instance name");        
+        getController().addMetaUndo("edit object instance name");
         InstanceNameTF = new TextFieldComponent(getModel().getInstanceName());
         InstanceNameTF.selectAll();
         InstanceNameTF.addActionListener(new ActionListener() {
@@ -353,12 +353,12 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     /*
     @Override public void validate() {
         super.validate();
-        Dimension d = getPreferredSize();        
+        Dimension d = getPreferredSize();
 //        setBounds();
         repaint();
     }
     */
-    
+
     @Override
     public void resizeToGrid() {
         revalidate();

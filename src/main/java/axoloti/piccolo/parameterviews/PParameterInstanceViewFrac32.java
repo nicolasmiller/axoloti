@@ -5,21 +5,37 @@ import axoloti.preset.PresetDouble;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
+
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+
 public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 
-    PParameterInstanceViewFrac32(ParameterInstanceFrac32 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    PParameterInstanceViewFrac32(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public ParameterInstanceFrac32 getModel() {
-        return (ParameterInstanceFrac32) parameterInstance;
+        return (ParameterInstanceFrac32) super.getModel();
+    }
+
+    @Override
+    void UpdateUnit() {
+        super.UpdateUnit();
+        if (getModel().getConversion() != null) {
+            valuelbl.setText(
+                getModel().getConversion().ToReal(new ValueFrac32(
+                                                      getModel().getValue())));
+        }
     }
 
     @Override
@@ -41,10 +57,8 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //getModel().applyDefaultValue();
-                updateV();
-                getControlComponent().setValue(getModel().getValue());
-                handleAdjustment();
+                getController().addMetaUndo("Reset to default");
+                getController().applyDefaultValue();
             }
         });
         m.add(m_default);
@@ -52,27 +66,35 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
 
     @Override
     public boolean handleAdjustment() {
+        // FIXME: cleanup preset logic
         PresetDouble p = getModel().getPreset(presetEditActive);
         if (p != null) {
             p.setValue(getControlComponent().getValue());
-        } else if (getModel().getValue() != getControlComponent().getValue()) {
-            getModel().setValue(new ValueFrac32(getControlComponent().getValue()));
-            getModel().setNeedsTransmit(true);
-            UpdateUnit();
+        }
+        if (getModel().getValue() != getControlComponent().getValue()) {
+            if (getController() != null) {
+                Double d = getControlComponent().getValue();
+                getController().setModelUndoableProperty(ParameterInstance.VALUE, d);
+            }
         } else {
             return false;
         }
         return true;
     }
 
-    @Override
-    public void CopyValueFrom(PParameterInstanceView p) {
-        if (p instanceof PParameterInstanceViewFrac32) {
-            getModel().CopyValueFrom(((PParameterInstanceViewFrac32) p).parameterInstance);
-        }
-    }
-
     public void updateModulation(int index, double amount) {
         getModel().updateModulation(index, amount);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInstance.VALUE.is(evt)) {
+            Double v = (Double) evt.getNewValue();
+            ctrl.setValue(v);
+            UpdateUnit();
+        } else if (ParameterInstance.CONVERSION.is(evt)) {
+            UpdateUnit();
+        }
     }
 }

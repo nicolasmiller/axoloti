@@ -1,15 +1,5 @@
 package axoloti.piccolo.iolet;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.net.Net;
-import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.piccolo.PNetDragging;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.components.PLabelComponent;
-import axoloti.piccolo.inlets.PInletInstanceView;
-import axoloti.piccolo.outlets.POutletInstanceView;
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -17,14 +7,31 @@ import java.awt.Stroke;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+
 import javax.swing.JPopupMenu;
+
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
 
-public abstract class PIoletAbstract extends PatchPNode {
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.mvc.AbstractController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.net.NetDrag;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.piccolo.PNetDragging;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.inlets.PInletInstanceView;
+import axoloti.piccolo.outlets.POutletInstanceView;
 
+public abstract class PIoletAbstract extends PatchPNode {
     public IAxoObjectInstanceView axoObjectInstanceView;
     public PLabelComponent lbl;
     public PatchPNode jack;
@@ -75,15 +82,17 @@ public abstract class PIoletAbstract extends PatchPNode {
             } else {
                 setHighlighted(true);
                 if (!axoObjectInstanceView.isLocked()) {
-                    if (dragnet == null) {
-                        dragnet = new PNetDragging(getPatchView());
-                        dragtarget = null;
-                        if (PIoletAbstract.this instanceof PInletInstanceView) {
-                            //dragnet.connectInlet((IInletInstanceView) PIoletAbstract.this);
-                        } else {
-                            //dragnet.connectOutlet((IOutletInstanceView) PIoletAbstract.this);
-                        }
+		    Net dnet = new NetDrag();
+                    NetController dragNetController = new NetController(dnet, null, getPatchView().getController());
+                    dragtarget = null;
+		    if (PIoletAbstract.this instanceof PInletInstanceView) {
+                        dragNetController.connectInlet((InletInstance) getController().getModel());
+                    } else {
+                        dragNetController.connectOutlet((OutletInstance) getController().getModel());
                     }
+                    dragnet = new PNetDragging(dragNetController, getPatchView());
+                    dragNetController.addView(dragnet);
+
                     dragnet.setVisible(true);
                     if (getPatchView() != null) {
                         getPatchView().getCanvas().getLayer().addChild(dragnet);
@@ -197,4 +206,6 @@ public abstract class PIoletAbstract extends PatchPNode {
     public PBasicInputEventHandler getInputEventHandler() {
         return inputEventListener;
     }
+
+    public abstract AbstractController getController();
 }
