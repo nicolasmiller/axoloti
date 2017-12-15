@@ -5,16 +5,20 @@ import axoloti.patch.object.AxoObjectInstanceComment;
 import axoloti.piccolo.components.PLabelComponent;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import javax.swing.BoxLayout;
+import java.beans.PropertyChangeEvent;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import axoloti.object.ObjectInstanceController;
 
 public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstract {
 
-    AxoObjectInstanceComment model;
+    public PAxoObjectInstanceViewComment(ObjectInstanceController controller, PatchViewPiccolo p) {
+        super(controller, p);
+    }
 
-    public PAxoObjectInstanceViewComment(AxoObjectInstanceComment model, PatchViewPiccolo p) {
-        super(model, p);
-        this.model = model;
+    @Override
+    public AxoObjectInstanceComment getModel() {
+        return (AxoObjectInstanceComment) super.getModel();
     }
 
     @Override
@@ -24,7 +28,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
 
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
 
-        instanceLabel = new PLabelComponent(model.getCommentText());
+        instanceLabel = new PLabelComponent(getModel().getCommentText());
         instanceLabel.setAlignmentX(CENTER_ALIGNMENT);
 
         addInputEventListener(new PBasicInputEventHandler() {
@@ -39,13 +43,18 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
         addChild(instanceLabel);
 
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     @Override
     public void showInstanceName(String s) {
-        if (!model.getCommentText().equals(s)) {
-            model.setCommentText(s);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (AxoObjectInstanceComment.COMMENT.is(evt)) {
+            instanceLabel.setText((String) evt.getNewValue());
         }
     }
 }

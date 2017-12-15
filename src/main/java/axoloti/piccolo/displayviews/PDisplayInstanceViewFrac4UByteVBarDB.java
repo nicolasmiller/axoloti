@@ -1,17 +1,18 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.datatypes.Value;
-import axoloti.patch.object.display.DisplayInstanceFrac4UByteVBarDB;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.components.displays.PVLineComponentDB;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
 
 public class PDisplayInstanceViewFrac4UByteVBarDB extends PDisplayInstanceViewFrac32 {
+    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    DisplayInstanceFrac4UByteVBarDB displayInstance;
-
-    public PDisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceFrac4UByteVBarDB displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+	this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
     private PVLineComponentDB vbar[];
@@ -27,16 +28,15 @@ public class PDisplayInstanceViewFrac4UByteVBarDB extends PDisplayInstanceViewFr
         }
     }
 
-    private Value getValue() {
-        //return displayInstance.getValueRef();
-        return null;
-    }
-
     @Override
-    public void updateV() {
-        vbar[0].setValue((byte) ((getValue().getRaw() & 0x000000FF)));
-        vbar[1].setValue((byte) ((getValue().getRaw() & 0x0000FF00) >> 8));
-        vbar[2].setValue((byte) ((getValue().getRaw() & 0x00FF0000) >> 16));
-        vbar[3].setValue((byte) ((getValue().getRaw() & 0xFF000000) >> 24));
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            int raw = (Integer) evt.getNewValue();
+            vbar[0].setValue((byte) ((raw & 0x000000FF)));
+            vbar[1].setValue((byte) ((raw & 0x0000FF00) >> 8));
+            vbar[2].setValue((byte) ((raw & 0x00FF0000) >> 16));
+            vbar[3].setValue((byte) ((raw & 0xFF000000) >> 24));
+        }
     }
 }

@@ -20,20 +20,19 @@ import org.piccolo2d.event.PInputEvent;
 
 public class POutletInstanceView extends PIoletAbstract implements IOutletInstanceView {
 
-    OutletInstance outletInstance;
     OutletInstanceController controller;
+    PLabelComponent label = new PLabelComponent("");
 
-    public POutletInstanceView(OutletInstance outletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    public POutletInstanceView(OutletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
-        this.outletInstance = outletInstance;
-
+	this.controller = controller;
     }
 
     private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
         @Override
         public void mouseEntered(PInputEvent e) {
             if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(outletInstance.getModel().getDescription());
+                axoObjectInstanceView.getCanvas().setToolTipText(getModel().getModel().getDescription());
             }
         }
 
@@ -53,14 +52,15 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
         addToSwingProxy(Box.createHorizontalGlue());
 
         if (axoObjectInstanceView.getModel().getType().getOutlets().size() > 1) {
-            addChild(new PLabelComponent(outletInstance.getModel().getName()));
+	    label.setText(getModel().getModel().getName());
+            addChild(label);
             addToSwingProxy(Box.createHorizontalStrut(2));
         }
-        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(outletInstance.getModel().GetSignalMetaData(), axoObjectInstanceView);
+        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(getModel().getModel().GetSignalMetaData(), axoObjectInstanceView);
         addChild(foo);
 
         jack = new PJackOutputComponent(this);
-        ((PJackOutputComponent) jack).setForeground(outletInstance.getModel().getDatatype().GetColor());
+        ((PJackOutputComponent) jack).setForeground(getModel().getModel().getDatatype().GetColor());
         addChild(jack);
 
         addInputEventListener(getInputEventHandler());
@@ -69,7 +69,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public OutletInstance getModel() {
-        return outletInstance;
+	return controller.getModel();
     }
 
     @Override
@@ -91,7 +91,11 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	if (OutletInstance.NAME.is(evt)) {
+	    label.setText((String) evt.getNewValue());
+	} else if (OutletInstance.DESCRIPTION.is(evt)) {
+	    axoObjectInstanceView.getCanvas().setToolTipText((String) evt.getNewValue());
+	}
     }
 
     @Override

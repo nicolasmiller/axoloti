@@ -10,8 +10,8 @@ import axoloti.abstractui.IAxoObjectInstanceView;
  * @author jtaelman
  */
 public class InletInstanceViewFactory {
-    
-    public static InletInstanceView createView(InletInstanceController controller, IAxoObjectInstanceView obj) {
+
+    public static IInletInstanceView createView(InletInstanceController controller, IAxoObjectInstanceView obj) {
         InletInstanceView view = new InletInstanceView(controller, (AxoObjectInstanceViewAbstract) obj);
         view.PostConstructor();
         controller.addView(view);

@@ -14,7 +14,7 @@ import org.piccolo2d.util.PPaintContext;
 public class PHRadioComponent extends PCtrlComponentAbstract {
 
     double value;
-    final int n;
+    int n;
     int bsize = 12;
 
     public PHRadioComponent(int value, int n, IAxoObjectInstanceView axoObjectInstanceView) {
@@ -86,7 +86,7 @@ public class PHRadioComponent extends PCtrlComponentAbstract {
                     v = 0;
                 }
                 fireEventAdjustmentBegin();
-                setValue(v);
+                fireValue(v);
                 ke.setHandled(true);
                 return;
             }
@@ -97,20 +97,20 @@ public class PHRadioComponent extends PCtrlComponentAbstract {
                     v = n - 1;
                 }
                 fireEventAdjustmentBegin();
-                setValue(v);
+                fireValue(v);
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_HOME: {
                 fireEventAdjustmentBegin();
-                setValue(0);
+                fireValue(0);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_END: {
                 fireEventAdjustmentBegin();
-                setValue(n - 1);
+                fireValue(n - 1);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
@@ -131,7 +131,7 @@ public class PHRadioComponent extends PCtrlComponentAbstract {
                 int i = ke.getKeyChar() - '0';
                 if (i < n) {
                     fireEventAdjustmentBegin();
-                    setValue(i);
+                    fireValue(i);
                     fireEventAdjustmentFinished();
                 }
                 ke.setHandled(true);
@@ -175,12 +175,21 @@ public class PHRadioComponent extends PCtrlComponentAbstract {
             this.value = value;
         }
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 
     @Override
     public double getValue() {
         return value;
+    }
+
+    public void setMax(int n) {
+        this.n = n;
+        setSize(getPreferredSize());
     }
 
     @Override

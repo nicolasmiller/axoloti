@@ -2,6 +2,9 @@ package axoloti.piccolo.iolet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.net.NetDrag;
+import axoloti.patch.net.NetDragging;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.piccolo.PNetDragging;
@@ -22,9 +25,16 @@ import org.piccolo2d.PNode;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceView;
+import axoloti.mvc.IView;
 
 public abstract class PIoletAbstract extends PatchPNode {
-
     public IAxoObjectInstanceView axoObjectInstanceView;
     public PLabelComponent lbl;
     public PatchPNode jack;
@@ -75,15 +85,17 @@ public abstract class PIoletAbstract extends PatchPNode {
             } else {
                 setHighlighted(true);
                 if (!axoObjectInstanceView.isLocked()) {
-                    if (dragnet == null) {
-                        dragnet = new PNetDragging(getPatchView());
-                        dragtarget = null;
-                        if (PIoletAbstract.this instanceof PInletInstanceView) {
-                            //dragnet.connectInlet((IInletInstanceView) PIoletAbstract.this);
-                        } else {
-                            //dragnet.connectOutlet((IOutletInstanceView) PIoletAbstract.this);
-                        }
+		    Net dnet = new NetDrag();
+                    NetController dragNetController = new NetController(dnet, null, getPatchView().getController());
+                    dragtarget = null;
+		    if (PIoletAbstract.this instanceof PInletInstanceView) {
+                        dragNetController.connectInlet((InletInstance) getController().getModel());
+                    } else {
+                        dragNetController.connectOutlet((OutletInstance) getController().getModel());
                     }
+                    dragnet = new PNetDragging(dnet, dragNetController, getPatchView());
+                    dragNetController.addView(dragnet);
+
                     dragnet.setVisible(true);
                     if (getPatchView() != null) {
                         getPatchView().getCanvas().getLayer().addChild(dragnet);

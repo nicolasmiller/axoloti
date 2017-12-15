@@ -26,10 +26,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import axoloti.object.ObjectInstanceController;
 
 public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract {
-
-    AxoObjectInstanceZombie model;
 
     public PatchPNode p_ioletViews;
     public PatchPNode p_inletViews;
@@ -37,11 +36,8 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     private String tooltipText = "<html>" + "Unresolved object!";
 
-    public PAxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchViewPiccolo p) {
-        super(model, p);
-        this.model = model;
-        System.out.println(model.getInletInstances().size());
-        System.out.println(model.getOutletInstances().size());
+    public PAxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewPiccolo p) {
+        super(controller, p);
     }
 
     public void PostConstructor() {
@@ -83,7 +79,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
         setPaint(Theme.getCurrentTheme().Object_Zombie_Background);
 
-        instanceLabel = new PLabelComponent(model.getInstanceName());
+        instanceLabel = new PLabelComponent(getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
 
         instanceLabel.addInputEventListener(new PBasicInputEventHandler() {
@@ -204,7 +200,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
         addToSwingProxy(Box.createVerticalGlue());
 
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     private boolean layoutFinished = false;

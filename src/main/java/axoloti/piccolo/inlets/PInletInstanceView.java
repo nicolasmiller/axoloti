@@ -21,21 +21,26 @@ import org.piccolo2d.event.PInputEvent;
 public class PInletInstanceView extends PIoletAbstract implements IInletInstanceView {
 
     InletInstancePopupMenu popup;
-    InletInstance inletInstance;
     InletInstanceController controller;
+    PLabelComponent label = new PLabelComponent("");
 
-    public PInletInstanceView(InletInstance inletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    public PInletInstanceView(InletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
-        this.inletInstance = inletInstance;
+	this.controller = controller;
 
         popup = new InletInstancePopupMenu(getController());
+    }
+
+    @Override
+    public InletInstance getModel() {
+        return controller.getModel();
     }
 
     private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
         @Override
         public void mouseEntered(PInputEvent e) {
             if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(inletInstance.getModel().getDescription());
+                axoObjectInstanceView.getCanvas().setToolTipText(getModel().getModel().getDescription());
             }
         }
 
@@ -53,24 +58,20 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
         setMaximumSize(new Dimension(32767, 14));
 
         jack = new PJackInputComponent(this);
-        ((PJackInputComponent) jack).setForeground(inletInstance.getModel().getDatatype().GetColor());
+        ((PJackInputComponent) jack).setForeground(getModel().getModel().getDatatype().GetColor());
 
         addChild(jack);
-        addChild(new PSignalMetaDataIcon(inletInstance.getModel().GetSignalMetaData(), axoObjectInstanceView));
+        addChild(new PSignalMetaDataIcon(getModel().getModel().GetSignalMetaData(), axoObjectInstanceView));
 
         if (axoObjectInstanceView.getModel().getType().getInlets().size() > 1) {
             addToSwingProxy(Box.createHorizontalStrut(3));
-            addChild(new PLabelComponent(inletInstance.getModel().getName()));
+	    label.setText(getModel().getModel().getName());
+            addChild(label);
         }
         addToSwingProxy(Box.createHorizontalGlue());
 
         addInputEventListener(getInputEventHandler());
         addInputEventListener(toolTipEventListener);
-    }
-
-    @Override
-    public InletInstance getModel() {
-        return inletInstance;
     }
 
     public void setHighlighted(boolean highlighted) {
@@ -91,7 +92,11 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (InletInstance.NAME.is(evt)) {
+	    label.setText((String) evt.getNewValue());
+        } else if (InletInstance.DESCRIPTION.is(evt)) {
+	    axoObjectInstanceView.getCanvas().setToolTipText((String) evt.getNewValue());
+        }
     }
 
     @Override

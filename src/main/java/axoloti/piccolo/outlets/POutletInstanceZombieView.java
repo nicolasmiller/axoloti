@@ -2,6 +2,7 @@ package axoloti.piccolo.outlets;
 
 import axoloti.abstractui.IOutletInstanceView;
 import axoloti.patch.object.outlet.OutletInstanceZombie;
+import axoloti.outlets.OutletInstanceController;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import axoloti.piccolo.components.PJackOutputComponent;
 import axoloti.piccolo.components.PLabelComponent;
@@ -11,11 +12,8 @@ import javax.swing.BoxLayout;
 
 public class POutletInstanceZombieView extends POutletInstanceView implements IOutletInstanceView {
 
-    OutletInstanceZombie outletInstanceZombie;
-
-    public POutletInstanceZombieView(OutletInstanceZombie outletInstanceZombie, PAxoObjectInstanceViewAbstract o) {
-        super(outletInstanceZombie, o);
-        this.outletInstanceZombie = outletInstanceZombie;
+    public POutletInstanceZombieView(OutletInstanceController controller, PAxoObjectInstanceViewAbstract o) {
+        super(controller, o);
     }
 
     @Override
@@ -24,10 +22,10 @@ public class POutletInstanceZombieView extends POutletInstanceView implements IO
         setMaximumSize(new Dimension(32767, 14));
 
         addToSwingProxy(Box.createHorizontalGlue());
-        addChild(new PLabelComponent(outletInstanceZombie.getName()));
+        addChild(new PLabelComponent(getModel().getName()));
         addToSwingProxy(Box.createHorizontalStrut(2));
         jack = new PJackOutputComponent(this);
-        jack.setForeground(outletInstanceZombie.getDataType().GetColor());
+        jack.setForeground(getModel().getDataType().GetColor());
         addChild(jack);
         addInputEventListener(getInputEventHandler());
     }

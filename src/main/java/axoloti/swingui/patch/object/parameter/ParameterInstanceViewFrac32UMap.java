@@ -65,7 +65,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 //        ctrl.setValue(getModel().getValue().getDouble());
     }
 
-
     /*
      *  Preset logic
      */

@@ -15,20 +15,55 @@ import axoloti.abstractui.IOutletInstanceView;
 import axoloti.object.outlet.Outlet;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.abstractui.IParameterInstanceView;
+
+import static java.awt.Component.LEFT_ALIGNMENT;
+import static java.awt.Component.RIGHT_ALIGNMENT;
+import static java.awt.Component.TOP_ALIGNMENT;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
+import axoloti.Theme;
+import axoloti.attribute.AttributeInstanceController;
+import axoloti.attributeviews.IAttributeInstanceView;
+import axoloti.displays.DisplayInstanceController;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceController;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.array.ArrayView;
+import axoloti.object.AxoObjectFromPatch;
+import axoloti.object.AxoObjectInstance;
+import axoloti.object.IAxoObject;
+import axoloti.object.ObjectInstanceController;
+import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceController;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.piccolo.PatchPNode;
 import axoloti.piccolo.attributeviews.PAttributeInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewFactory;
 import axoloti.piccolo.displayviews.PDisplayInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFactory;
 import axoloti.piccolo.inlets.PInletInstanceView;
+import axoloti.piccolo.inlets.PInletInstanceViewFactory;
 import axoloti.piccolo.outlets.POutletInstanceView;
+import axoloti.piccolo.outlets.POutletInstanceViewFactory;
 import axoloti.piccolo.parameterviews.PParameterInstanceView;
-import axoloti.swingui.patch.object.attribute.AttributeInstanceView;
+
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.preferences.Preferences;
 import axoloti.piccolo.components.PLabelComponent;
-import static java.awt.Component.LEFT_ALIGNMENT;
-import static java.awt.Component.RIGHT_ALIGNMENT;
-import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -41,15 +76,16 @@ import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
+import axoloti.piccolo.parameterviews.PParameterInstanceViewFactory;
+
 public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
 
     public static final int MIN_HEIGHT = 40;
     public static final int MIN_WIDTH = 80;
 
-    private AxoObjectInstance model;
-
     PLabelComponent IndexLabel;
 
+    public PatchPNode p_attributeViews;
     public PatchPNode p_parameterViews;
     public PatchPNode p_displayViews;
     public PatchPNode p_ioletViews;
@@ -63,14 +99,24 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     String tooltipText = "<html>";
 
-    public PAxoObjectInstanceView(AxoObjectInstance model, PatchViewPiccolo patchView) {
-        super(model, patchView);
-        this.model = model;
+    public PAxoObjectInstanceView(ObjectInstanceController controller, PatchViewPiccolo patchView) {
+        super(controller, patchView);
     }
 
-    public AxoObject getType() {
-        return (AxoObject)model.getType();
+    @Override
+    public AxoObjectInstance getModel() {
+        return (AxoObjectInstance) super.getModel();
     }
+
+    public IAxoObject getType() {
+        return getModel().getType();
+    }
+
+    List<IInletInstanceView> inletInstanceViews;
+    List<IOutletInstanceView> outletInstanceViews;
+    List<IAttributeInstanceView> attributeInstanceViews;
+    List<IParameterInstanceView> parameterInstanceViews;
+    List<IDisplayInstanceView> displayInstanceViews;
 
     @Override
     public void PostConstructor() {
@@ -78,7 +124,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         setPaint(Theme.getCurrentTheme().Object_Default_Background);
         //model.updateObj1();
 
-        setLocation(model.getX(), model.getY());
+        setLocation(getModel().getX(), getModel().getY());
         setDrawBorder(true);
 
         p_parameterViews = new PatchPNode(patchView);
@@ -103,6 +149,13 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         p_inletViews.setAlignmentY(TOP_ALIGNMENT);
         p_inletViews.setPickable(false);
 
+	p_attributeViews = new PatchPNode(patchView);
+        p_attributeViews.setLayout(new BoxLayout(
+				   p_attributeViews.getProxyComponent(),
+				   BoxLayout.PAGE_AXIS));
+        p_attributeViews.setAlignmentX(LEFT_ALIGNMENT);
+        p_attributeViews.setPickable(false);
+
         p_outletViews = new PatchPNode(patchView);
         p_outletViews.setLayout(new BoxLayout(p_outletViews.getProxyComponent(), BoxLayout.PAGE_AXIS));
         p_outletViews.setPickable(false);
@@ -124,7 +177,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         titleBar.addChild(popupIcon);
 
-        PLabelComponent titleBarLabel = new PLabelComponent(model.getController().getModel().getId());
+        PLabelComponent titleBarLabel = new PLabelComponent(getModel().getTypeName());
         titleBarLabel.setAlignmentX(LEFT_ALIGNMENT);
         titleBarLabel.setPickable(false);
 
@@ -136,7 +189,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         addChild(titleBar);
 
-        instanceLabel = new PLabelComponent(model.getInstanceName());
+        instanceLabel = new PLabelComponent(getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
 
         addChild(instanceLabel);
@@ -162,63 +215,61 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         p_displayViews.addToSwingProxy(Box.createHorizontalGlue());
         p_parameterViews.addToSwingProxy(Box.createHorizontalGlue());
-        for (Inlet inlet : getType().getInlets()) {
-            InletInstance inletInstanceP = null;
-            for (InletInstance inletInstance : pInletInstances) {
-                if (inletInstance.GetLabel().equals(inlet.getName())) {
-                    inletInstanceP = inletInstance;
-                }
-            }
+
+//        for (Inlet inlet : getType().getInlets()) {
+//            InletInstance inletInstanceP = null;
+//            for (InletInstance inletInstance : pInletInstances) {
+//                if (inletInstance.GetLabel().equals(inlet.getName())) {
+//                    inletInstanceP = inletInstance;
+//                }
+//            }
 //            InletInstance inletInstance = new InletInstance(inlet, getModel());
-            if (inletInstanceP != null) {
+//            if (inletInstanceP != null) {
 //                Net n = getPatchModel().GetNet(inletInstanceP);
 //                if (n != null) {
 //                    n.connectInlet(inletInstance);
 //                }
-            }
+//            }
 //            getModel().getInletInstances().add(inletInstance);
             // TODO: PICCOLO view factory
             PInletInstanceView view = null; // (PInletInstanceView) inletInstance.createView(this);
-            view.setAlignmentX(LEFT_ALIGNMENT);
+//            view.setAlignmentX(LEFT_ALIGNMENT);
             //inletInstanceViews.add(view);
-        }
+//        }
 
         // disconnect stale inlets from nets
-        for (InletInstance inletInstance : pInletInstances) {
+//        for (InletInstance inletInstance : pInletInstances) {
 //            getPatchModel().disconnect(inletInstance);
-        }
+//        }
 
-        for (Outlet o : getType().getOutlets()) {
-            OutletInstance outletInstanceP = null;
-            for (OutletInstance outletInstance : pOutletInstances) {
-                if (outletInstance.GetLabel().equals(o.getName())) {
-                    outletInstanceP = outletInstance;
-                }
-            }
+//        for (Outlet o : getType().getOutlets()) {
+//            OutletInstance outletInstanceP = null;
+//            for (OutletInstance outletInstance : pOutletInstances) {
+//                if (outletInstance.GetLabel().equals(o.getName())) {
+//                    outletInstanceP = outletInstance;
+//                }
+//            }
 //            OutletInstance outletInstance = new OutletInstance(o, getModel());
-            if (outletInstanceP != null) {
+//            if (outletInstanceP != null) {
 //                Net n = getPatchModel().GetNet(outletInstanceP);
 //                if (n != null) {
 //                    n.connectOutlet(outletInstance);
 //                }
-            }
-//            getModel().getOutletInstances().add(outletInstance);            
-            POutletInstanceView view = null;
+//            }
+//            getModel().getOutletInstances().add(outletInstance);
+//            POutletInstanceView view = null;
             // TODO: PICCOLO view factory
-            // ... = (POutletInstanceView) outletInstance.createView(this);            
-            view.setAlignmentX(RIGHT_ALIGNMENT);
+            // ... = (POutletInstanceView) outletInstance.createView(this);
+//            view.setAlignmentX(RIGHT_ALIGNMENT);
             //outletInstanceViews.add(view);
-        }
+//        }
 
         // disconnect stale outlets from nets
-        for (OutletInstance outletInstance : pOutletInstances) {
+//        for (OutletInstance outletInstance : pOutletInstances) {
 //            getPatchModel().disconnect(outletInstance);
-        }
+//        }
 
-        p_ioletViews.addChild(p_inletViews);
-        p_ioletViews.addToSwingProxy(Box.createHorizontalGlue());
-        p_ioletViews.addChild(p_outletViews);
-        addChild(p_ioletViews);
+
 /*
         for (AxoAttribute p : getType().attributes) {
             AttributeInstance attributeInstanceP = null;
@@ -250,15 +301,20 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             getModel().getParameterInstances().add(pin);
         }
 */
-        for (Display p : getType().displays) {
+//        for (Display p : getType().displays) {
 //            DisplayInstance pin = p.CreateInstance(getModel());
-            PDisplayInstanceView view = null; 
+//            PDisplayInstanceView view = null;
             // TODO: implement PICCOLO view factory
             // ... = (PDisplayInstanceView) pin.createView(this);
-            view.setAlignmentX(RIGHT_ALIGNMENT);
+//            view.setAlignmentX(RIGHT_ALIGNMENT);
 //            getModel().getDisplayInstances().add(pin);
-        }
+//        }
 
+	p_ioletViews.addChild(p_inletViews);
+        p_ioletViews.addToSwingProxy(Box.createHorizontalGlue());
+        p_ioletViews.addChild(p_outletViews);
+        addChild(p_ioletViews);
+	addChild(p_attributeViews);
         addChild(p_parameterViews);
         addChild(p_displayViews);
         addToSwingProxy(Box.createVerticalGlue());
@@ -295,7 +351,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         validate();
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     private void showReplaceClassSelector(PInputEvent e) {
@@ -316,6 +372,122 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
         if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
             tooltipText += "<p>Path: " + getType().getPath();
+        }
+    }
+
+    ArrayView<IInletInstanceView> inletInstanceViewSync = new ArrayView<IInletInstanceView>() {
+	    @Override
+	    public IInletInstanceView viewFactory(AbstractController ctrl) {
+		return PInletInstanceViewFactory.createView((InletInstanceController) ctrl, PAxoObjectInstanceView.this);
+	    }
+
+	    @Override
+	    public void updateUI(List<IInletInstanceView> views) {
+		p_inletViews.removeAllChildren();
+		for (IInletInstanceView c : views) {
+		    p_inletViews.addChild((PatchPNode) c);
+		}
+		resizeToGrid();
+	    }
+
+	    @Override
+	    public void removeView(IInletInstanceView view) {
+	    }
+	};
+
+    ArrayView<IOutletInstanceView> outletInstanceViewSync = new ArrayView<IOutletInstanceView>() {
+	    @Override
+	    public IOutletInstanceView viewFactory(AbstractController ctrl) {
+		return POutletInstanceViewFactory.createView((OutletInstanceController) ctrl, PAxoObjectInstanceView.this);
+	    }
+
+	    @Override
+	    public void updateUI(List<IOutletInstanceView> views) {
+		p_outletViews.removeAllChildren();
+		for (IOutletInstanceView c : views) {
+		    p_outletViews.addChild((PatchPNode) c);
+		}
+		resizeToGrid();
+	    }
+
+	    @Override
+	    public void removeView(IOutletInstanceView view) {
+	    }
+	};
+
+    ArrayView<IAttributeInstanceView> attributeInstanceViewSync = new ArrayView<IAttributeInstanceView>() {
+            @Override
+            public IAttributeInstanceView viewFactory(AbstractController ctrl) {
+                return PAttributeInstanceViewFactory.createView((AttributeInstanceController) ctrl, PAxoObjectInstanceView.this);
+            }
+
+            @Override
+            public void updateUI(List<IAttributeInstanceView> views) {
+                p_attributeViews.removeAllChildren();
+                for (IAttributeInstanceView c : views) {
+                    p_attributeViews.addChild((PatchPNode) c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IAttributeInstanceView view) {
+            }
+        };
+
+    ArrayView<IParameterInstanceView> parameterInstanceViewSync = new ArrayView<IParameterInstanceView>() {
+            @Override
+            public IParameterInstanceView viewFactory(AbstractController ctrl) {
+                return PParameterInstanceViewFactory.createView((ParameterInstanceController) ctrl, PAxoObjectInstanceView.this);
+            }
+
+            @Override
+            public void updateUI(List<IParameterInstanceView> views) {
+                p_parameterViews.removeAllChildren();
+                for (IParameterInstanceView c : views) {
+                    p_parameterViews.addChild((PatchPNode) c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IParameterInstanceView view) {
+            }
+        };
+
+    ArrayView<IDisplayInstanceView> displayInstanceViewSync = new ArrayView<IDisplayInstanceView>() {
+            @Override
+            public IDisplayInstanceView viewFactory(AbstractController ctrl) {
+                return PDisplayInstanceViewFactory.createView((DisplayInstanceController) ctrl, PAxoObjectInstanceView.this);
+            }
+
+            @Override
+            public void updateUI(List<IDisplayInstanceView> views) {
+                p_displayViews.removeAllChildren();
+                for (IDisplayInstanceView c : views) {
+                    p_displayViews.addChild((PatchPNode) c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IDisplayInstanceView view) {
+            }
+        };
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (AxoObjectInstance.OBJ_INLET_INSTANCES.is(evt)) {
+            inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().inletInstanceControllers);
+        } else if (AxoObjectInstance.OBJ_OUTLET_INSTANCES.is(evt)) {
+            outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().outletInstanceControllers);
+        } else if (AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES.is(evt)) {
+            attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().attributeInstanceControllers);
+        } else if (AxoObjectInstance.OBJ_PARAMETER_INSTANCES.is(evt)) {
+            parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().parameterInstanceControllers);
+        } else if (AxoObjectInstance.OBJ_DISPLAY_INSTANCES.is(evt)) {
+            displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().displayInstanceControllers);
         }
     }
 
@@ -367,7 +539,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             popup.add(popm_adapt);
         }
 
-        if (model.getType() instanceof AxoObjectFromPatch) {
+        if (getModel().getType() instanceof AxoObjectFromPatch) {
             JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
@@ -400,15 +572,13 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     public void OpenEditor() {
-        getType().OpenEditor(model.editorBounds, model.editorActiveTabIndex);
+	getType().OpenEditor(getModel().editorBounds, getModel().editorActiveTabIndex);
     }
-
-    public ArrayList<AttributeInstanceView> attributeInstanceViews = new ArrayList<AttributeInstanceView>();
 
     @Override
     public void Lock() {
         super.Lock();
-        for (AttributeInstanceView a : attributeInstanceViews) {
+        for (IAttributeInstanceView a : attributeInstanceViews) {
             a.Lock();
         }
     }
@@ -416,7 +586,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     @Override
     public void Unlock() {
         super.Unlock();
-        for (AttributeInstanceView a : attributeInstanceViews) {
+        for (IAttributeInstanceView a : attributeInstanceViews) {
             a.UnLock();
         }
         if (deferredObjTypeUpdate) {
@@ -426,23 +596,18 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public AxoObjectInstance getModel() {
-        return model;
-    }
-
-    @Override
     public List<IInletInstanceView> getInletInstanceViews() {
-        return null;//inletInstanceViews;
+        return inletInstanceViews;
     }
 
     @Override
     public List<IOutletInstanceView> getOutletInstanceViews() {
-        return null;//outletInstanceViews;
+        return outletInstanceViews;
     }
 
     @Override
     public List<IParameterInstanceView> getParameterInstanceViews() {
-        return null;//parameterInstanceViews;
+        return parameterInstanceViews;
     }
 
     @Override

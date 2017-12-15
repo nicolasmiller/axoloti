@@ -1,16 +1,16 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.patch.object.display.DisplayInstanceFrac32VU;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.displays.PVUComponent;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
 
 public class PDisplayInstanceViewFrac32VU extends PDisplayInstanceViewFrac32 {
+    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    DisplayInstanceFrac32VU displayInstance;
-
-    public PDisplayInstanceViewFrac32VU(DisplayInstanceFrac32VU displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewFrac32VU(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+	this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
     private PVUComponent vu;
@@ -25,7 +25,10 @@ public class PDisplayInstanceViewFrac32VU extends PDisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        //vu.setValue(displayInstance.getValueRef().getDouble());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            vu.setValue((Double) evt.getNewValue());
+        }
     }
 }
