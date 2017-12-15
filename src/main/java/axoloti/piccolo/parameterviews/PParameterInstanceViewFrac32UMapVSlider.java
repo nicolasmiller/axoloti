@@ -6,11 +6,12 @@ import axoloti.Theme;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
 import components.piccolo.control.PVSliderComponent;
+import axoloti.parameters.ParameterInstanceController;
 
 public class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceViewFrac32U {
 
-    public PParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewFrac32UMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -44,11 +45,11 @@ public class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceV
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(getModel().getValue());
         }
-        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
+//        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);
-        } else {
+//        } else {
 //            lblPreset.setVisible(false);
-        }
+//        }
     }
 
     @Override

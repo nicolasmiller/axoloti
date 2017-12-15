@@ -17,7 +17,6 @@ import javax.swing.event.DocumentListener;
 class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
     JTextField TFObjName;
-    JLabel vlabel;
 
     AttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

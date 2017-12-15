@@ -1,27 +1,27 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceInt32VRadio;
-import axoloti.parameters.ParameterInt32VRadio;
-import components.piccolo.PAssignMidiCCMenuItems;
-import components.piccolo.control.PVRadioComponent;
+import java.beans.PropertyChangeEvent;
+
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
+import axoloti.parameters.ParameterInt32;
+import axoloti.parameters.ParameterInt32VRadio;
+
+import components.piccolo.PAssignMidiCCMenuItems;
+import components.piccolo.control.PVRadioComponent;
+
 public class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32VRadio(ParameterInstanceInt32VRadio parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue());
+    public PParameterInstanceViewInt32VRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public PVRadioComponent CreateControl() {
-        return null;//new PVRadioComponent(0, ((ParameterInt32VRadio) parameterInstance.getModel()).MaxValue.getInt(), axoObjectInstanceView);
+        return new PVRadioComponent(0, ((ParameterInt32VRadio) getModel().getModel()).getMaxValue(), axoObjectInstanceView);
     }
 
     @Override
@@ -36,5 +36,13 @@ public class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt
         // AssignMidiCCMenuItems, does stuff in ctor
         PAssignMidiCCMenuItems assignMidiCCMenuItems = new PAssignMidiCCMenuItems(this, m1);
         m.add(m1);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInt32.VALUE_MAX.is(evt)) {
+            getControlComponent().setMax((Integer) evt.getNewValue());
+        }
     }
 }

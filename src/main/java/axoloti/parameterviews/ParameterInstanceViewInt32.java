@@ -17,9 +17,9 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
     @Override
     public ParameterInstanceInt32 getModel() {
-        return (ParameterInstanceInt32)controller.getModel();
-    }    
-    
+        return (ParameterInstanceInt32) controller.getModel();
+    }
+
     @Override
     public void ShowPreset(int i) {
         presetEditActive = i;
@@ -61,7 +61,7 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
         } else if (ParameterInt32.VALUE_MIN.is(evt)) {
 //            ctrl.
         }
-        
+
     }
-    
+
 }

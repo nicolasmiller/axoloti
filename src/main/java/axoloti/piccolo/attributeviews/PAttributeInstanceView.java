@@ -14,11 +14,13 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
 
     IAxoObjectInstanceView axoObjectInstanceView;
 
-    AttributeInstance attributeInstance;
+    final AttributeInstanceController controller;
 
-    PAttributeInstanceView(AttributeInstance attributeInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PLabelComponent label;
+
+    PAttributeInstanceView(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
-        this.attributeInstance = attributeInstance;
+        this.controller = controller;
         this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
@@ -31,40 +33,44 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
-        addChild(new PLabelComponent(attributeInstance.getModel().getName()));
+        label = new PLabelComponent(getModel().getModel().getName());
+        addChild(label);
         setSize(getPreferredSize());
-    }
-
-    @Override
-    public String getName() {
-        if (attributeInstance != null) {
-            return attributeInstance.getName();
-        } else {
-            return super.getName();
+        String description = getModel().getModel().getDescription();
+        if (description != null) {
+            setToolTipText(description);
         }
-    }
-
-    public PatchView getPatchView() {
-        return axoObjectInstanceView.getPatchView();
     }
 
     @Override
     public AttributeInstance getModel() {
-        return attributeInstance;
+        return getController().getModel();
     }
 
     @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    // public PatchView getPatchView() {
+    //     return axoObjectInstanceView.getPatchView();
+    // }
+
+    @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (AttributeInstance.NAME.is(evt)) {
+            label.setText((String) evt.getNewValue());
+        } else if (AttributeInstance.DESCRIPTION.is(evt)) {
+            setToolTipText((String) evt.getNewValue());
+        }
     }
 
     @Override
     public AttributeInstanceController getController() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return controller;
     }
 
     @Override
     public void dispose() {
     }
-
 }

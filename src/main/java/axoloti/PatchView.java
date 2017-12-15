@@ -56,6 +56,8 @@ import qcmds.QCmdStart;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
 
+import axoloti.piccolo.PNetView;
+
 public abstract class PatchView extends PatchAbstractView {
 
     // shortcut patch names
@@ -70,14 +72,14 @@ public abstract class PatchView extends PatchAbstractView {
 
     List<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
     List<INetView> netViews = new ArrayList<>();
-    
+
     PatchView(PatchController patchController) {
         super(patchController);
     }
 
     public void PostConstructor() {
 
-        
+
     }
 
     public List<IAxoObjectInstanceView> getObjectInstanceViews() {
@@ -263,7 +265,7 @@ public abstract class PatchView extends PatchAbstractView {
         for(String module : getController().getModel().getModules()) {
            qCmdProcessor.AppendToQueue(
                    new QCmdCompileModule(getController(),
-                           module, 
+                           module,
                            getController().getModel().getModuleDir(module)));
         }
         qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getController()));
@@ -337,7 +339,7 @@ public abstract class PatchView extends PatchAbstractView {
         }
         return b;
     }
-    
+
     public static PatchFrame OpenPatchModel(PatchModel pm, String fileNamePath) {
         if (fileNamePath == null) {
             fileNamePath = "untitled";
@@ -465,7 +467,7 @@ public abstract class PatchView extends PatchAbstractView {
         return new Dimension(mx, my);
     }
 
-    IAxoObjectInstanceView getObjectInstanceView(IAxoObjectInstance o) {
+    public IAxoObjectInstanceView getObjectInstanceView(IAxoObjectInstance o) {
         for (IAxoObjectInstanceView o2 : objectInstanceViews) {
             if (o2.getModel() == o) {
                 return o2;
@@ -537,11 +539,11 @@ public abstract class PatchView extends PatchAbstractView {
         }
         */
     }
-    
+
     ArrayView<IAxoObjectInstanceView> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView>() {
         @Override
         public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
-            IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, (PatchViewSwing) PatchView.this);
+            IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, PatchView.this);
             view.PostConstructor();
             add(view);
             return view;
@@ -562,12 +564,22 @@ public abstract class PatchView extends PatchAbstractView {
     ArrayView<INetView> netViewSync = new ArrayView<INetView>() {
         @Override
         public INetView viewFactory(AbstractController ctrl) {
-            INetView view = new NetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewSwing) PatchView.this);
-            view.PostConstructor();
-            ctrl.addView(view);
-            add(view);
-            view.repaint();
-            return view;
+	    if(PatchView.this instanceof PatchViewSwing) {
+		INetView view = new NetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewSwing) PatchView.this);
+		view.PostConstructor();
+		ctrl.addView(view);
+		add(view);
+		view.repaint();
+		return view;
+	    }
+	    else {
+		INetView view = new PNetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewPiccolo) PatchView.this);
+		view.PostConstructor();
+		ctrl.addView(view);
+		add(view);
+		view.repaint();
+		return view;
+	    }
         }
 
         @Override
@@ -629,9 +641,9 @@ public abstract class PatchView extends PatchAbstractView {
                     }
                     dtde.dropComplete(true);
                 } catch (UnsupportedFlavorException ex) {
-                    Logger.getLogger(PatchViewSwing.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
-                    Logger.getLogger(PatchViewSwing.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return;
             }

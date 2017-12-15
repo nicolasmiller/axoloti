@@ -363,12 +363,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 c = new ObjectInstanceController(objectInstance, null, null);
             }
 
-            AxoObjectInstanceViewAbstract objectInstanceView = AxoObjectInstanceViewFactory.createView(c, null);
+            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.createView(c, (PatchViewSwing) null);
             jPanel1.removeAll();
-            jPanel1.add(objectInstanceView);
+            jPanel1.add((AxoObjectInstanceViewAbstract) objectInstanceView);
             objectInstanceView.resizeToGrid();
             jPanel1.repaint();  //reqd, as removed object may be smaller than new object
-           
+
             IAxoObject t = objectInstanceView.getModel().getType();
             if (t != null) {
                 String description = t.getDescription() == null || t.getDescription().isEmpty() ? o.getDescription() : t.getDescription();

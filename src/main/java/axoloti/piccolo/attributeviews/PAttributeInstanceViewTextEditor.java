@@ -1,42 +1,36 @@
 package axoloti.piccolo.attributeviews;
 
+import javax.swing.SwingUtilities;
+
+import axoloti.DocumentWindow;
 import axoloti.TextEditor;
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceTextEditor;
 import axoloti.objectviews.IAxoObjectInstanceView;
+
 import components.piccolo.control.PButtonComponent;
 
 public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
-    AttributeInstanceTextEditor attributeInstance;
     PButtonComponent bEdit;
-    TextEditor editor;
 
-    public PAttributeInstanceViewTextEditor(AttributeInstanceTextEditor attributeInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public PAttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceTextEditor getModel() {
+        return (AttributeInstanceTextEditor) super.getModel();
     }
 
     void showEditor() {
-        if (editor == null) {/*
-            editor = new TextEditor(attributeInstance.getStringRef(), null);
-            // fixme DocumentWindow null arg was: getPatchView().getPatchController().getPatchFrame());
-            editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getModel().getName());
-            editor.addWindowFocusListener(new WindowFocusListener() {
-                @Override
-                public void windowGainedFocus(WindowEvent e) {
-                    //attributeInstance.setValueBeforeAdjustment(attributeInstance.getStringRef().s);
-                }
-
-                @Override
-                public void windowLostFocus(WindowEvent e) {
-                    //if (!attributeInstance.getValueBeforeAdjustment().equals(attributeInstance.getStringRef().s)) {
-                    //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                    //}
-                }
-            });*/
+        if (getModel().editor == null) {
+            DocumentWindow dw = (DocumentWindow) SwingUtilities.getWindowAncestor(this.getProxyComponent());
+            getModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getController(), dw);
+            getModel().editor.setTitle(getController().getParent().getModel().getInstanceName() + "/" + getModel().getModel().getName());
         }
-        editor.setState(java.awt.Frame.NORMAL);
-        editor.setVisible(true);
+        getModel().editor.setState(java.awt.Frame.NORMAL);
+        getModel().editor.setVisible(true);
     }
 
     @Override
@@ -67,14 +61,15 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
     }
 
     @Override
-    public String getString() {
-        return attributeInstance.getValue();
+    public void setString(String sText) {
+        getModel().setValue(sText);
+        if (getModel().editor != null) {
+            getModel().editor.SetText(sText);
+        }
     }
 
     @Override
-    public void setString(String sText) {
-        if (editor != null) {
-            editor.SetText(sText);
-        }
+    public void dispose() {
+        super.dispose();
     }
 }

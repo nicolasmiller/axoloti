@@ -88,7 +88,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         initComponents();
         fileMenu1.initComponents();
-        patchView = new PatchViewSwing(patchController);
+//        patchView = new PatchViewSwing(patchController);
+	patchView = new PatchViewPiccolo(patchController);
         patchView.PostConstructor();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -126,7 +127,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         getContentPane().add(jScrollPane1);
 
         jMenuEdit.add(undoUi.createMenuItemUndo());
-        jMenuEdit.add(undoUi.createMenuItemRedo());      
+        jMenuEdit.add(undoUi.createMenuItemRedo());
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -245,9 +246,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 askClose();
             }
         });
-        
+
         patchController.addView(this);
-        patchController.addView(patchView);        
+        patchController.addView(patchView);
     }
 
     private void initializeZoomMenuItems() {
@@ -297,7 +298,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public PatchController getController() {
         return patchController;
     }
-    
+
     QCmdProcessor qcmdprocessor;
 
     private void setLive(boolean b) {

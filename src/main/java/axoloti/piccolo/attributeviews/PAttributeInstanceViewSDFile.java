@@ -1,32 +1,41 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PTextFieldComponent;
-import components.piccolo.control.PButtonComponent;
 import java.awt.Dimension;
+import java.awt.Window;
+
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
+import axoloti.attribute.AttributeInstanceController;
+import axoloti.attribute.AttributeInstanceSDFile;
+import axoloti.objectviews.IAxoObjectInstanceView;
 
-    AttributeInstanceSDFile attributeInstance;
+import components.piccolo.PTextFieldComponent;
+import components.piccolo.control.PButtonComponent;
+
+public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFFileName;
     PButtonComponent ButtonChooseFile;
 
-    public PAttributeInstanceViewSDFile(AttributeInstanceSDFile attributeInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public PAttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceSDFile getModel() {
+        return (AttributeInstanceSDFile) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFFileName = new PTextFieldComponent(attributeInstance.getValue());
+        TFFileName = new PTextFieldComponent(getModel().getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
@@ -37,7 +46,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
         addChild(TFFileName);
         TFFileName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {
-                attributeInstance.setValue(TFFileName.getText());
+//                attributeInstance.setValue(TFFileName.getText());
             }
 
             @Override
@@ -64,27 +73,25 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                //attributeInstance.setValueBeforeAdjustment(TFFileName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,TFFileName.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                //if (!TFFileName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                //}
+                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,TFFileName.getText());
             }
         });
         ButtonChooseFile = new PButtonComponent("choose", axoObjectInstanceView);
         ButtonChooseFile.addActListener(new PButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(attributeInstance.getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
-                int returnVal = fc.showOpenDialog(null); // FIXME: parent frame, was: getPatchView().getPatchController().getPatchFrame());
+                JFileChooser fc = new JFileChooser(getModel().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
+                Window window = SwingUtilities.getWindowAncestor(PAttributeInstanceViewSDFile.this.getProxyComponent());
+                int returnVal = fc.showOpenDialog(window);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String f = attributeInstance.toRelative(fc.getSelectedFile());
-                    TFFileName.setText(f);
-                    if (!f.equals(attributeInstance.getValue())) {
-                        attributeInstance.setValue(f);
+                    String f = getModel().toRelative(fc.getSelectedFile());
+                    if (!f.equals(getModel().getValue())) {
+                        getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, f);
                     }
                 }
             }
@@ -113,13 +120,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
     }
 
     @Override
-    public String getString() {
-        return attributeInstance.getValue();
-    }
-
-    @Override
     public void setString(String tableName) {
-        attributeInstance.setValue(tableName);
         if (TFFileName != null) {
             TFFileName.setText(tableName);
         }

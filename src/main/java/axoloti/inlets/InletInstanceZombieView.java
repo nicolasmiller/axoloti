@@ -9,7 +9,7 @@ public class InletInstanceZombieView extends InletInstanceView {
 
 
     public InletInstanceZombieView(InletInstanceController controller, AxoObjectInstanceViewAbstract o) {
-        super( controller, o);
+        super(controller, o);
     }
 
     @Override

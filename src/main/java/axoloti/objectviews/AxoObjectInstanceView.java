@@ -109,7 +109,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
                 return d;
             }
-            
+
         });*/
 
         final PopupIcon popupIcon = new PopupIcon();
@@ -221,10 +221,10 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         setVisible(true);
         revalidate();
     }
-    
+
     ArrayView<IInletInstanceView> inletInstanceViewSync = new ArrayView<IInletInstanceView>() {
         @Override
-        public InletInstanceView viewFactory(AbstractController ctrl) {
+        public IInletInstanceView viewFactory(AbstractController ctrl) {
             return InletInstanceViewFactory.createView((InletInstanceController) ctrl, AxoObjectInstanceView.this);
         }
 
@@ -321,7 +321,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             public void removeView(IDisplayInstanceView view) {
             }
         };
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
@@ -337,8 +337,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().displayInstanceControllers);
         }
     }
-    
-    
+
+
     @Override
     JPopupMenu CreatePopupMenu() {
         JPopupMenu popup = super.CreatePopupMenu();

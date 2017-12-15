@@ -1,18 +1,20 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceInt32HexLabel;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PLabelComponent;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
+import axoloti.objectviews.IAxoObjectInstanceView;
+
+import components.piccolo.PLabelComponent;
 
 public class PDisplayInstanceViewInt32HexLabel extends PDisplayInstanceViewInt32 {
 
-    private DisplayInstanceInt32HexLabel displayInstance;
     private PLabelComponent readout;
 
-    public PDisplayInstanceViewInt32HexLabel(DisplayInstanceInt32HexLabel displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewInt32HexLabel(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -25,7 +27,11 @@ public class PDisplayInstanceViewInt32HexLabel extends PDisplayInstanceViewInt32
     }
 
     @Override
-    public void updateV() {
-        //readout.setText(String.format("0x%08X", displayInstance.getValueRef().getInt()));
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            int i = (Integer) evt.getNewValue();
+            readout.setText(String.format("0x%08X", i));
+        }
     }
 }

@@ -3,23 +3,33 @@ package axoloti.piccolo.objectviews;
 import axoloti.PatchViewPiccolo;
 import axoloti.object.AxoObjectInstancePatcher;
 import components.piccolo.control.PButtonComponent;
+import axoloti.object.ObjectInstanceController;
+import axoloti.object.ObjectInstancePatcherController;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
 
 public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
 
-    AxoObjectInstancePatcher model;
     private PButtonComponent BtnUpdate;
 
-    public PAxoObjectInstanceViewPatcher(AxoObjectInstancePatcher model, PatchViewPiccolo p) {
-        super(model, p);
-        this.model = model;
+    public PAxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewPiccolo p) {
+        super(controller, p);
     }
 
     public void edit() {
         //model.init();
         //model.pf.setState(java.awt.Frame.NORMAL);
         //model.pf.setVisible(true);
+    }
+
+    @Override
+    public AxoObjectInstancePatcher getModel() {
+        return (AxoObjectInstancePatcher) super.getModel();
+    }
+
+    @Override
+    public ObjectInstancePatcherController getController() {
+        return (ObjectInstancePatcherController) super.getController();
     }
 
     @Override
@@ -47,7 +57,7 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
         });
         addChild(BtnUpdate);
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     @Override

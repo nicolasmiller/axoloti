@@ -1,18 +1,21 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceFrac32UDial;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
 import axoloti.objectviews.IAxoObjectInstanceView;
+
 import components.piccolo.displays.PDispComponent;
 
 public class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 {
 
     private PDispComponent dial;
+    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    DisplayInstanceFrac32UDial displayInstance;
-
-    public PDisplayInstanceViewFrac32UDial(DisplayInstanceFrac32UDial displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewFrac32UDial(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+	this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
     @Override
@@ -24,7 +27,10 @@ public class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 
     }
 
     @Override
-    public void updateV() {
-        //dial.setValue(displayInstance.getValueRef().getDouble());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            dial.setValue((Double) evt.getNewValue());
+        }
     }
 }

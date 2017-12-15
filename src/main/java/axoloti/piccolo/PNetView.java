@@ -1,12 +1,5 @@
 package axoloti.piccolo;
 
-import axoloti.INetView;
-import axoloti.Net;
-import axoloti.PatchViewPiccolo;
-import axoloti.Theme;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.mvc.AbstractController;
-import axoloti.outlets.IOutletInstanceView;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -18,7 +11,21 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.piccolo2d.util.PPaintContext;
+
+import axoloti.INetView;
+import axoloti.Net;
+import axoloti.NetController;
+import axoloti.PatchViewPiccolo;
+import axoloti.Theme;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractController;
+import axoloti.object.IAxoObjectInstance;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
 
 public class PNetView extends PatchPNode implements INetView {
 
@@ -27,14 +34,46 @@ public class PNetView extends PatchPNode implements INetView {
     protected Net net;
     protected boolean selected = false;
 
-    public PNetView(Net net, PatchViewPiccolo patchView) {
+    NetController controller;
+
+    public PNetView(Net net, NetController controller, PatchViewPiccolo patchView) {
         super(patchView);
         this.net = net;
+	this.controller = controller;
         setPickable(false);
     }
 
     @Override
     public void PostConstructor() {
+        source.clear();
+        dest.clear();
+        // resolve inlet/outlet views
+        for (OutletInstance i : net.getSources()) {
+            IAxoObjectInstance o = i.getObjectInstance();
+            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            if (ov == null) {
+                throw new Error("no corresponding outlet instance view found");
+            }
+            for (IOutletInstanceView o2 : ov.getOutletInstanceViews()) {
+                if (o2.getController().getModel() == i) {
+                    source.add(o2);
+                    break;
+                }
+            }
+        }
+        for (InletInstance i : net.getDestinations()) {
+            IAxoObjectInstance o = i.getObjectInstance();
+            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            if (ov == null) {
+                throw new Error("no corresponding inlet instance view found");
+            }
+            for (IInletInstanceView o2 : ov.getInletInstanceViews()) {
+                if (o2.getController().getModel() == i) {
+                    dest.add(o2);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -246,12 +285,17 @@ public class PNetView extends PatchPNode implements INetView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	if (Net.NET_SOURCES.is(evt)
+	    || Net.NET_DESTINATIONS.is(evt)) {
+            PostConstructor();
+            updateBounds();
+            repaint();
+        }
     }
 
     @Override
     public AbstractController getController() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	return controller;
     }
 
     @Override

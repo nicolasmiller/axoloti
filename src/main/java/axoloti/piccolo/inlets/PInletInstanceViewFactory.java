@@ -1,17 +1,14 @@
-
-package axoloti.inlets;
+package axoloti.piccolo.inlets;
 
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.inlets.InletInstanceController;
+import axoloti.inlets.IInletInstanceView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 
-/**
- *
- * @author jtaelman
- */
-public class InletInstanceViewFactory {
+public class PInletInstanceViewFactory {
 
     public static IInletInstanceView createView(InletInstanceController controller, IAxoObjectInstanceView obj) {
-        InletInstanceView view = new InletInstanceView(controller, (AxoObjectInstanceViewAbstract) obj);
+        IInletInstanceView view = new PInletInstanceView(controller, obj);
         view.PostConstructor();
         controller.addView(view);
         return view;

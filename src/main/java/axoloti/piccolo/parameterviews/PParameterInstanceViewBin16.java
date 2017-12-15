@@ -2,13 +2,13 @@ package axoloti.piccolo.parameterviews;
 
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin16;
+import axoloti.parameters.ParameterInstanceController;
 import components.piccolo.control.PCheckboxComponent;
 
 public class PParameterInstanceViewBin16 extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin16(ParameterInstanceBin16 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewBin16(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class PParameterInstanceViewBin16 extends PParameterInstanceViewBin {
 
     @Override
     public void setValue(Value value) {
-        parameterInstance.setValue(value);
+//        parameterInstance.setValue(value);
         updateV();
     }
 

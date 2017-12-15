@@ -1,28 +1,41 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceTablename;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PTextFieldComponent;
 import java.awt.Dimension;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
+import axoloti.PatchView;
+import axoloti.attribute.AttributeInstanceController;
+import axoloti.attribute.AttributeInstanceTablename;
+import axoloti.objectviews.IAxoObjectInstanceView;
+
+import components.piccolo.PTextFieldComponent;
+
 public class PAttributeInstanceViewTablename extends PAttributeInstanceViewString {
 
-    AttributeInstanceTablename attributeInstance;
     PTextFieldComponent TFtableName;
 
-    public PAttributeInstanceViewTablename(AttributeInstanceTablename attributeInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public PAttributeInstanceViewTablename(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+    }
+
+    public PatchView getPatchView() {
+        return axoObjectInstanceView.getPatchView();
+    }
+
+    @Override
+    public AttributeInstanceTablename getModel() {
+        return (AttributeInstanceTablename) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFtableName = new PTextFieldComponent(attributeInstance.getValue());
+        TFtableName = new PTextFieldComponent(getModel().getValue());
         Dimension d = TFtableName.getSize();
         d.width = 128;
         d.height = 22;
@@ -35,7 +48,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                attributeInstance.setValue(TFtableName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
             }
 
             @Override
@@ -56,19 +69,17 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
         TFtableName.addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void keyTyped(PInputEvent ke) {
-                //TFtableName.transferFocus(ke, getPatchView());
+                TFtableName.transferFocus(ke, getPatchView());
             }
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                //attributeInstance.setValueBeforeAdjustment(TFtableName.getText());
+                getController().addMetaUndo("edit attribute " + getModel().getName());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                //if (!TFtableName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                //}
+                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
 
             }
         });
@@ -89,13 +100,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
     }
 
     @Override
-    public String getString() {
-        return attributeInstance.getValue();
-    }
-
-    @Override
     public void setString(String tableName) {
-        attributeInstance.setValue(tableName);
         if (TFtableName != null) {
             TFtableName.setText(tableName);
         }

@@ -3,13 +3,14 @@ package axoloti.piccolo.parameterviews;
 import axoloti.PresetDouble;
 import axoloti.Theme;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32SMapVSlider;
 import components.piccolo.control.PVSliderComponent;
 
 public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceViewFrac32S {
 
-    public PParameterInstanceViewFrac32SMapVSlider(ParameterInstanceFrac32SMapVSlider parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewFrac32SMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -19,7 +20,7 @@ public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceV
 
     @Override
     public ParameterInstanceFrac32SMapVSlider getModel() {
-        return (ParameterInstanceFrac32SMapVSlider) parameterInstance;
+        return (ParameterInstanceFrac32SMapVSlider) super.getModel();
     }
 
     @Override

@@ -8,16 +8,20 @@ import components.piccolo.control.PButtonComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
 import javax.swing.SwingUtilities;
+import axoloti.object.ObjectInstanceController;
 
 public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView {
 
-    AxoObjectInstancePatcherObject model;
     PButtonComponent BtnEdit;
     AxoObjectEditor aoe;
 
-    public PAxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, PatchViewPiccolo p) {
-        super(model, p);
-        this.model = model;
+    public PAxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewPiccolo p) {
+        super(controller, p);
+    }
+
+    @Override
+    public AxoObjectInstancePatcherObject getModel() {
+        return (AxoObjectInstancePatcherObject) controller.getModel();
     }
 
     @Override
@@ -34,7 +38,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
         });
         addChild(BtnEdit);
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     @Override
@@ -43,12 +47,8 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
     }
 
     public void edit() {
-        if (model.getAxoObject() == null) {
-            //model.setAxoObject(new AxoObjectPatcherObject());
-            model.getAxoObject().setDescription("");
-        }
         if (aoe == null) {
-            aoe = new AxoObjectEditor(model.getAxoObject().createController(null, null));
+            aoe = new AxoObjectEditor(getModel().getAxoObject().createController(null, null));
         } else {
             aoe.updateReferenceXML();
         }
@@ -63,5 +63,13 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
 
     public boolean isEditorOpen() {
         return aoe != null && aoe.isVisible();
+    }
+
+    @Override
+    public void dispose() {
+        if (aoe != null) {
+            aoe.Close();
+            aoe = null;
+        }
     }
 }

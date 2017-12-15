@@ -1,17 +1,21 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceFrac32VBar;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
 import axoloti.objectviews.IAxoObjectInstanceView;
+
 import components.piccolo.displays.PVBarComponent;
 
 public class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
 
-    DisplayInstanceFrac32VBar displayInstance;
     private PVBarComponent vbar;
+    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac32VBar(DisplayInstanceFrac32VBar displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewFrac32VBar(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+	this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
     @Override
@@ -24,7 +28,10 @@ public class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        //vbar.setValue(displayInstance.getValueRef().getDouble());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            vbar.setValue((Double) evt.getNewValue());
+        }
     }
 }

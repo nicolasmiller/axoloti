@@ -1,6 +1,7 @@
 package axoloti.piccolo.displayviews;
 
 import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -10,36 +11,47 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
 public abstract class PDisplayInstanceView extends PatchPNode implements IDisplayInstanceView {
+    DisplayInstanceController controller;
+    PLabelComponent label;
 
-    DisplayInstance displayInstance;
-    IAxoObjectInstanceView axoObjectInstanceView;
-
-    PDisplayInstanceView(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceView(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
-        this.displayInstance = displayInstance;
-        this.axoObjectInstanceView = axoObjectInstanceView;
+	this.controller = controller;
+    }
+
+    DisplayInstance getModel() {
+        return getController().getModel();
     }
 
     public void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
-        if ((displayInstance.getModel().noLabel == null) || (displayInstance.getModel().noLabel == false)) {
-            addChild(new PLabelComponent(displayInstance.getModel().getName()));
-        }
+	label = new PLabelComponent("");
+        addChild(label);
         setSize(getPreferredSize());
     }
 
-    public abstract void updateV();
+    @Override
+    public DisplayInstanceController getController() {
+        return controller;
+    }
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        updateV();
+        if (DisplayInstance.NAME.is(evt)) {
+            label.setText((String) evt.getNewValue());
+        } else if (DisplayInstance.NOLABEL.is(evt)) {
+            Boolean b = (Boolean) evt.getNewValue();
+            if (b == null) {
+                b = false;
+            }
+            label.setVisible(!b);
+        } else if (DisplayInstance.DESCRIPTION.is(evt)) {
+	    // TODO wtf
+//            setToolTipText((String) evt.getNewValue());
+        }
     }
 
-    @Override
-    public AbstractController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     @Override
     public void dispose() {
     }

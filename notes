@@ -1,0 +1,234 @@
+./MainFrame.java:1001:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./PatchFrame.java:1191:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./PatchView.java:597:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./PatchViewCodegen.java:1441:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./PatchViewLive.java:19:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./PatchViewPiccolo.java:475:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./PatchViewPiccolo.java:476:        super.modelPropertyChange(evt);
+./PatchViewSwing.java:461:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./PatchViewSwing.java:462:        super.modelPropertyChange(evt);
+
+./TextEditor.java:154:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./USBBulkConnection.java:452:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./USBBulkConnection_v2.java:478:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./atom/AtomInstance.java:48:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./atom/AtomInstance.java:49://        super.modelPropertyChange(evt);
+
+./attribute/AttributeInstance.java:76:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./attribute/AttributeInstance.java:77:        super.modelPropertyChange(evt);
+
+./attribute/AttributeInstanceComboBox.java:98:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./attribute/AttributeInstanceComboBox.java:99:        super.modelPropertyChange(evt);
+
+./attribute/AttributeInstanceSpinner.java:55:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./attribute/AttributeInstanceSpinner.java:56:        super.modelPropertyChange(evt);
+
+./dialogs/AxolotiRemoteControl.java:291:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/FileManagerFrame.java:473:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/KeyboardFrame.java:207:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/Memory.java:218:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/MidiMonitor.java:193:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/MidiRouting.java:337:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/PatchSettingsFrame.java:466:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/PropertyTable.java:92:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/TargetRTInfo.java:86:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./dialogs/USBPortSelectionDlg.java:366:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./displays/DisplayInstance.java:96:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displays/DisplayInstance.java:97:        super.modelPropertyChange(evt);
+
+./inlets/InletInstance.java:121:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./inlets/InletInstance.java:122:        super.modelPropertyChange(evt);
+
+./menus/TargetMenu.java:281:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./mvc/AbstractController.java:37:                    view.modelPropertyChange(evt);
+./mvc/AbstractController.java:72:            view.modelPropertyChange(evt);
+./mvc/IView.java:11:    abstract void modelPropertyChange(PropertyChangeEvent evt);
+
+./object/AxoObjectInstance.java:541:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./object/AxoObjectInstanceComment.java:99:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./object/AxoObjectInstanceHyperlink.java:77:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./object/AxoObjectInstanceZombie.java:114:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./object/codegenview/AxoObjectInstanceCodegenView.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./object/codegenview/AxoObjectInstanceCommentCodegenView.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./object/codegenview/AxoObjectInstanceHyperlinkCodegenView.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./objecteditor/AtomDefinitionsEditor.java:462:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./objecteditor/AxoObjectEditor.java:92:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./outlets/OutletInstance.java:129:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./outlets/OutletInstance.java:130:        super.modelPropertyChange(evt);
+
+./parameters/ParameterInstance.java:331:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameters/ParameterInstance.java:332:        super.modelPropertyChange(evt);
+./parameters/ParameterInstanceInt32.java:151:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameters/ParameterInstanceInt32.java:152:        super.modelPropertyChange(evt);
+
+------------------------------- TODO PARITY
+
+./objectviews/AxoObjectInstanceView.java:326:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./objectviews/AxoObjectInstanceView.java:327:        super.modelPropertyChange(evt);
+./objectviews/AxoObjectInstanceViewAbstract.java:419:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./objectviews/AxoObjectInstanceViewComment.java:145:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./objectviews/AxoObjectInstanceViewComment.java:146:        super.modelPropertyChange(evt);
+./piccolo/objectviews/PAxoObjectInstanceView.java:456:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/objectviews/PAxoObjectInstanceView.java:457:        super.modelPropertyChange(evt);
+./piccolo/objectviews/PAxoObjectInstanceViewAbstract.java:346:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/objectviews/PAxoObjectInstanceViewComment.java:54:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/objectviews/PAxoObjectInstanceViewComment.java:55:        super.modelPropertyChange(evt);
+
+./parameterviews/ParameterInstanceViewInt32VRadio.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewInt32VRadio.java:28:        super.modelPropertyChange(evt);
+// piccolo added
+
+./parameterviews/ParameterInstanceViewInt32HRadio.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewInt32HRadio.java:28:        super.modelPropertyChange(evt);
+./piccolo/parameterviews/PParameterInstanceViewInt32HRadio.java:41:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/parameterviews/PParameterInstanceViewInt32HRadio.java:42:        super.modelPropertyChange(evt);
+
+./parameterviews/ParameterInstanceView.java:224:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/parameterviews/PParameterInstanceView.java:320:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./parameterviews/ParameterInstanceViewBin.java:57:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewBin.java:58:        super.modelPropertyChange(evt);
+./piccolo/parameterviews/PParameterInstanceViewBin.java:83:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/parameterviews/PParameterInstanceViewBin.java:84:        super.modelPropertyChange(evt);
+
+./parameterviews/ParameterInstanceViewFrac32.java:87:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewFrac32.java:88:        super.modelPropertyChange(evt);
+// piccolo added
+
+./parameterviews/ParameterInstanceViewFrac32UMap.java:125:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewFrac32UMap.java:126:        super.modelPropertyChange(evt);
+// piccolo added
+
+./parameterviews/ParameterInstanceViewInt32.java:56:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewInt32.java:57:        super.modelPropertyChange(evt);
+// piccolo added
+
+./parameterviews/ParameterInstanceViewInt32Box.java:33:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./parameterviews/ParameterInstanceViewInt32Box.java:34:        super.modelPropertyChange(evt);
+// piccolo added
+
+./outlets/OutletInstanceView.java:76:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/outlets/POutletInstanceView.java:93:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./inlets/InletInstanceView.java:83:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/inlets/PInletInstanceView.java:94:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./displayviews/DisplayInstanceView.java:36:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/displayviews/PDisplayInstanceView.java:42:    public void modelPropertyChange(PropertyChangeEvent evt) {
+// piccolo added
+
+./displayviews/DisplayInstanceViewBool32.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewBool32.java:28:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32SChart.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32SChart.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32SDial.java:25:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32SDial.java:26:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32UChart.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32UChart.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32UDial.java:25:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32UDial.java:26:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32VBar.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32VBar.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32VBarDB.java:25:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32VBarDB.java:26:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac32VU.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac32VU.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac4ByteVBar.java:28:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac4ByteVBar.java:29:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac4UByteVBar.java:27:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac4UByteVBar.java:28:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac4UByteVBarDB.java:28:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac4UByteVBarDB.java:29:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac8S128VBar.java:30:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac8S128VBar.java:31:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewInt32Bar16.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewInt32Bar16.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewInt32Bar32.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewInt32Bar32.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewInt32HexLabel.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewInt32HexLabel.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewInt32Label.java:26:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewInt32Label.java:27:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewNoteLabel.java:32:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewNoteLabel.java:33:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewVScale.java:24:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewVScale.java:25:        super.modelPropertyChange(evt);
+// piccolo added
+
+./displayviews/DisplayInstanceViewFrac8U128VBar.java:30:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./displayviews/DisplayInstanceViewFrac8U128VBar.java:31:        super.modelPropertyChange(evt);
+./piccolo/displayviews/PDisplayInstanceViewFrac8U128VBar.java:38:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/displayviews/PDisplayInstanceViewFrac8U128VBar.java:39:        super.modelPropertyChange(evt);
+// piccolo added
+
+./attributeviews/AttributeInstanceView.java:49:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/attributeviews/PAttributeInstanceView.java:60:    public void modelPropertyChange(PropertyChangeEvent evt) {
+
+./attributeviews/AttributeInstanceViewComboBox.java:66:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./attributeviews/AttributeInstanceViewComboBox.java:67:        super.modelPropertyChange(evt);
+./piccolo/attributeviews/PAttributeInstanceViewComboBox.java:96:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/attributeviews/PAttributeInstanceViewComboBox.java:97:        super.modelPropertyChange(evt);
+
+./attributeviews/AttributeInstanceViewSpinner.java:65:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./attributeviews/AttributeInstanceViewSpinner.java:66:        super.modelPropertyChange(evt);
+./piccolo/attributeviews/PAttributeInstanceViewSpinner.java:69:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/attributeviews/PAttributeInstanceViewSpinner.java:70:        super.modelPropertyChange(evt);
+
+./attributeviews/AttributeInstanceViewString.java:17:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./attributeviews/AttributeInstanceViewString.java:18:        super.modelPropertyChange(evt);
+./piccolo/attributeviews/PAttributeInstanceViewString.java:18:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/attributeviews/PAttributeInstanceViewString.java:19:        super.modelPropertyChange(evt);
+
+./NetView.java:241:    public void modelPropertyChange(PropertyChangeEvent evt) {
+./piccolo/PNetView.java:252:    public void modelPropertyChange(PropertyChangeEvent evt) {

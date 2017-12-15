@@ -15,7 +15,6 @@ import javax.swing.event.DocumentListener;
 class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
     JTextField TFtableName;
-    JLabel vlabel;
 
     AttributeInstanceViewTablename(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

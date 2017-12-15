@@ -2,13 +2,14 @@ package axoloti.piccolo.parameterviews;
 
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceBin1Momentary;
 import components.piccolo.control.PPulseButtonComponent;
 
 public class PParameterInstanceViewBin1Momentary extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin1Momentary(ParameterInstanceBin1Momentary parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public PParameterInstanceViewBin1Momentary(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -18,7 +19,7 @@ public class PParameterInstanceViewBin1Momentary extends PParameterInstanceViewB
 
     @Override
     public void setValue(Value value) {
-        parameterInstance.setValue(value);
+//        parameterInstance.setValue(value);
         updateV();
     }
 

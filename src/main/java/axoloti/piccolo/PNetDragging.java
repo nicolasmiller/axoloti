@@ -1,6 +1,7 @@
 package axoloti.piccolo;
 
 import axoloti.Net;
+import axoloti.NetController;
 import axoloti.PatchViewPiccolo;
 import axoloti.Theme;
 import axoloti.inlets.IInletInstanceView;
@@ -15,13 +16,12 @@ import org.piccolo2d.util.PPaintContext;
 
 public class PNetDragging extends PNetView {
 
-    public PNetDragging(PatchViewPiccolo patchView) {
-        super(null,null);
-        //this(patchView.getController().getNetDraggingModel(), patchView);
+    public PNetDragging(NetController controller, PatchViewPiccolo patchView) {
+	this(controller.getModel(), controller, patchView);
     }
 
-    public PNetDragging(Net net, PatchViewPiccolo patchView) {
-        super(net, patchView);
+    public PNetDragging(Net net, NetController controller, PatchViewPiccolo patchView) {
+        super(net, controller, patchView);
     }
 
     Point p0;
