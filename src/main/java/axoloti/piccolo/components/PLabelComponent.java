@@ -19,11 +19,15 @@ public class PLabelComponent extends PatchPNode {
         label.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         textNode.setPickable(false);
         setPickable(false);
+        updateDimensions();
+        addChild(textNode);
+    }
+
+    private void updateDimensions() {
         setMinimumSize(label.getMinimumSize());
         setMaximumSize(label.getMaximumSize());
         setPreferredSize(label.getPreferredSize());
         setSize(label.getSize());
-        addChild(textNode);
     }
 
     public String getText() {
@@ -32,5 +36,6 @@ public class PLabelComponent extends PatchPNode {
 
     public void setText(String text) {
         label.setText(text);
+        updateDimensions();
     }
 }

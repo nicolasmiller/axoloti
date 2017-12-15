@@ -12,11 +12,8 @@ import javax.swing.BoxLayout;
 
 public class PInletInstanceZombieView extends PInletInstanceView implements IIoletInstanceView {
 
-    InletInstanceZombie inletInstanceZombie;
-
-    public PInletInstanceZombieView(InletInstanceZombie inletInstanceZombie, PAxoObjectInstanceViewAbstract o) {
-        super(inletInstanceZombie, o);
-        this.inletInstanceZombie = inletInstanceZombie;
+    public PInletInstanceZombieView(IoletInstanceController controller, PAxoObjectInstanceViewAbstract o) {
+        super(controller, o);
     }
 
     @Override
@@ -25,18 +22,13 @@ public class PInletInstanceZombieView extends PInletInstanceView implements IIol
         setMaximumSize(new Dimension(32767, 14));
 
         jack = new PJackInputComponent(this);
-        jack.setForeground(inletInstanceZombie.getDataType().GetColor());
+        jack.setForeground(getModel().getDataType().GetColor());
 
         addChild(jack);
         addToSwingProxy(Box.createHorizontalStrut(2));
-        addChild(new PLabelComponent(inletInstanceZombie.getName()));
+
+        addChild(new PLabelComponent(getModel().getName()));
         addToSwingProxy(Box.createHorizontalGlue());
         this.addInputEventListener(getInputEventHandler());
     }
-
-    @Override
-    public IoletInstanceController getController() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

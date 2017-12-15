@@ -1,24 +1,30 @@
 package axoloti.piccolo.objectviews;
 
+import static java.awt.Component.LEFT_ALIGNMENT;
+
+import javax.swing.BoxLayout;
+
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
+
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
+import axoloti.patch.object.ObjectInstanceController;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.control.PCtrlEvent;
 import axoloti.piccolo.components.control.PCtrlListener;
 import axoloti.piccolo.components.control.PPulseButtonComponent;
-import static java.awt.Component.LEFT_ALIGNMENT;
-import javax.swing.BoxLayout;
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
 
 public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstract {
-
-    AxoObjectInstanceHyperlink model;
     private PPulseButtonComponent button;
 
-    public PAxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink model, PatchViewPiccolo p) {
-        super(model, p);
-        this.model = model;
+    public PAxoObjectInstanceViewHyperlink(ObjectInstanceController controller, PatchViewPiccolo p) {
+        super(controller, p);
+    }
+
+    @Override
+    public AxoObjectInstanceHyperlink getModel() {
+        return (AxoObjectInstanceHyperlink) super.getModel();
     }
 
     @Override
@@ -33,7 +39,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
             @Override
             public void PCtrlAdjusted(PCtrlEvent e) {
                 if (e.getValue() == 1.0) {
-                    model.Launch();
+                    getModel().Launch();
                 }
             }
 
@@ -46,7 +52,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
             }
         });
         addChild(button);
-        instanceLabel = new PLabelComponent(model.getInstanceName());
+        instanceLabel = new PLabelComponent(getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
 
         addInputEventListener(new PBasicInputEventHandler() {
@@ -61,7 +67,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
         addChild(instanceLabel);
 
         resizeToGrid();
-        translate(model.getX(), model.getY());
+        translate(getModel().getX(), getModel().getY());
     }
 
     @Override

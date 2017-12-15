@@ -106,6 +106,5 @@ public class PatchPNode extends SwingLayoutNode {
         } else {
             ((PatchPCanvas) patchView.getViewportView().getComponent()).unselect(this);
         }
-
     }
 }

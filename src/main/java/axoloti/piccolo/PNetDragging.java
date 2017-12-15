@@ -1,6 +1,7 @@
 package axoloti.piccolo;
 
 import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.preferences.Theme;
 import axoloti.abstractui.IIoletInstanceView;
@@ -14,13 +15,8 @@ import org.piccolo2d.util.PPaintContext;
 
 public class PNetDragging extends PNetView {
 
-    public PNetDragging(PatchViewPiccolo patchView) {
-        super(null, null);
-        //this(patchView.getController().getNetDraggingModel(), patchView);
-    }
-
-    public PNetDragging(Net net, PatchViewPiccolo patchView) {
-        super(net, patchView);
+    public PNetDragging(NetController controller, PatchViewPiccolo patchView) {
+        super(controller, patchView);
     }
 
     Point p0;
@@ -36,14 +32,14 @@ public class PNetDragging extends PNetView {
         Graphics2D g2 = paintContext.getGraphics();
         float shadowOffset = 0.5f;
         Color c;
-        if (net.isValidNet()) {
+        if (controller.getModel().isValidNet()) {
             if (selected) {
                 g2.setStroke(strokeValidSelected);
             } else {
                 g2.setStroke(strokeValidDeselected);
             }
 
-            c = net.getDataType().GetColor();
+            c = controller.getModel().getDataType().GetColor();
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -51,8 +47,8 @@ public class PNetDragging extends PNetView {
                 g2.setStroke(strokeBrokenDeselected);
             }
 
-            if (net.getDataType() != null) {
-                c = net.getDataType().GetColor();
+            if (controller.getModel().getDataType() != null) {
+                c = controller.getModel().getDataType().GetColor();
             } else {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }

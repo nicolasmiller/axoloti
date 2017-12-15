@@ -1,31 +1,20 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.datatypes.Value;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceBin32;
+import axoloti.datatypes.Value;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.components.control.PCheckboxComponent;
 
 public class PParameterInstanceViewBin32 extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewBin32(ParameterInstanceBin32 parameterInstance,
+    public PParameterInstanceViewBin32(ParameterInstanceController controller,
             IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public PCheckboxComponent CreateControl() {
         return new PCheckboxComponent(0, 32, axoObjectInstanceView);
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue());
-    }
-
-    @Override
-    public void setValue(Value value) {
-        parameterInstance.setValue(value);
-        updateV();
     }
 
     @Override

@@ -2,10 +2,11 @@ package axoloti.piccolo.parameterviews;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32U;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 
 public abstract class PParameterInstanceViewFrac32U extends PParameterInstanceViewFrac32 {
 
-    PParameterInstanceViewFrac32U(ParameterInstanceFrac32U parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    PParameterInstanceViewFrac32U(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 }

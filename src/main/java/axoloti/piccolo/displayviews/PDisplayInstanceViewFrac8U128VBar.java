@@ -1,28 +1,40 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.patch.object.display.DisplayInstanceFrac8U128VBar;
+import java.beans.PropertyChangeEvent;
+
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstanceFrac8U128VBar;
 import axoloti.piccolo.components.PVGraphComponent;
 
 public class PDisplayInstanceViewFrac8U128VBar extends PDisplayInstanceView {
 
-    DisplayInstanceFrac8U128VBar displayInstance;
     private PVGraphComponent vgraph;
+    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac8U128VBar(DisplayInstanceFrac8U128VBar displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewFrac8U128VBar(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+	this.axoObjectInstanceView = axoObjectInstanceView;
+    }
+
+    @Override
+    DisplayInstanceFrac8U128VBar getModel() {
+        return (DisplayInstanceFrac8U128VBar) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        vgraph = new PVGraphComponent(displayInstance.getN(), 128, 0, 128, axoObjectInstanceView);
+        vgraph = new PVGraphComponent(getModel().getN(), 128, 0, 128, axoObjectInstanceView);
         addChild(vgraph);
     }
 
     @Override
-    public void updateV() {
-        vgraph.setValue(displayInstance.getIDst());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            vgraph.setValue(getModel().getIDst());
+        }
     }
 }

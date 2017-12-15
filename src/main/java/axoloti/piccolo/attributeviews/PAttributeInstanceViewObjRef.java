@@ -1,28 +1,35 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.patch.object.attribute.AttributeInstanceObjRef;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.PTextFieldComponent;
 import java.awt.Dimension;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
+import axoloti.patch.object.attribute.AttributeInstanceController;
 
-    AttributeInstanceObjRef attributeInstance;
+import axoloti.piccolo.components.PTextFieldComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceObjRef;
+
+public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFObjName;
 
-    public PAttributeInstanceViewObjRef(AttributeInstanceObjRef attributeInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public PAttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceObjRef getModel() {
+        return (AttributeInstanceObjRef) super.getModel();
     }
 
     public void PostConstructor() {
         super.PostConstructor();
-        TFObjName = new PTextFieldComponent(attributeInstance.getValue());
+        TFObjName = new PTextFieldComponent(getModel().getValue());
         Dimension d = TFObjName.getSize();
         d.width = 92;
         d.height = 22;
@@ -93,15 +100,11 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
     }
 
     @Override
-    public String getString() {
-        return attributeInstance.getValue();
-    }
-
-    @Override
     public void setString(String objName) {
-        attributeInstance.setValue(objName);
         if (TFObjName != null) {
-            TFObjName.setText(objName);
+            if (!TFObjName.getText().equals(objName)) {
+                TFObjName.setText(objName);
+            }
         }
     }
 }

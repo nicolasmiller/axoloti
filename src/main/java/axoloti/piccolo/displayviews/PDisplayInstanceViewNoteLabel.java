@@ -1,17 +1,17 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.patch.object.display.DisplayInstanceNoteLabel;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.PLabelComponent;
 
 public class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
 
-    DisplayInstanceNoteLabel displayInstance;
-
-    public PDisplayInstanceViewNoteLabel(DisplayInstanceNoteLabel displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewNoteLabel(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     private PLabelComponent readout;
@@ -26,7 +26,11 @@ public class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        //readout.setText(displayInstance.getConv().ToReal(displayInstance.getValueRef()));
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            throw new UnsupportedOperationException("Not supported yet.");
+            //readout.setText(getModel().getConv().ToReal(((Value) evt.getNewValue())));
+        }
     }
 }

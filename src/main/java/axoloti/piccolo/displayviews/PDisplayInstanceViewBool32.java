@@ -1,18 +1,21 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.patch.object.display.DisplayInstanceBool32;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.displays.PLedstripComponent;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.displays.PLedstripComponent;
 
 public class PDisplayInstanceViewBool32 extends PDisplayInstanceViewInt32 {
 
-    DisplayInstanceBool32 displayInstance;
     private PLedstripComponent readout;
+    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewBool32(DisplayInstanceBool32 displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(displayInstance, axoObjectInstanceView);
-        this.displayInstance = displayInstance;
+    public PDisplayInstanceViewBool32(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+	this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
     @Override
@@ -26,7 +29,11 @@ public class PDisplayInstanceViewBool32 extends PDisplayInstanceViewInt32 {
     }
 
     @Override
-    public void updateV() {
-        //readout.setValue(displayInstance.getValueRef().getInt() > 0 ? 1 : 0);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
+            int i = (Integer) evt.getNewValue();
+            readout.setValue(i > 0 ? 1 : 0);
+        }
     }
 }

@@ -20,23 +20,60 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.piccolo2d.util.PPaintContext;
+
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.mvc.AbstractController;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.outlet.OutletInstance;
 
 public class PNetView extends PatchPNode implements INetView {
 
     protected final List<IIoletInstanceView> source = new ArrayList<>();
     protected final List<IIoletInstanceView> dest = new ArrayList<>();
-    protected Net net;
     protected boolean selected = false;
 
-    public PNetView(Net net, PatchViewPiccolo patchView) {
+    NetController controller;
+
+    public PNetView(NetController controller, PatchViewPiccolo patchView) {
         super(patchView);
-        this.net = net;
+	this.controller = controller;
         setPickable(false);
     }
 
     @Override
     public void PostConstructor() {
+        source.clear();
+        dest.clear();
+        // resolve inlet/outlet views
+        for (OutletInstance i : getController().getModel().getSources()) {
+            IAxoObjectInstance o = i.getObjectInstance();
+            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            if (ov == null) {
+                throw new Error("no corresponding outlet instance view found");
+            }
+            for (IIoletInstanceView o2 : ov.getOutletInstanceViews()) {
+                if (o2.getController().getModel() == i) {
+                    source.add(o2);
+                    break;
+                }
+            }
+        }
+        for (InletInstance i : getController().getModel().getDestinations()) {
+            IAxoObjectInstance o = i.getObjectInstance();
+            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            if (ov == null) {
+                throw new Error("no corresponding inlet instance view found");
+            }
+            for (IIoletInstanceView o2 : ov.getInletInstanceViews()) {
+                if (o2.getController().getModel() == i) {
+                    dest.add(o2);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -123,7 +160,7 @@ public class PNetView extends PatchPNode implements INetView {
         float shadowOffset = 0.5f;
         Point p0;
         Color c;
-        boolean isValidNet = net.isValidNet();
+        boolean isValidNet = getController().getModel().isValidNet();
         if (isValidNet) {
             if (selected) {
                 g2.setStroke(strokeValidSelected);
@@ -131,7 +168,7 @@ public class PNetView extends PatchPNode implements INetView {
                 g2.setStroke(strokeValidDeselected);
             }
 
-            c = net.getDataType().GetColor();
+            c = getController().getModel().getDataType().GetColor();
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -139,8 +176,8 @@ public class PNetView extends PatchPNode implements INetView {
                 g2.setStroke(strokeBrokenDeselected);
             }
 
-            if (net.getDataType() != null) {
-                c = net.getDataType().GetColor();
+            if (getController().getModel().getDataType() != null) {
+                c = getController().getModel().getDataType().GetColor();
             } else {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }
@@ -223,17 +260,20 @@ public class PNetView extends PatchPNode implements INetView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-    @Override
-    public void dispose() {
+	if (Net.NET_SOURCES.is(evt)
+	    || Net.NET_DESTINATIONS.is(evt)) {
+            PostConstructor();
+            updateBounds();
+            repaint();
+        }
     }
 
     @Override
     public NetController getController() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return controller;
     }
 
+    @Override
+    public void dispose() {
+    }
 }
