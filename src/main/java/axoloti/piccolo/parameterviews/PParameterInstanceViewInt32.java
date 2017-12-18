@@ -1,19 +1,17 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.preset.PresetInt;
-import axoloti.preferences.Theme;
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueInt32;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceInt32;
-import java.awt.Graphics2D;
-import org.piccolo2d.util.PPaintContext;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInt32;
+import org.piccolo2d.util.PPaintContext;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.object.parameter.ParameterInt32;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstanceInt32;
+import axoloti.preferences.Theme;
+import axoloti.preset.PresetInt;
 
 public abstract class PParameterInstanceViewInt32 extends PParameterInstanceView {
 

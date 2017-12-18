@@ -4,7 +4,7 @@ import axoloti.patch.object.attribute.AttributeInstanceString;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceController;
 
 public abstract class PAttributeInstanceViewString extends PAttributeInstanceView {
 

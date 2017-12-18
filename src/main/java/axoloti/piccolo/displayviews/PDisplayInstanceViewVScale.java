@@ -1,10 +1,10 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.patch.object.display.DisplayInstanceVScale;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.displays.PVValueLabelsComponent;
 import java.beans.PropertyChangeEvent;
-import axoloti.displays.DisplayInstanceController;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.displays.PVValueLabelsComponent;
 
 public class PDisplayInstanceViewVScale extends PDisplayInstanceView {
     private PVValueLabelsComponent vlabels;

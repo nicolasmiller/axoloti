@@ -1,14 +1,18 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.patch.object.AxoObjectInstanceComment;
-import axoloti.piccolo.components.PLabelComponent;
 import static java.awt.Component.CENTER_ALIGNMENT;
-import javax.swing.BoxLayout;
+
 import java.beans.PropertyChangeEvent;
+
+import javax.swing.BoxLayout;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-import axoloti.object.ObjectInstanceController;
+
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.AxoObjectInstanceComment;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.piccolo.components.PLabelComponent;
 
 public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstract {
 

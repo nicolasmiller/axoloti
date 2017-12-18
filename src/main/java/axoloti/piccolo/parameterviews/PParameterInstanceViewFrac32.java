@@ -14,8 +14,8 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 
 public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 

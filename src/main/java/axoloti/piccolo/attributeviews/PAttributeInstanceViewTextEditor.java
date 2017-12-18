@@ -6,8 +6,8 @@ import axoloti.piccolo.components.control.PButtonComponent;
 import axoloti.swingui.TextEditor;
 import javax.swing.SwingUtilities;
 
-import axoloti.DocumentWindow;
-import axoloti.attribute.AttributeInstanceController;
+import axoloti.abstractui.DocumentWindow;
+import axoloti.patch.object.attribute.AttributeInstanceController;
 
 public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
@@ -28,7 +28,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
             getModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getController(), dw);
             getModel().editor.setTitle(getController().getParent().getModel().getInstanceName() + "/" + getModel().getModel().getName());
         }
-        editor.toFront();
+        getModel().editor.toFront();
 
         // TODO verify this
         getModel().editor.setState(java.awt.Frame.NORMAL);

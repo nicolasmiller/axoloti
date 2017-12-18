@@ -1,12 +1,13 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.piccolo.components.control.PButtonComponent;
-import axoloti.object.ObjectInstanceController;
-import axoloti.object.ObjectInstancePatcherController;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
+
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.AxoObjectInstancePatcher;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.ObjectInstancePatcherController;
+import axoloti.piccolo.components.control.PButtonComponent;
 
 public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
 

@@ -11,7 +11,14 @@ import javax.swing.event.DocumentListener;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-import axoloti.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceSDFile;
+import axoloti.piccolo.components.PTextFieldComponent;
+import axoloti.piccolo.components.control.PButtonComponent;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+
+
 
 public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 

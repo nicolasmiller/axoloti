@@ -1,16 +1,19 @@
 package axoloti.piccolo.objectviews;
 
+import static java.awt.Component.LEFT_ALIGNMENT;
+
+import javax.swing.BoxLayout;
+
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
+
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
+import axoloti.patch.object.ObjectInstanceController;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.control.PCtrlEvent;
 import axoloti.piccolo.components.control.PCtrlListener;
 import axoloti.piccolo.components.control.PPulseButtonComponent;
-import static java.awt.Component.LEFT_ALIGNMENT;
-import javax.swing.BoxLayout;
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-import axoloti.object.ObjectInstanceController;
 
 public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstract {
     private PPulseButtonComponent button;

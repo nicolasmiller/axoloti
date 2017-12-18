@@ -1,9 +1,8 @@
 package axoloti.piccolo.inlets;
 
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.inlets.InletInstanceController;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.patch.object.inlet.InletInstanceController;
 
 public class PInletInstanceViewFactory {
 

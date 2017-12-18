@@ -1,7 +1,8 @@
 package axoloti.swingui.patch.object;
 
-import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.swingui.patch.PatchViewPiccolo;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.PatchView;
+import axoloti.patch.PatchViewPiccolo;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceComment;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
@@ -10,8 +11,14 @@ import axoloti.patch.object.AxoObjectInstancePatcherObject;
 import axoloti.patch.object.AxoObjectInstanceZombie;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
-
-import axoloti.piccolo.objectviews.*;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewHyperlink;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcher;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcherObject;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
+import axoloti.swingui.patch.PatchViewSwing;
 
 /**
  *

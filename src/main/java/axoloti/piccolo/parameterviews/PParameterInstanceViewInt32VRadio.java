@@ -1,15 +1,16 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.object.parameter.ParameterInt32VRadio;
-import axoloti.piccolo.components.PAssignMidiCCMenuItems;
-import axoloti.piccolo.components.control.PVRadioComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInt32;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.object.parameter.ParameterInt32;
+import axoloti.object.parameter.ParameterInt32VRadio;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.piccolo.components.PAssignMidiCCMenuItems;
+import axoloti.piccolo.components.control.PVRadioComponent;
 
 public class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt32 {
 

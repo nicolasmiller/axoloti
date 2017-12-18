@@ -2,8 +2,10 @@ package axoloti.piccolo.displayviews;
 
 import java.beans.PropertyChangeEvent;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displays.DisplayInstanceController;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.displays.PDispComponent;
 
 public class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 {
 

@@ -6,7 +6,7 @@ import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.control.PCtrlEvent;
 import axoloti.piccolo.components.control.PCtrlListener;
 import axoloti.piccolo.components.control.PVSliderComponent;
-import axoloti.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceController;
 import java.awt.Dimension;
 
 public class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {

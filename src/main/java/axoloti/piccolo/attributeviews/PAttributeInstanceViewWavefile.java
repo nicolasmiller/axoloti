@@ -3,12 +3,16 @@ package axoloti.piccolo.attributeviews;
 import java.awt.Dimension;
 
 import javax.swing.event.DocumentEvent;
-nimport javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentListener;
 
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-import axoloti.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceWavefile;
+import axoloti.piccolo.components.PTextFieldComponent;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
 
 public class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
 

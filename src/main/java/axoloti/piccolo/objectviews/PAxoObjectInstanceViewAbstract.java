@@ -1,19 +1,5 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.abstractui.INetView;
-import axoloti.patch.PatchModel;
-import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.preferences.Theme;
-import axoloti.abstractui.IAttributeInstanceView;
-import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.AxoObjectInstanceAbstract;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.abstractui.IOutletInstanceView;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.abstractui.IParameterInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -37,35 +23,30 @@ import javax.swing.border.Border;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
+import axoloti.abstractui.IAttributeInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IDisplayInstanceView;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.INetView;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IParameterInstanceView;
+import axoloti.abstractui.PatchView;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
-import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.PPopupIcon;
 import axoloti.piccolo.components.PTextFieldComponent;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
-import javax.swing.border.Border;
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
 
 public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoObjectInstanceView {
 

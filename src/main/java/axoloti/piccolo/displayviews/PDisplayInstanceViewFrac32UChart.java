@@ -4,8 +4,8 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.components.displays.PScopeComponent;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displays.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
 
 public class PDisplayInstanceViewFrac32UChart extends PDisplayInstanceViewFrac32 {
 

@@ -1,35 +1,5 @@
 package axoloti.abstractui;
 
-import axoloti.chunks.ChunkData;
-import axoloti.chunks.ChunkParser;
-import axoloti.chunks.Cpatch_display;
-import axoloti.chunks.FourCC;
-import axoloti.chunks.FourCCs;
-import axoloti.connection.CConnection;
-import axoloti.connection.IConnection;
-import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.array.ArrayView;
-import axoloti.object.AxoObjectFromPatch;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewCodegen;
-import axoloti.patch.PatchViewportView;
-import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.swingui.ObjectSearchFrame;
-import axoloti.swingui.patch.PatchFrame;
-import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.swingui.patch.net.NetView;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
-import axoloti.swingui.patch.object.iolet.IoletAbstract;
-import axoloti.target.fs.SDCardInfo;
-import axoloti.target.fs.SDFileReference;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
@@ -51,10 +21,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
+
+import axoloti.chunks.ChunkData;
+import axoloti.chunks.ChunkParser;
+import axoloti.chunks.Cpatch_display;
+import axoloti.chunks.FourCC;
+import axoloti.chunks.FourCCs;
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
+import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.array.ArrayView;
+import axoloti.object.AxoObjectFromPatch;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewCodegen;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.PatchViewportView;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.piccolo.PNetView;
+import axoloti.swingui.ObjectSearchFrame;
+import axoloti.swingui.patch.PatchFrame;
+import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patch.net.NetView;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
+import axoloti.swingui.patch.object.iolet.IoletAbstract;
+import axoloti.target.fs.SDCardInfo;
+import axoloti.target.fs.SDFileReference;
+
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
@@ -65,8 +70,6 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdStart;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
-
-import axoloti.piccolo.PNetView;
 
 public abstract class PatchView extends PatchAbstractView {
 

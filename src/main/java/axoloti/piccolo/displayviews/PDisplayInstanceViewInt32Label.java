@@ -1,12 +1,12 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displays.DisplayInstanceController;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.PLabelComponent;
 
 public class PDisplayInstanceViewInt32Label extends PDisplayInstanceViewInt32 {
     private PLabelComponent readout;

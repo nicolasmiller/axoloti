@@ -21,11 +21,11 @@ import java.util.Map;
 
 import org.piccolo2d.util.PPaintContext;
 
-import axoloti.inlets.InletInstance;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.AbstractController;
-import axoloti.object.IAxoObjectInstance;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.outlets.OutletInstance;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.outlet.OutletInstance;
 
 public class PNetView extends PatchPNode implements INetView {
 
@@ -291,8 +291,9 @@ public class PNetView extends PatchPNode implements INetView {
     @Override
     public void dispose() {
     }
-    
-    public AbstractController getController() {
-	return controller;
+
+    @Override
+    public NetController getController() {
+        return controller;
     }
 }

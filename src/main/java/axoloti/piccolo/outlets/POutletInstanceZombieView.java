@@ -1,14 +1,15 @@
 package axoloti.piccolo.outlets;
 
-import axoloti.abstractui.IOutletInstanceView;
-import axoloti.patch.object.outlet.OutletInstanceZombie;
-import axoloti.outlets.OutletInstanceController;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
-import axoloti.piccolo.components.PJackOutputComponent;
-import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.object.outlet.OutletInstanceController;
+import axoloti.piccolo.components.PJackOutputComponent;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 
 public class POutletInstanceZombieView extends POutletInstanceView implements IOutletInstanceView {
 

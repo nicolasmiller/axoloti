@@ -1,16 +1,16 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstance;
-import axoloti.attribute.AttributeInstanceComboBox;
-import axoloti.attribute.AttributeInstanceController;
-import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.attribute.AttributeInstanceObjRef;
-import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.attribute.AttributeInstanceTablename;
-import axoloti.attribute.AttributeInstanceTextEditor;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.patch.object.attribute.AttributeInstanceComboBox;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceInt32;
+import axoloti.patch.object.attribute.AttributeInstanceObjRef;
+import axoloti.patch.object.attribute.AttributeInstanceSDFile;
+import axoloti.patch.object.attribute.AttributeInstanceSpinner;
+import axoloti.patch.object.attribute.AttributeInstanceTablename;
+import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
+import axoloti.swingui.patch.object.AxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
 
 public class PAttributeInstanceViewFactory {
 

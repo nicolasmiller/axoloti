@@ -24,8 +24,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 
 public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac32U {
 

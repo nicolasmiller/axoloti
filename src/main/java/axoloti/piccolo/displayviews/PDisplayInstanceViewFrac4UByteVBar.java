@@ -1,11 +1,11 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.displays.PVLineComponent;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displays.DisplayInstanceController;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.displays.PVLineComponent;
 
 public class PDisplayInstanceViewFrac4UByteVBar extends PDisplayInstanceViewFrac32 {
 

@@ -1,31 +1,32 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displays.DisplayInstanceBool32;
-import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac32SChart;
-import axoloti.displays.DisplayInstanceFrac32SDial;
-import axoloti.displays.DisplayInstanceFrac32UChart;
-import axoloti.displays.DisplayInstanceFrac32UDial;
-import axoloti.displays.DisplayInstanceFrac32VBar;
-import axoloti.displays.DisplayInstanceFrac32VBarDB;
-import axoloti.displays.DisplayInstanceFrac32VU;
-import axoloti.displays.DisplayInstanceFrac4ByteVBar;
-import axoloti.displays.DisplayInstanceFrac4UByteVBar;
-import axoloti.displays.DisplayInstanceFrac4UByteVBarDB;
-import axoloti.displays.DisplayInstanceFrac8S128VBar;
-import axoloti.displays.DisplayInstanceFrac8U128VBar;
-import axoloti.displays.DisplayInstanceInt32Bar16;
-import axoloti.displays.DisplayInstanceInt32Bar32;
-import axoloti.displays.DisplayInstanceInt32HexLabel;
-import axoloti.displays.DisplayInstanceInt32Label;
-import axoloti.displays.DisplayInstanceNoteLabel;
-import axoloti.displays.DisplayInstanceVScale;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IDisplayInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceBool32;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstanceFrac32SChart;
+import axoloti.patch.object.display.DisplayInstanceFrac32SDial;
+import axoloti.patch.object.display.DisplayInstanceFrac32UChart;
+import axoloti.patch.object.display.DisplayInstanceFrac32UDial;
+import axoloti.patch.object.display.DisplayInstanceFrac32VBar;
+import axoloti.patch.object.display.DisplayInstanceFrac32VBarDB;
+import axoloti.patch.object.display.DisplayInstanceFrac32VU;
+import axoloti.patch.object.display.DisplayInstanceFrac4ByteVBar;
+import axoloti.patch.object.display.DisplayInstanceFrac4UByteVBar;
+import axoloti.patch.object.display.DisplayInstanceFrac4UByteVBarDB;
+import axoloti.patch.object.display.DisplayInstanceFrac8S128VBar;
+import axoloti.patch.object.display.DisplayInstanceFrac8U128VBar;
+import axoloti.patch.object.display.DisplayInstanceInt32Bar16;
+import axoloti.patch.object.display.DisplayInstanceInt32Bar32;
+import axoloti.patch.object.display.DisplayInstanceInt32HexLabel;
+import axoloti.patch.object.display.DisplayInstanceInt32Label;
+import axoloti.patch.object.display.DisplayInstanceNoteLabel;
+import axoloti.patch.object.display.DisplayInstanceVScale;
 
 public class PDisplayInstanceViewFactory {
 
-    public static PDisplayInstanceView createView(DisplayInstanceController controller, IAxoObjectInstanceView obj) {
+    public static IDisplayInstanceView createView(DisplayInstanceController controller, IAxoObjectInstanceView obj) {
         DisplayInstance model = controller.getModel();
         PDisplayInstanceView view;
         if (model instanceof DisplayInstanceBool32) {

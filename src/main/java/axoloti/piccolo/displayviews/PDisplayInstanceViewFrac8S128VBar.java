@@ -1,12 +1,12 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.PVGraphComponent;
 import java.beans.PropertyChangeEvent;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac8S128VBar;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstanceFrac8S128VBar;
+import axoloti.piccolo.components.PVGraphComponent;
 
 public class PDisplayInstanceViewFrac8S128VBar extends PDisplayInstanceView {
 

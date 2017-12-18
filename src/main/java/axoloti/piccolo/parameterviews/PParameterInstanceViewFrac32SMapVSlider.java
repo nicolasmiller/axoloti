@@ -1,11 +1,11 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.preset.PresetDouble;
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
 import axoloti.piccolo.components.control.PVSliderComponent;
-import axoloti.parameters.ParameterInstanceController;
+import axoloti.preferences.Theme;
+import axoloti.preset.PresetDouble;
 
 public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceViewFrac32S {
 

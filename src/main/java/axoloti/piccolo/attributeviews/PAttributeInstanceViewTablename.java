@@ -11,8 +11,8 @@ import javax.swing.event.DocumentListener;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-import axoloti.PatchView;
-import axoloti.attribute.AttributeInstanceController;
+import axoloti.abstractui.PatchView;
+import axoloti.patch.object.attribute.AttributeInstanceController;
 
 public class PAttributeInstanceViewTablename extends PAttributeInstanceViewString {
 

@@ -1,23 +1,22 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstance4LevelX16;
-import axoloti.parameters.ParameterInstanceBin1;
-import axoloti.parameters.ParameterInstanceBin12;
-import axoloti.parameters.ParameterInstanceBin16;
-import axoloti.parameters.ParameterInstanceBin1Momentary;
-import axoloti.parameters.ParameterInstanceBin32;
-import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInstanceFrac32SMap;
-import axoloti.parameters.ParameterInstanceFrac32SMapVSlider;
-import axoloti.parameters.ParameterInstanceFrac32UMap;
-import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
-import axoloti.parameters.ParameterInstanceInt32Box;
-import axoloti.parameters.ParameterInstanceInt32BoxSmall;
-import axoloti.parameters.ParameterInstanceInt32HRadio;
-import axoloti.parameters.ParameterInstanceInt32VRadio;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstance4LevelX16;
+import axoloti.patch.object.parameter.ParameterInstanceBin1;
+import axoloti.patch.object.parameter.ParameterInstanceBin12;
+import axoloti.patch.object.parameter.ParameterInstanceBin16;
+import axoloti.patch.object.parameter.ParameterInstanceBin1Momentary;
+import axoloti.patch.object.parameter.ParameterInstanceBin32;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32UMapVSlider;
+import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
+import axoloti.patch.object.parameter.ParameterInstanceInt32BoxSmall;
+import axoloti.patch.object.parameter.ParameterInstanceInt32HRadio;
+import axoloti.patch.object.parameter.ParameterInstanceInt32VRadio;
 
 public class PParameterInstanceViewFactory {
     public static PParameterInstanceView createView(ParameterInstanceController controller, IAxoObjectInstanceView obj) {

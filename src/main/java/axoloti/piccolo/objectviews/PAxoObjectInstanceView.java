@@ -1,21 +1,5 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.preferences.Theme;
-import axoloti.abstractui.IAttributeInstanceView;
-import axoloti.object.display.Display;
-import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.object.inlet.Inlet;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.object.AxoObject;
-import axoloti.object.AxoObjectFromPatch;
-import axoloti.patch.object.AxoObjectInstance;
-import axoloti.abstractui.IOutletInstanceView;
-import axoloti.object.outlet.Outlet;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.abstractui.IParameterInstanceView;
-
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
@@ -31,27 +15,33 @@ import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import axoloti.Theme;
-import axoloti.attribute.AttributeInstanceController;
-import axoloti.attributeviews.IAttributeInstanceView;
-import axoloti.displays.DisplayInstanceController;
-import axoloti.displayviews.IDisplayInstanceView;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.inlets.InletInstance;
-import axoloti.inlets.InletInstanceController;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
+
+import axoloti.abstractui.IAttributeInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IDisplayInstanceView;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IParameterInstanceView;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectFromPatch;
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.IAxoObject;
-import axoloti.object.ObjectInstanceController;
-import axoloti.outlets.IOutletInstanceView;
-import axoloti.outlets.OutletInstance;
-import axoloti.outlets.OutletInstanceController;
-import axoloti.parameters.ParameterInstanceController;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.inlet.InletInstanceController;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.patch.object.outlet.OutletInstanceController;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.PatchPNode;
 import axoloti.piccolo.attributeviews.PAttributeInstanceView;
 import axoloti.piccolo.attributeviews.PAttributeInstanceViewFactory;
+import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.displayviews.PDisplayInstanceView;
 import axoloti.piccolo.displayviews.PDisplayInstanceViewFactory;
 import axoloti.piccolo.inlets.PInletInstanceView;
@@ -59,24 +49,10 @@ import axoloti.piccolo.inlets.PInletInstanceViewFactory;
 import axoloti.piccolo.outlets.POutletInstanceView;
 import axoloti.piccolo.outlets.POutletInstanceViewFactory;
 import axoloti.piccolo.parameterviews.PParameterInstanceView;
-
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.preferences.Preferences;
-import axoloti.piccolo.components.PLabelComponent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-
 import axoloti.piccolo.parameterviews.PParameterInstanceViewFactory;
+import axoloti.preferences.Preferences;
+import axoloti.preferences.Theme;
+import axoloti.swingui.patch.PatchViewSwing;
 
 public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
 

@@ -6,8 +6,8 @@ import axoloti.piccolo.components.control.PNumberBoxComponent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import axoloti.attribute.AttributeInstanceController;
-import components.control.ACtrlComponent;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.swingui.components.control.ACtrlComponent;
 
 public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 

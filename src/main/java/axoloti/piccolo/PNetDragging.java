@@ -1,6 +1,7 @@
 package axoloti.piccolo;
 
 import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.preferences.Theme;
 import axoloti.abstractui.IInletInstanceView;

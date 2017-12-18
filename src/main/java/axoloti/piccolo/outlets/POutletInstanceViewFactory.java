@@ -1,9 +1,8 @@
 package axoloti.piccolo.outlets;
 
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.outlets.OutletInstanceController;
-import axoloti.outlets.IOutletInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.object.outlet.OutletInstanceController;
 
 public class POutletInstanceViewFactory {
 
