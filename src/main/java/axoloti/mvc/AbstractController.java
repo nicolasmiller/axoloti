@@ -23,16 +23,17 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         this.model = model;
         this.parent = parent;
         this.documentRoot = documentRoot;
-        if (documentRoot == null) {
-            //System.out.println("documentroot is null");
-        }
+    }
+
+    private Logger getLogger() {
+        return Logger.getLogger(AbstractController.class.getName());
     }
 
     // to be called in controller.createView()
     final public void addView(View view) {
         if (view != null) {
             if (registeredViews.contains(view)) {
-                System.out.println("view already added : " + view.toString());
+                getLogger().log(Level.INFO, "view already added : " + view.toString());
             } else {
                 for (Property property : getModel().getProperties()) {
                     Object propertyValue = property.get(getModel());
@@ -42,7 +43,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
                 registeredViews.add(view);
             }
         } else {
-            System.out.println("view is null");
+            getLogger().log(Level.SEVERE, "addView(): view is null");
         }
     }
 
@@ -70,9 +71,8 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     //  and propagate them on to all the views.
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //System.out.println("propertyChange: " + evt.getPropertyName() + " : " + ((evt.getNewValue()!=null)?evt.getNewValue().toString() : "null"));
         if (!SwingUtilities.isEventDispatchThread()) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
+            getLogger().log(Level.SEVERE, "not in EventDispatchThread");
         }
         for (View view : registeredViews) {
             view.modelPropertyChange(evt);
@@ -105,8 +105,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
 
     public void setModelUndoableProperty(Property property, Object newValue) {
         if (getUndoManager() == null) {
-            //System.out.println("no undomanager");
-            property.set(getModel(),newValue);
+            property.set(getModel(), newValue);
         } else {
             Object old_val = property.get(getModel());
             if (old_val == newValue) {
