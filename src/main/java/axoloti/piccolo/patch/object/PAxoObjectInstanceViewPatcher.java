@@ -43,7 +43,10 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
         pf.setVisible(true);
     }
 
-    private void initComponents() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
+
         PButtonComponent BtnEdit = new PButtonComponent("edit", this);
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);

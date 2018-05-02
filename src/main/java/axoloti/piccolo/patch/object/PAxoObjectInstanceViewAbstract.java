@@ -80,10 +80,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         super(patchView);
         this.controller = controller;
         titleBar = new PatchPNode(patchView);
-        initComponent();
-    }
-
-    private void initComponent() {
         setVisible(false);
     }
 
@@ -112,7 +108,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     protected static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
     protected static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
 
-    private void initComponents() {
+    protected void initComponents() {
         setMinimumSize(new Dimension(60, 40));
 
         titleBar.removeAllChildren();

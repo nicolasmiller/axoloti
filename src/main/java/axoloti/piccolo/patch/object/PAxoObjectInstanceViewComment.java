@@ -76,7 +76,10 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
         InstanceNameTF.grabFocus();
     }
 
-    private void initComponents() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
+
         setDrawBorder(true);
 
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));

@@ -21,7 +21,6 @@ import org.piccolo2d.event.PInputEvent;
 public class POutletInstanceView extends PIoletAbstract implements IIoletInstanceView {
 
     IoletInstanceController controller;
-    PLabelComponent label;
 
     public POutletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
@@ -35,16 +34,12 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
 
         addToSwingProxy(Box.createHorizontalGlue());
         if (axoObjectInstanceView.getModel().getType().getOutlets().size() > 1) {
-            label = new PLabelComponent(getModel().getModel().getName());
-        } else {
-            label = new PLabelComponent("");
+            addChild(label);
         }
 
-        addChild(label);
         addToSwingProxy(Box.createHorizontalStrut(2));
 
-        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(getModel().getModel().GetSignalMetaData(), axoObjectInstanceView);
-        addChild(foo);
+        addChild(new PSignalMetaDataIcon(getModel().getModel().GetSignalMetaData(), axoObjectInstanceView));
 
         jack = new PJackOutputComponent(this);
         ((PJackOutputComponent) jack).setForeground(getModel().getModel().getDatatype().GetColor());

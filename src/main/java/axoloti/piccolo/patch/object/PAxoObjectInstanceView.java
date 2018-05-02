@@ -70,10 +70,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         p_outletViews = new PatchPNode(patchView);
         p_displayViews = new PatchPNode(patchView);
         p_ioletViews = new PatchPNode(patchView);
-        initComponents();
-    }
 
-    private void initComponents() {
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews.getProxyComponent(), BoxLayout.LINE_AXIS));
         p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -89,7 +86,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
 
-        initComponents2();
+        initComponents();
     }
 
     @Override
@@ -107,7 +104,9 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     List<IParameterInstanceView> parameterInstanceViews;
     List<IDisplayInstanceView> displayInstanceViews;
 
-    private void initComponents2() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.PAGE_AXIS));
 
         setPaint(Theme.getCurrentTheme().Object_Default_Background);
@@ -253,6 +252,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 for (IIoletInstanceView c : views) {
                     p_inletViews.addChild((PatchPNode) c);
                 }
+                resizeToGrid();
             }
 
             @Override
@@ -277,6 +277,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             for (IIoletInstanceView c : views) {
                 p_outletViews.addChild((PatchPNode) c);
             }
+            resizeToGrid();
         }
 
         @Override
@@ -302,6 +303,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             for (IAttributeInstanceView c : views) {
                 p_attributeViews.addChild((PatchPNode) c);
             }
+            resizeToGrid();
         }
 
         @Override
@@ -326,6 +328,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             for (IParameterInstanceView c : views) {
                 p_parameterViews.addChild((PatchPNode) c);
             }
+            resizeToGrid();
         }
 
         @Override
@@ -350,6 +353,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             for (IDisplayInstanceView c : views) {
                 p_displayViews.addChild((PatchPNode) c);
             }
+            resizeToGrid();
         }
 
         @Override
@@ -376,7 +380,6 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 || AxoObject.OBJ_LICENSE.is(evt)) {
             // updateTooltext(); // TODO: implement for piccolo
         }
-        resizeToGrid();
     }
 
     @Override

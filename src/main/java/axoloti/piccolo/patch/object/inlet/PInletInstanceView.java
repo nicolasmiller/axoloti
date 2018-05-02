@@ -20,7 +20,6 @@ import org.piccolo2d.event.PInputEvent;
 
 public class PInletInstanceView extends PIoletAbstract implements IIoletInstanceView {
     IoletInstanceController controller;
-    PLabelComponent label;
 
     public PInletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
@@ -40,12 +39,9 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
         addToSwingProxy(Box.createHorizontalStrut(3));
 
         if (!((axoObjectInstanceView != null) && axoObjectInstanceView.getModel().getType().getInlets().size() <= 1)) {
-            label = new PLabelComponent(getModel().getModel().getName());
-        } else {
-            label = new PLabelComponent("");
+            addChild(label);
         }
 
-        addChild(label);
         addToSwingProxy(Box.createHorizontalGlue());
 
         addInputEventListener(getInputEventHandler());
@@ -95,7 +91,6 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (InletInstance.NAME.is(evt)) {
             label.setText((String) evt.getNewValue());
-            getProxyComponent().doLayout();
         } else if (InletInstance.DESCRIPTION.is(evt)) {
             axoObjectInstanceView.getCanvas().setToolTipText((String) evt.getNewValue());
         }

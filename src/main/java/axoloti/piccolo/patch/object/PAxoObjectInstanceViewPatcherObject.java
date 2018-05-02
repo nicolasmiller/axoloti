@@ -24,7 +24,10 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
         return (AxoObjectInstancePatcherObject) controller.getModel();
     }
 
-    private void initComponents() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
+
         BtnEdit = new PButtonComponent("edit", this);
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);

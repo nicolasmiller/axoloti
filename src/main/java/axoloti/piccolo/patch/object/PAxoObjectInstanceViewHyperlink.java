@@ -27,7 +27,10 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
         return (AxoObjectInstanceHyperlink) super.getModel();
     }
 
-    private void initComponents() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
+
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
 
         setDrawBorder(true);

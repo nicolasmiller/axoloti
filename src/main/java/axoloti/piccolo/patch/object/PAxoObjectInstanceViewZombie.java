@@ -34,7 +34,10 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
         initComponents();
     }
 
-    private void initComponents() {
+    @Override
+    protected void initComponents() {
+        super.initComponents();
+
         p_ioletViews = new PatchPNode(patchView);
         p_ioletViews.setPickable(false);
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews.getProxyComponent(), BoxLayout.LINE_AXIS));

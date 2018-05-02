@@ -29,9 +29,9 @@ import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
 
 public abstract class PIoletAbstract extends PatchPNode {
-    public IAxoObjectInstanceView axoObjectInstanceView;
-    public PLabelComponent lbl;
-    public PatchPNode jack;
+    protected IAxoObjectInstanceView axoObjectInstanceView;
+    protected PLabelComponent label = new PLabelComponent("");
+    protected PatchPNode jack;
 
     public PIoletAbstract(IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
